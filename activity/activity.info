@@ -1,0 +1,8 @@
+[Activity]
+name = View Slides
+service_name = org.laptop.ViewSlidesActivity
+exec = sugar-activity viewslides.ViewSlidesActivity
+activity-version = 1
+icon = ViewSlides
+show_launcher = no
+mime_types = application/zip
