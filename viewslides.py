@@ -42,8 +42,6 @@ _HARDWARE_MANAGER_SERVICE = 'org.laptop.HardwareManager'
 _HARDWARE_MANAGER_OBJECT_PATH = '/org/laptop/HardwareManager'
 
 _TOOLBAR_READ = 1
-_SOCKET_TYPE_IPv4 = 2
-_SOCKET_ACCESS_CONTROL_LOCALHOST = 0
 
 _logger = logging.getLogger('view-slides')
 
@@ -149,9 +147,9 @@ class ViewSlidesActivity(activity.Activity):
         page = self.page
         page=page-1
         if page < 0: page=0
-        self.save_extracted_file(self.zf, self.image_files[page])
-        self.show_image("/tmp/" + self.image_files[page])
-        os.remove("/tmp/" + self.image_files[page])
+        if self.save_extracted_file(self.zf, self.image_files[page]) == True:
+            self.show_image("/tmp/" + self.image_files[page])
+            os.remove("/tmp/" + self.image_files[page])
         self._read_toolbar.set_current_page(page)
         self.page = page
 
@@ -162,9 +160,9 @@ class ViewSlidesActivity(activity.Activity):
         page = self.page
         page = page + 1
         if page >= len(self.image_files): page=len(self.image_files) - 1
-        self.save_extracted_file(self.zf, self.image_files[page])
-        self.show_image("/tmp/" + self.image_files[page])
-        os.remove("/tmp/" + self.image_files[page])
+        if self.save_extracted_file(self.zf, self.image_files[page]) == True:
+            self.show_image("/tmp/" + self.image_files[page])
+            os.remove("/tmp/" + self.image_files[page])
         self._read_toolbar.set_current_page(page)
         self.page = page
 
@@ -172,9 +170,9 @@ class ViewSlidesActivity(activity.Activity):
         return False
 
     def show_page(self, page):
-        self.save_extracted_file(self.zf, self.image_files[page])
-        self.show_image("/tmp/" + self.image_files[page])
-        os.remove("/tmp/" + self.image_files[page])
+        if self.save_extracted_file(self.zf, self.image_files[page]) == True:
+            self.show_image("/tmp/" + self.image_files[page])
+            os.remove("/tmp/" + self.image_files[page])
         
     def show_image(self, filename):
         "display a resized image in a full screen window"
@@ -216,12 +214,17 @@ class ViewSlidesActivity(activity.Activity):
  
     def save_extracted_file(self, zipfile, filename):
         "Extract the file to a temp directory for viewing"
-        filebytes = zipfile.read(filename)
+        try:
+            filebytes = zipfile.read(filename)
+        except BadZipfile, err:
+            print 'Error opening the zip file: %s' % (err)
+            return False    
         f = open("/tmp/" + filename, 'w')
         try:
             f.write(filebytes)
         finally:
             f.close
+        return True
 
     def read_file(self, file_path):
         """Load a file from the datastore on activity start"""
@@ -233,30 +236,34 @@ class ViewSlidesActivity(activity.Activity):
         # We open it both as a regular file and as a Zip file
         # The regular file will be copied to the Journal if
         # we received the file from elsewhere.
-        self.zf = zipfile.ZipFile(file_path, 'r')
-        self.image_files = self.zf.namelist()
-        self.image_files.sort()
-        self.page = int(self.metadata.get('current_image', '0'))
-        self.save_extracted_file(self.zf, self.image_files[self.page])
-        currentFileName = "/tmp/" + self.image_files[self.page]
-        self.show_image(currentFileName)
-        os.remove(currentFileName)
-        self._read_toolbar.set_total_pages(len(self.image_files))
-        self._read_toolbar.set_current_page(self.page)
-        # We've got the document, so if we're a shared activity, offer it
-        if self.get_shared():
-            self.watch_for_tubes()
-            self._share_document()
+        if zipfile.is_zipfile(file_path):
+            self.zf = zipfile.ZipFile(file_path, 'r')
+            self.image_files = self.zf.namelist()
+            self.image_files.sort()
+            self.page = int(self.metadata.get('current_image', '0'))
+            self.save_extracted_file(self.zf, self.image_files[self.page])
+            currentFileName = "/tmp/" + self.image_files[self.page]
+            self.show_image(currentFileName)
+            os.remove(currentFileName)
+            self._read_toolbar.set_total_pages(len(self.image_files))
+            self._read_toolbar.set_current_page(self.page)
+            # We've got the document, so if we're a shared activity, offer it
+            if self.get_shared():
+                self.watch_for_tubes()
+                self._share_document()
+        else:
+            print 'not a zipfile', file_path
 
     def write_file(self, file_path):
         "Save meta data for the file."
         if self.is_received_document == True:
             # This document was given to us by someone, so we have
             # to save it to the Journal.
-            filebytes = self.shared_file.read()
             f = open(filename, 'w')
             try:
-                f.write(filebytes)
+                while self.shared_file:
+                    filebytes = self.shared_file.read(2048)
+                    f.write(filebytes)
             finally:
                 f.close
 
@@ -273,8 +280,6 @@ class ViewSlidesActivity(activity.Activity):
         self.save()
 
     def _download_progress_cb(self, getter, bytes_downloaded, tube_id):
-        # FIXME: signal the expected size somehow, so we can draw a progress
-        # bar
         _logger.debug("Downloaded %u bytes from tube %u...",
                       bytes_downloaded, tube_id)
 
@@ -285,15 +290,11 @@ class ViewSlidesActivity(activity.Activity):
         gobject.idle_add(self._get_document)
 
     def _download_document(self, tube_id):
-        # FIXME: should ideally have the CM listen on a Unix socket
-        # instead of IPv4 (might be more compatible with Rainbow)
         chan = self._shared_activity.telepathy_tubes_chan
         iface = chan[telepathy.CHANNEL_TYPE_TUBES]
         addr = iface.AcceptStreamTube(tube_id,
-                # telepathy.SOCKET_ADDRESS_TYPE_IPV4,
-                _SOCKET_TYPE_IPv4,
-                # telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0,
-                _SOCKET_ACCESS_CONTROL_LOCALHOST, 0,
+                telepathy.SOCKET_ADDRESS_TYPE_IPV4,
+                telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0,
                 utf8_strings=True)
         _logger.debug('Accepted stream tube: listening address is %r', addr)
         # SOCKET_ADDRESS_TYPE_IPV4 is defined to have addresses of type '(sq)'
@@ -341,9 +342,6 @@ class ViewSlidesActivity(activity.Activity):
         gobject.idle_add(self._get_document)
 
     def _share_document(self):
-        # FIXME: should ideally have the fileserver listen on a Unix socket
-        # instead of IPv4 (might be more compatible with Rainbow)
-
         # FIXME: there is an issue with the Activity class and Read that makes
         # the file disappear; probably related to write_file not writing a
         # file. This is a dirty fix and should be improved later.
