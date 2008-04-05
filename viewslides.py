@@ -21,6 +21,7 @@ import logging
 import tempfile
 import time
 import zipfile
+from zipfile import BadZipfile
 import pygtk
 import gtk
 import string
