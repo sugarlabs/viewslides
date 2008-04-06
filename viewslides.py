@@ -37,6 +37,7 @@ import dbus
 import gobject
 import hippo
 import telepathy
+import shutil
 
 _HARDWARE_MANAGER_INTERFACE = 'org.laptop.HardwareManager'
 _HARDWARE_MANAGER_SERVICE = 'org.laptop.HardwareManager'
@@ -233,12 +234,11 @@ class ViewSlidesActivity(activity.Activity):
 
     def _load_document(self, file_path):
         "Read the Zip file containing the images"
-        self.shared_file = open(file_path,"r")
-        # We open it both as a regular file and as a Zip file
-        # The regular file will be copied to the Journal if
-        # we received the file from elsewhere.
-        if zipfile.is_zipfile(file_path):
-            self.zf = zipfile.ZipFile(file_path, 'r')
+        print file_path
+        self.temp_filename = '/tmp/viewslides.zip'
+        shutil.copyfile (file_path, self.temp_filename)
+        if zipfile.is_zipfile(self.temp_filename):
+            self.zf = zipfile.ZipFile(self.temp_filename, 'r')
             self.image_files = self.zf.namelist()
             self.image_files.sort()
             self.page = int(self.metadata.get('current_image', '0'))
@@ -260,14 +260,7 @@ class ViewSlidesActivity(activity.Activity):
         if self.is_received_document == True:
             # This document was given to us by someone, so we have
             # to save it to the Journal.
-            f = open(filename, 'w')
-            try:
-                while self.shared_file:
-                    filebytes = self.shared_file.read(2048)
-                    f.write(filebytes)
-            finally:
-                f.close
-
+            shutil.copyfile (self.temp_filename, file_path)
         self.metadata['current_image'] =str(self.page)
 
     # The code from here on down is for sharing.
@@ -343,9 +336,6 @@ class ViewSlidesActivity(activity.Activity):
         gobject.idle_add(self._get_document)
 
     def _share_document(self):
-        # FIXME: there is an issue with the Activity class and Read that makes
-        # the file disappear; probably related to write_file not writing a
-        # file. This is a dirty fix and should be improved later.
         if self._jobject is None:
             self._jobject = datastore.get(self._object_id)
         elif not os.path.exists(self._jobject.get_file_path()):
@@ -360,11 +350,9 @@ class ViewSlidesActivity(activity.Activity):
         iface = chan[telepathy.CHANNEL_TYPE_TUBES]
         self._fileserver_tube_id = iface.OfferStreamTube(READ_STREAM_SERVICE,
                 {},
-                # telepathy.SOCKET_ADDRESS_TYPE_IPV4,
-                _SOCKET_TYPE_IPv4,
+                telepathy.SOCKET_ADDRESS_TYPE_IPV4,
                 ('127.0.0.1', dbus.UInt16(self.port)),
-                # telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0)
-                _SOCKET_ACCESS_CONTROL_LOCALHOST, 0)
+                telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0)
 
     def watch_for_tubes(self):
         tubes_chan = self._shared_activity.telepathy_tubes_chan
