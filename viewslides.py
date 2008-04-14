@@ -38,6 +38,7 @@ import gobject
 import hippo
 import telepathy
 import shutil
+from decimal import *
 
 _HARDWARE_MANAGER_INTERFACE = 'org.laptop.HardwareManager'
 _HARDWARE_MANAGER_SERVICE = 'org.laptop.HardwareManager'
@@ -68,6 +69,7 @@ class ViewSlidesActivity(activity.Activity):
 
         self.connect("expose_event", self.area_expose_cb)
         self.connect("key_press_event", self.keypress_cb)
+        self.connect("delete-event", self.delete_cb)
         toolbox = activity.ActivityToolbox(self)
         self._read_toolbar = ReadToolbar()
         toolbox.add_toolbar(_('Read'), self._read_toolbar)
@@ -186,9 +188,13 @@ class ViewSlidesActivity(activity.Activity):
         # get the size of the image.
         im = pygame.image.load(filename)
         image_width, image_height = im.get_size()
+        getcontext().prec = 7
+        s_a_ratio = Decimal(screen_height) / Decimal(screen_width)
+        i_a_ratio = Decimal(image_height) / Decimal(image_width)
+        # print 's_a_ratio', s_a_ratio, 'i_a_ratio', i_a_ratio
         new_width = image_width
         new_height = image_height
-        if image_width >= image_height:
+        if s_a_ratio >= i_a_ratio:
             new_width = screen_width
             new_height = image_height * screen_width
             if image_width > 1:
@@ -232,10 +238,16 @@ class ViewSlidesActivity(activity.Activity):
         """Load a file from the datastore on activity start"""
         self._load_document(file_path)
 
+    def delete_cb(self, widget, event):
+        remove(self.temp_filename)
+        return False
+
     def _load_document(self, file_path):
         "Read the Zip file containing the images"
         print file_path
-        self.temp_filename = '/tmp/viewslides.zip'
+        partition_tuple = file_path.rpartition('/')
+        self.temp_filename = '/tmp/' + partition_tuple[2]
+        print self.temp_filename
         shutil.copyfile (file_path, self.temp_filename)
         if zipfile.is_zipfile(self.temp_filename):
             self.zf = zipfile.ZipFile(self.temp_filename, 'r')
