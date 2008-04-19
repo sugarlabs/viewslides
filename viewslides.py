@@ -39,6 +39,7 @@ import hippo
 import telepathy
 import shutil
 from decimal import *
+from sugar.presence import presenceservice
 
 _HARDWARE_MANAGER_INTERFACE = 'org.laptop.HardwareManager'
 _HARDWARE_MANAGER_SERVICE = 'org.laptop.HardwareManager'
@@ -69,7 +70,7 @@ class ViewSlidesActivity(activity.Activity):
 
         self.connect("expose_event", self.area_expose_cb)
         self.connect("key_press_event", self.keypress_cb)
-        self.connect("delete-event", self.delete_cb)
+        self.connect("delete_event", self.delete_cb)
         toolbox = activity.ActivityToolbox(self)
         self._read_toolbar = ReadToolbar()
         toolbox.add_toolbar(_('Read'), self._read_toolbar)
@@ -80,7 +81,9 @@ class ViewSlidesActivity(activity.Activity):
         self.set_canvas(self.image)
         self.show_image("ViewSlides.jpg")
         self._read_toolbar.set_activity(self)
-
+        self.page = 0
+        self.temp_filename = ''
+        
         # Set up for idle suspend
         self._idle_timer = 0
         self._service = None
@@ -113,10 +116,11 @@ class ViewSlidesActivity(activity.Activity):
         h = hash(self._activity_id)
         self.port = 1024 + (h % 64511)
 
-        if handle.uri:
-            self._load_document(handle.uri)
-
         self.is_received_document = False
+        
+        presenceService = presenceservice.get_instance()
+        xoOwner = presenceService.get_owner()
+        self.owner = xoOwner.props.nick
         
         if self._shared_activity:
             # We're joining
@@ -191,7 +195,6 @@ class ViewSlidesActivity(activity.Activity):
         getcontext().prec = 7
         s_a_ratio = Decimal(screen_height) / Decimal(screen_width)
         i_a_ratio = Decimal(image_height) / Decimal(image_width)
-        # print 's_a_ratio', s_a_ratio, 'i_a_ratio', i_a_ratio
         new_width = image_width
         new_height = image_height
         if s_a_ratio >= i_a_ratio:
@@ -239,15 +242,14 @@ class ViewSlidesActivity(activity.Activity):
         self._load_document(file_path)
 
     def delete_cb(self, widget, event):
-        remove(self.temp_filename)
+        os.remove(self.temp_filename)
+        print 'deleted file', self.temp_filename
         return False
 
     def _load_document(self, file_path):
         "Read the Zip file containing the images"
-        print file_path
         partition_tuple = file_path.rpartition('/')
-        self.temp_filename = '/tmp/' + partition_tuple[2]
-        print self.temp_filename
+        self.temp_filename = '/tmp/' + self.owner + partition_tuple[2]
         shutil.copyfile (file_path, self.temp_filename)
         if zipfile.is_zipfile(self.temp_filename):
             self.zf = zipfile.ZipFile(self.temp_filename, 'r')
@@ -269,11 +271,13 @@ class ViewSlidesActivity(activity.Activity):
 
     def write_file(self, file_path):
         "Save meta data for the file."
-        if self.is_received_document == True:
+        if self.is_received_document == True and self.temp_filename != '':
             # This document was given to us by someone, so we have
             # to save it to the Journal.
             shutil.copyfile (self.temp_filename, file_path)
-        self.metadata['current_image'] =str(self.page)
+        self.metadata['current_image']  = str(self.page)
+        if self.temp_filename != '':
+            os.remove(self.temp_filename)
 
     # The code from here on down is for sharing.
     def _download_result_cb(self, getter, tempfile, suggested_name, tube_id):
@@ -286,8 +290,9 @@ class ViewSlidesActivity(activity.Activity):
         self.save()
 
     def _download_progress_cb(self, getter, bytes_downloaded, tube_id):
-        _logger.debug("Downloaded %u bytes from tube %u...",
-                      bytes_downloaded, tube_id)
+        self._read_toolbar.set_downloaded_bytes(bytes_downloaded)
+        # _logger.debug("Downloaded %u bytes from tube %u...",
+        #            bytes_downloaded, tube_id)
 
     def _download_error_cb(self, getter, err, tube_id):
         _logger.debug("Error getting document from tube %u: %s",
@@ -299,8 +304,9 @@ class ViewSlidesActivity(activity.Activity):
         chan = self._shared_activity.telepathy_tubes_chan
         iface = chan[telepathy.CHANNEL_TYPE_TUBES]
         addr = iface.AcceptStreamTube(tube_id,
-                telepathy.SOCKET_ADDRESS_TYPE_IPV4,
-                telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0,
+                # telepathy.SOCKET_ADDRESS_TYPE_IPV4,
+                # telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0,
+                2, 0, 0, 
                 utf8_strings=True)
         _logger.debug('Accepted stream tube: listening address is %r', addr)
         # SOCKET_ADDRESS_TYPE_IPV4 is defined to have addresses of type '(sq)'
@@ -362,9 +368,11 @@ class ViewSlidesActivity(activity.Activity):
         iface = chan[telepathy.CHANNEL_TYPE_TUBES]
         self._fileserver_tube_id = iface.OfferStreamTube(READ_STREAM_SERVICE,
                 {},
-                telepathy.SOCKET_ADDRESS_TYPE_IPV4,
+                # telepathy.SOCKET_ADDRESS_TYPE_IPV4,
+                2,
                 ('127.0.0.1', dbus.UInt16(self.port)),
-                telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0)
+                # telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0)
+                0, 0)
 
     def watch_for_tubes(self):
         tubes_chan = self._shared_activity.telepathy_tubes_chan
