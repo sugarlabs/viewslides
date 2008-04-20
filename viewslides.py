@@ -156,8 +156,9 @@ class ViewSlidesActivity(activity.Activity):
         page=page-1
         if page < 0: page=0
         if self.save_extracted_file(self.zf, self.image_files[page]) == True:
-            self.show_image("/tmp/" + self.image_files[page])
-            os.remove("/tmp/" + self.image_files[page])
+            fname = "/tmp/" + self.make_new_filename(self.image_files[page])
+            self.show_image(fname)
+            os.remove(fname)
         self._read_toolbar.set_current_page(page)
         self.page = page
 
@@ -169,8 +170,9 @@ class ViewSlidesActivity(activity.Activity):
         page = page + 1
         if page >= len(self.image_files): page=len(self.image_files) - 1
         if self.save_extracted_file(self.zf, self.image_files[page]) == True:
-            self.show_image("/tmp/" + self.image_files[page])
-            os.remove("/tmp/" + self.image_files[page])
+            fname = "/tmp/" + self.make_new_filename(self.image_files[page])
+            self.show_image(fname)
+            os.remove(fname)
         self._read_toolbar.set_current_page(page)
         self.page = page
 
@@ -179,8 +181,9 @@ class ViewSlidesActivity(activity.Activity):
 
     def show_page(self, page):
         if self.save_extracted_file(self.zf, self.image_files[page]) == True:
-            self.show_image("/tmp/" + self.image_files[page])
-            os.remove("/tmp/" + self.image_files[page])
+            fname = "/tmp/" + self.make_new_filename(self.image_files[page])
+            self.show_image(fname)
+            os.remove(fname)
         
     def show_image(self, filename):
         "display a resized image in a full screen window"
@@ -230,7 +233,10 @@ class ViewSlidesActivity(activity.Activity):
         except BadZipfile, err:
             print 'Error opening the zip file: %s' % (err)
             return False    
-        f = open("/tmp/" + filename, 'w')
+        outfn = self.make_new_filename(filename)
+        if (outfn == ''):
+            return False
+        f = open("/tmp/" + outfn, 'w')
         try:
             f.write(filebytes)
         finally:
@@ -246,6 +252,10 @@ class ViewSlidesActivity(activity.Activity):
         print 'deleted file', self.temp_filename
         return False
 
+    def make_new_filename(self, filename):
+        partition_tuple = filename.rpartition('/')
+        return partition_tuple[2]
+    
     def _load_document(self, file_path):
         "Read the Zip file containing the images"
         partition_tuple = file_path.rpartition('/')
@@ -255,9 +265,17 @@ class ViewSlidesActivity(activity.Activity):
             self.zf = zipfile.ZipFile(self.temp_filename, 'r')
             self.image_files = self.zf.namelist()
             self.image_files.sort()
+            i = 0
+            valid_endings = ('.jpg', '.JPG', '.gif', '.GIF', '.tiff', '.TIFF', '.png', '.PNG')
+            while i < len(self.image_files):
+                newfn = self.make_new_filename(self.image_files[i])
+                if newfn.endswith(valid_endings):
+                    i = i + 1
+                else:   
+                    del self.image_files[i]
             self.page = int(self.metadata.get('current_image', '0'))
             self.save_extracted_file(self.zf, self.image_files[self.page])
-            currentFileName = "/tmp/" + self.image_files[self.page]
+            currentFileName = "/tmp/" + self.make_new_filename(self.image_files[self.page])
             self.show_image(currentFileName)
             os.remove(currentFileName)
             self._read_toolbar.set_total_pages(len(self.image_files))

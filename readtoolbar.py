@@ -84,9 +84,6 @@ class ReadToolbar(gtk.Toolbar):
 
         self._downloaded_label = gtk.Label()
 
-        # label_attributes = pango.AttrList()
-        # label_attributes.insert(pango.AttrSize(14000, 0, -1))
-        # label_attributes.insert(pango.AttrForeground(65535, 65535, 65535, 0, -1))
         self._downloaded_label.set_attributes(label_attributes)
 
         self._downloaded_label.set_text('')
