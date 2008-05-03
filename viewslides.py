@@ -289,6 +289,10 @@ class ViewSlidesActivity(activity.Activity):
 
     def write_file(self, file_path):
         "Save meta data for the file."
+        if not os.path.exists(self.temp_filename):
+            print 'No file to save', self.temp_filename
+            return
+
         if self.is_received_document == True and self.temp_filename != '':
             # This document was given to us by someone, so we have
             # to save it to the Journal.
@@ -308,9 +312,8 @@ class ViewSlidesActivity(activity.Activity):
         self.save()
 
     def _download_progress_cb(self, getter, bytes_downloaded, tube_id):
-        self._read_toolbar.set_downloaded_bytes(bytes_downloaded)
-        # _logger.debug("Downloaded %u bytes from tube %u...",
-        #            bytes_downloaded, tube_id)
+        total = getter._info.headers["Content-Length"]
+        self._read_toolbar.set_downloaded_bytes(bytes_downloaded,  total)
 
     def _download_error_cb(self, getter, err, tube_id):
         _logger.debug("Error getting document from tube %u: %s",
@@ -322,9 +325,9 @@ class ViewSlidesActivity(activity.Activity):
         chan = self._shared_activity.telepathy_tubes_chan
         iface = chan[telepathy.CHANNEL_TYPE_TUBES]
         addr = iface.AcceptStreamTube(tube_id,
-                # telepathy.SOCKET_ADDRESS_TYPE_IPV4,
-                # telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0,
-                2, 0, 0, 
+                telepathy.SOCKET_ADDRESS_TYPE_IPV4,
+                telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0,
+                # 2, 0, 0, 
                 utf8_strings=True)
         _logger.debug('Accepted stream tube: listening address is %r', addr)
         # SOCKET_ADDRESS_TYPE_IPV4 is defined to have addresses of type '(sq)'
@@ -386,11 +389,11 @@ class ViewSlidesActivity(activity.Activity):
         iface = chan[telepathy.CHANNEL_TYPE_TUBES]
         self._fileserver_tube_id = iface.OfferStreamTube(READ_STREAM_SERVICE,
                 {},
-                # telepathy.SOCKET_ADDRESS_TYPE_IPV4,
-                2,
+                telepathy.SOCKET_ADDRESS_TYPE_IPV4,
+                # 2,
                 ('127.0.0.1', dbus.UInt16(self.port)),
-                # telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0)
-                0, 0)
+                telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0)
+               # 0)
 
     def watch_for_tubes(self):
         tubes_chan = self._shared_activity.telepathy_tubes_chan

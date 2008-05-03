@@ -135,8 +135,8 @@ class ReadToolbar(gtk.Toolbar):
     def set_total_pages(self, pages):
         self.total_pages = pages
         
-    def set_downloaded_bytes(self, bytes):
-        self._downloaded_label.props.label = '     ' + str(bytes) + ' received'
+    def set_downloaded_bytes(self, bytes,  total):
+        self._downloaded_label.props.label = '     ' + str(bytes) + ' of ' + str(total) + ' received'
         
     def set_current_page(self, page):
         self.current_page = page
