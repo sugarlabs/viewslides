@@ -69,7 +69,6 @@ class ViewSlidesActivity(activity.Activity):
         self._object_id = handle.object_id
 
         self.connect("expose_event", self.area_expose_cb)
-        self.connect("key_press_event", self.keypress_cb)
         self.connect("delete_event", self.delete_cb)
         toolbox = activity.ActivityToolbox(self)
         self._read_toolbar = ReadToolbar()
@@ -77,12 +76,21 @@ class ViewSlidesActivity(activity.Activity):
         self._read_toolbar.show()
         self.set_toolbox(toolbox)
         toolbox.show()
+        self.scrolled = gtk.ScrolledWindow()
+        self.scrolled.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+        self.scrolled.props.shadow_type = gtk.SHADOW_NONE
         self.image = gtk.Image()
-        self.set_canvas(self.image)
+        self.image.show()
+        self.scrolled.add(self.image)
+        self.set_canvas(self.scrolled)
+        self.scrolled.show()
+        self.scrolled.connect("key_press_event", self.keypress_cb)
         self.show_image("ViewSlides.jpg")
         self._read_toolbar.set_activity(self)
         self.page = 0
         self.temp_filename = ''
+        self.saved_screen_width = 0
+        self.scrolled.grab_focus()
         
         # Set up for idle suspend
         self._idle_timer = 0
@@ -177,6 +185,12 @@ class ViewSlidesActivity(activity.Activity):
         self.page = page
 
     def area_expose_cb(self, area, event):
+        screen_width = gtk.gdk.screen_width()
+        screen_height = gtk.gdk.screen_height()
+        print 'width', screen_width, 'height',  screen_height
+        if self.saved_screen_width != screen_width and self.saved_screen_width != 0:
+            self.show_page(self.page)
+        self.saved_screen_width = screen_width
         return False
 
     def show_page(self, page):
