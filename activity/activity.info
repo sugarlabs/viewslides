@@ -2,7 +2,8 @@
 name = View Slides
 service_name = org.laptop.ViewSlidesActivity
 exec = sugar-activity viewslides.ViewSlidesActivity
-activity-version = 3
+activity-version = 4
 icon = ViewSlides
-show_launcher = no
+show_launcher = yes
 mime_types = application/zip
+license = GPLv2+

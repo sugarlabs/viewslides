@@ -30,6 +30,7 @@ from pygame.locals import *
 from sugar.activity import activity
 from sugar import network
 from sugar.datastore import datastore
+from sugar.graphics.objectchooser import ObjectChooser
 from readtoolbar import ReadToolbar
 from gettext import gettext as _
 import pango
@@ -119,6 +120,9 @@ class ViewSlidesActivity(activity.Activity):
         # start on the read toolbar
         self.toolbox.set_current_toolbar(_TOOLBAR_READ)
         self.unused_download_tubes = set()
+        # Status of temp file used for write_file:
+        self._tempfile = None
+        self._close_requested = False
         self._want_document = True
         self.connect("shared", self._shared_cb)
         h = hash(self._activity_id)
@@ -138,9 +142,31 @@ class ViewSlidesActivity(activity.Activity):
             else:
                 # Wait for a successful join before trying to get the document
                 self.connect("joined", self._joined_cb)
-        # uncomment this and adjust the path for easier testing
-        #else:
-        #    self._load_document('file:///home/smcv/tmp/test.pdf')
+        elif self._object_id is None:
+            # Not joining, not resuming
+            self._show_journal_object_picker()
+
+    def _show_journal_object_picker(self):
+        """Show the journal object picker to load a document.
+        This is for if View Slides is launched without a document.
+        """
+        if not self._want_document:
+            return
+        chooser = ObjectChooser(_('Choose document'), self, 
+                                gtk.DIALOG_MODAL | 
+                                gtk.DIALOG_DESTROY_WITH_PARENT)
+        try:
+            result = chooser.run()
+            if result == gtk.RESPONSE_ACCEPT:
+                logging.debug('ObjectChooser: %r' % 
+                              chooser.get_selected_object())
+                jobject = chooser.get_selected_object()
+                if jobject and jobject.file_path:
+                    self.metadata['title'] = jobject.metadata['title']
+                    self.read_file(jobject.file_path)
+        finally:
+            chooser.destroy()
+            del chooser
 
     def keypress_cb(self, widget, event):
         "Respond when the user presses Escape or one of the arrow keys"
@@ -259,7 +285,10 @@ class ViewSlidesActivity(activity.Activity):
 
     def read_file(self, file_path):
         """Load a file from the datastore on activity start"""
-        self._load_document(file_path)
+        tempfile = os.path.join(self.get_activity_root(),  'instance', 'tmp%i' % time.time())
+        os.link(file_path,  tempfile)
+        self._tempfile = tempfile
+        self._load_document(self._tempfile)
 
     def delete_cb(self, widget, event):
         os.remove(self.temp_filename)
@@ -280,7 +309,7 @@ class ViewSlidesActivity(activity.Activity):
             self.image_files = self.zf.namelist()
             self.image_files.sort()
             i = 0
-            valid_endings = ('.jpg', '.JPG', '.gif', '.GIF', '.tiff', '.TIFF', '.png', '.PNG')
+            valid_endings = ('.jpg', '.JPG', '.gif', '.GIF', '.tiff', '.TIFF', '.png', '.PNG',  '.bmp', '.BMP')
             while i < len(self.image_files):
                 newfn = self.make_new_filename(self.image_files[i])
                 if newfn.endswith(valid_endings):
@@ -311,6 +340,14 @@ class ViewSlidesActivity(activity.Activity):
             # This document was given to us by someone, so we have
             # to save it to the Journal.
             shutil.copyfile (self.temp_filename, file_path)
+        else:
+            os.link(self._tempfile,  file_path)
+ 
+            if self._close_requested:
+                _logger.debug("Removing temp file %s because we will close", self._tempfile)
+                os.unlink(self._tempfile)
+                self._tempfile = None
+
         self.metadata['current_image']  = str(self.page)
         if self.temp_filename != '':
             os.remove(self.temp_filename)
