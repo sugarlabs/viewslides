@@ -301,11 +301,8 @@ class ViewSlidesActivity(activity.Activity):
     
     def _load_document(self, file_path):
         "Read the Zip file containing the images"
-        partition_tuple = file_path.rpartition('/')
-        self.temp_filename = '/tmp/' + self.owner + partition_tuple[2]
-        shutil.copyfile (file_path, self.temp_filename)
-        if zipfile.is_zipfile(self.temp_filename):
-            self.zf = zipfile.ZipFile(self.temp_filename, 'r')
+        if zipfile.is_zipfile(file_path):
+            self.zf = zipfile.ZipFile(file_path, 'r')
             self.image_files = self.zf.namelist()
             self.image_files.sort()
             i = 0
@@ -332,26 +329,21 @@ class ViewSlidesActivity(activity.Activity):
 
     def write_file(self, file_path):
         "Save meta data for the file."
-        if not os.path.exists(self.temp_filename):
-            print 'No file to save', self.temp_filename
-            return
-
-        if self.is_received_document == True and self.temp_filename != '':
-            # This document was given to us by someone, so we have
-            # to save it to the Journal.
-            shutil.copyfile (self.temp_filename, file_path)
-        else:
-            os.link(self._tempfile,  file_path)
- 
-            if self._close_requested:
-                _logger.debug("Removing temp file %s because we will close", self._tempfile)
-                os.unlink(self._tempfile)
-                self._tempfile = None
+        if self._tempfile is None:
+            raise NotImplementedError
 
         self.metadata['current_image']  = str(self.page)
-        if self.temp_filename != '':
-            os.remove(self.temp_filename)
+        os.link(self._tempfile,  file_path)
+ 
+        if self._close_requested:
+            _logger.debug("Removing temp file %s because we will close", self._tempfile)
+            os.unlink(self._tempfile)
+            self._tempfile = None
 
+    def can_close(self):
+        self._close_requested = True
+        return True
+        
     # The code from here on down is for sharing.
     def _download_result_cb(self, getter, tempfile, suggested_name, tube_id):
         del self.unused_download_tubes
