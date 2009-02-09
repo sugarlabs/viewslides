@@ -72,6 +72,12 @@ class ViewSlidesActivity(activity.Activity):
         self.connect("expose_event", self.area_expose_cb)
         self.connect("delete_event", self.delete_cb)
         toolbox = activity.ActivityToolbox(self)
+        activity_toolbar = toolbox.get_activity_toolbar()
+        activity_toolbar.remove(activity_toolbar.share)
+        activity_toolbar.share = None
+        activity_toolbar.remove(activity_toolbar.keep)
+        activity_toolbar.keep = None
+        
         self._read_toolbar = ReadToolbar()
         toolbox.add_toolbar(_('Read'), self._read_toolbar)
         self._read_toolbar.show()
