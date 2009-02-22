@@ -1,72 +1,37 @@
-# translation of xbook.master.po to Français
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# French translations for PACKAGE package.
+# Copyright (C) 2009 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# James Simmons <ja.simmons@sbcglobal.net>, 2009.
 #
-# Gauthier Ancelin <gauthier.ancelin@laposte.net>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: xbook.master\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-31 09:25+0100\n"
-"PO-Revision-Date: 2007-07-31 00:03+0200\n"
-"Last-Translator: Gauthier Ancelin <gauthier.ancelin@laposte.net>\n"
-"Language-Team: Français <fedora-trans-fr@redhat.com>\n"
+"POT-Creation-Date: 2009-02-22 13:44-0600\n"
+"PO-Revision-Date: 2009-02-22 17:49-0600\n"
+"Last-Translator: James Simmons <ja.simmons@sbcglobal.net>\n"
+"Language-Team: French\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=ASCII\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: activity/activity.info:2 readactivity.py:77
+#: activity/activity.info:2
+msgid "View Slides"
+msgstr ""
+
+#: viewslides.py:82
 msgid "Read"
 msgstr ""
 
-#: readactivity.py:73
-msgid "Edit"
+#: viewslides.py:161
+msgid "Choose document"
 msgstr ""
 
-#: readactivity.py:81
-msgid "View"
-msgstr "Vue"
-
-#: readtoolbar.py:60
-msgid "Previous"
-msgstr "Précédent"
-
-#: readtoolbar.py:67
-msgid "Next"
-msgstr "Suivant"
-
-#: readtoolbar.py:105
+#: readtoolbar.py:36
 msgid "Back"
-msgstr "Reculer"
+msgstr ""
 
-#: readtoolbar.py:112
+#: readtoolbar.py:43
 msgid "Forward"
-msgstr "Avancer"
-
-#: readtoolbar.py:207
-msgid "Zoom out"
 msgstr ""
-
-#: readtoolbar.py:213
-msgid "Zoom in"
-msgstr ""
-
-#: readtoolbar.py:219
-msgid "Zoom to width"
-msgstr ""
-
-#: readtoolbar.py:225
-msgid "Zoom to fit"
-msgstr ""
-
-#: readtoolbar.py:230
-msgid "Actual size"
-msgstr ""
-
-#: readtoolbar.py:248
-msgid "%"
-msgstr ""
-
-#~ msgid "Read Activity"
-#~ msgstr "Lecture"

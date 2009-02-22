@@ -1,71 +1,37 @@
-# Greek translation of Xbook project.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Greek translations for PACKAGE package.
+# Copyright (C) 2009 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Simos Xenitellis <simos.lists@googlemail.com>, 2007.
+# James Simmons <ja.simmons@sbcglobal.net>, 2009.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Xbook project\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-31 09:25+0100\n"
-"PO-Revision-Date: 2007-07-25 18:53+0100\n"
-"Last-Translator: Simos Xenitellis <simos.lists@googlemail.com>\n"
-"Language-Team: Greek <olpc@grnet.gr>\n"
+"POT-Creation-Date: 2009-02-22 13:44-0600\n"
+"PO-Revision-Date: 2009-02-22 17:48-0600\n"
+"Last-Translator: James Simmons <ja.simmons@sbcglobal.net>\n"
+"Language-Team: Greek\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=ASCII\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: activity/activity.info:2 readactivity.py:77
+#: activity/activity.info:2
+msgid "View Slides"
+msgstr ""
+
+#: viewslides.py:82
 msgid "Read"
 msgstr ""
 
-#: readactivity.py:73
-msgid "Edit"
+#: viewslides.py:161
+msgid "Choose document"
 msgstr ""
 
-#: readactivity.py:81
-msgid "View"
-msgstr "Προβολή"
-
-#: readtoolbar.py:60
-msgid "Previous"
-msgstr "Προηγούμενο"
-
-#: readtoolbar.py:67
-msgid "Next"
-msgstr "Επόμενο"
-
-#: readtoolbar.py:105
+#: readtoolbar.py:36
 msgid "Back"
-msgstr "Πίσω"
+msgstr ""
 
-#: readtoolbar.py:112
+#: readtoolbar.py:43
 msgid "Forward"
-msgstr "Μπροστά"
-
-#: readtoolbar.py:207
-msgid "Zoom out"
 msgstr ""
-
-#: readtoolbar.py:213
-msgid "Zoom in"
-msgstr ""
-
-#: readtoolbar.py:219
-msgid "Zoom to width"
-msgstr ""
-
-#: readtoolbar.py:225
-msgid "Zoom to fit"
-msgstr ""
-
-#: readtoolbar.py:230
-msgid "Actual size"
-msgstr ""
-
-#: readtoolbar.py:248
-msgid "%"
-msgstr ""
-
-#~ msgid "Read Activity"
-#~ msgstr "Ανάγνωση δραστηριότητας"
