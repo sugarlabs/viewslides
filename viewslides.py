@@ -99,6 +99,10 @@ class ViewSlidesActivity(activity.Activity):
         self.saved_screen_width = 0
         self.scrolled.grab_focus()
         
+        pixmap = gtk.gdk.Pixmap(None, 1, 1, 1)
+        color = gtk.gdk.Color()
+        self.hidden_cursor = gtk.gdk.Cursor(pixmap, pixmap, color, color, 0, 0)
+
         # Set up for idle suspend
         self._idle_timer = 0
         self._service = None
