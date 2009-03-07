@@ -73,8 +73,8 @@ class ViewSlidesActivity(activity.Activity):
         self.connect("delete_event", self.delete_cb)
         toolbox = activity.ActivityToolbox(self)
         activity_toolbar = toolbox.get_activity_toolbar()
-        activity_toolbar.remove(activity_toolbar.share)
-        activity_toolbar.share = None
+        # activity_toolbar.remove(activity_toolbar.share)
+        # activity_toolbar.share = None
         activity_toolbar.remove(activity_toolbar.keep)
         activity_toolbar.keep = None
         
@@ -102,31 +102,10 @@ class ViewSlidesActivity(activity.Activity):
         pixmap = gtk.gdk.Pixmap(None, 1, 1, 1)
         color = gtk.gdk.Color()
         self.hidden_cursor = gtk.gdk.Cursor(pixmap, pixmap, color, color, 0, 0)
+        self.cursor_visible = True
 
-        # Set up for idle suspend
-        self._idle_timer = 0
-        self._service = None
+        self.setup_power_management()
 
-        # start with sleep off
-        self._sleep_inhibit = True
-
-        fname = os.path.join('/etc', 'inhibit-ebook-sleep')
-        if not os.path.exists(fname):
-            try:
-                bus = dbus.SystemBus()
-                proxy = bus.get_object(_HARDWARE_MANAGER_SERVICE,
-                                       _HARDWARE_MANAGER_OBJECT_PATH)
-                self._service = dbus.Interface(proxy, _HARDWARE_MANAGER_INTERFACE)
-                self.connect("focus-in-event", self._focus_in_event_cb)
-                self.connect("focus-out-event", self._focus_out_event_cb)
-                self.connect("notify::active", self._now_active_cb)
-
-                logging.debug('Suspend on idle enabled')
-            except dbus.DBusException, e:
-                _logger.info('Hardware manager service not found, no idle suspend.')
-        else:
-            logging.debug('Suspend on idle disabled')
-    
         # start on the read toolbar
         self.toolbox.set_current_toolbar(_TOOLBAR_READ)
         self.unused_download_tubes = set()
@@ -192,6 +171,14 @@ class ViewSlidesActivity(activity.Activity):
             return True
         if keyname == 'Down' or keyname == 'KP_Down':
             self.next_page()
+            return True
+        if keyname == 'KP_Home':
+            if self.cursor_visible:
+                self.window.set_cursor(self.hidden_cursor)
+                self.cursor_visible = False
+            else:
+                self.window.set_cursor(None)
+                self.cursor_visible = True
             return True
         return False
 
@@ -282,6 +269,7 @@ class ViewSlidesActivity(activity.Activity):
             filebytes = zipfile.read(filename)
         except BadZipfile, err:
             print 'Error opening the zip file: %s' % (err)
+            self._alert('Error', 'Error opening the zip file: '  + err)
             return False    
         outfn = self.make_new_filename(filename)
         if (outfn == ''):
@@ -335,7 +323,7 @@ class ViewSlidesActivity(activity.Activity):
                 self.watch_for_tubes()
                 self._share_document()
         else:
-            print 'not a zipfile', file_path
+            self._alert('Invalid', 'Not a zipfile: '  + file_path)
 
     def write_file(self, file_path):
         "Save meta data for the file."
@@ -360,6 +348,7 @@ class ViewSlidesActivity(activity.Activity):
 
         _logger.debug("Got document %s (%s) from tube %u",
                       tempfile, suggested_name, tube_id)
+        self._tempfile = tempfile
         self._load_document(tempfile)
         _logger.debug("Saving %s to datastore...", tempfile)
         self.save()
@@ -371,6 +360,7 @@ class ViewSlidesActivity(activity.Activity):
     def _download_error_cb(self, getter, err, tube_id):
         _logger.debug("Error getting document from tube %u: %s",
                       tube_id, err)
+        self._alert('Failure', 'Error getting document from tube: '  + tube_id + ' '  + err)
         self._want_document = True
         gobject.idle_add(self._get_document)
 
@@ -416,6 +406,7 @@ class ViewSlidesActivity(activity.Activity):
         except (ValueError, KeyError), e:
             _logger.debug('No tubes to get the document from right now: %s',
                           e)
+            self._alert('Failure', 'No tubes to get the document from right now: '  + e)
             return False
 
         # Avoid trying to download the document multiple times at once
@@ -475,6 +466,7 @@ class ViewSlidesActivity(activity.Activity):
 
     def _list_tubes_error_cb(self, e):
         _logger.error('ListTubes() failed: %s', e)
+        self._alert('Failure', 'ListTubes() failed: '  + e)
 
     def _shared_cb(self, activity):
         # We initiated this activity and have now shared it, so by
@@ -483,7 +475,44 @@ class ViewSlidesActivity(activity.Activity):
         self.watch_for_tubes()
         self._share_document()
 
+    def _alert(self, title, text=None):
+        alert = NotifyAlert(timeout=5)
+        alert.props.title = title
+        alert.props.msg = text
+        self.add_alert(alert)
+        alert.connect('response', self._alert_cancel_cb)
+        alert.show()
+
+    def _alert_cancel_cb(self, alert, response_id):
+        self.remove_alert(alert)
+
     # From here down is power management stuff.
+
+    def setup_power_management(self):
+                # Set up for idle suspend
+        self._idle_timer = 0
+        self._service = None
+
+        # start with sleep off
+        self._sleep_inhibit = True
+
+        fname = os.path.join('/etc', 'inhibit-ebook-sleep')
+        if not os.path.exists(fname):
+            try:
+                bus = dbus.SystemBus()
+                proxy = bus.get_object(_HARDWARE_MANAGER_SERVICE,
+                                       _HARDWARE_MANAGER_OBJECT_PATH)
+                self._service = dbus.Interface(proxy, _HARDWARE_MANAGER_INTERFACE)
+                self.connect("focus-in-event", self._focus_in_event_cb)
+                self.connect("focus-out-event", self._focus_out_event_cb)
+                self.connect("notify::active", self._now_active_cb)
+
+                logging.debug('Suspend on idle enabled')
+            except dbus.DBusException, e:
+                _logger.info('Hardware manager service not found, no idle suspend.')
+        else:
+            logging.debug('Suspend on idle disabled')
+    
     def _now_active_cb(self, widget, pspec):
         if self.props.active:
             # Now active, start initial suspend timeout
