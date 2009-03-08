@@ -211,7 +211,6 @@ class ViewSlidesActivity(activity.Activity):
     def area_expose_cb(self, area, event):
         screen_width = gtk.gdk.screen_width()
         screen_height = gtk.gdk.screen_height()
-        print 'width', screen_width, 'height',  screen_height
         if self.saved_screen_width != screen_width and self.saved_screen_width != 0:
             self.show_page(self.page)
         self.saved_screen_width = screen_width
@@ -270,7 +269,7 @@ class ViewSlidesActivity(activity.Activity):
             filebytes = zipfile.read(filename)
         except BadZipfile, err:
             print 'Error opening the zip file: %s' % (err)
-            self._alert('Error', 'Error opening the zip file')
+            # self._alert('Error', 'Error opening the zip file')
             return False    
         outfn = self.make_new_filename(filename)
         if (outfn == ''):
@@ -324,7 +323,8 @@ class ViewSlidesActivity(activity.Activity):
                 self.watch_for_tubes()
                 self._share_document()
         else:
-            self._alert('Invalid', 'Not a zipfile: '  + file_path)
+            print 'Not a zipfile',  file_path
+            # self._alert('Invalid', 'Not a zipfile: '  + file_path)
 
     def write_file(self, file_path):
         "Save meta data for the file."
