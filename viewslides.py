@@ -31,6 +31,7 @@ from sugar.activity import activity
 from sugar import network
 from sugar.datastore import datastore
 from sugar.graphics.objectchooser import ObjectChooser
+from sugar.graphics.alert import NotifyAlert
 from readtoolbar import ReadToolbar
 from gettext import gettext as _
 import pango
