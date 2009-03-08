@@ -269,7 +269,7 @@ class ViewSlidesActivity(activity.Activity):
             filebytes = zipfile.read(filename)
         except BadZipfile, err:
             print 'Error opening the zip file: %s' % (err)
-            self._alert('Error', 'Error opening the zip file: '  + err)
+            self._alert('Error', 'Error opening the zip file')
             return False    
         outfn = self.make_new_filename(filename)
         if (outfn == ''):
@@ -360,7 +360,7 @@ class ViewSlidesActivity(activity.Activity):
     def _download_error_cb(self, getter, err, tube_id):
         _logger.debug("Error getting document from tube %u: %s",
                       tube_id, err)
-        self._alert('Failure', 'Error getting document from tube: '  + tube_id + ' '  + err)
+        self._alert('Failure', 'Error getting document from tube')
         self._want_document = True
         gobject.idle_add(self._get_document)
 
@@ -406,7 +406,7 @@ class ViewSlidesActivity(activity.Activity):
         except (ValueError, KeyError), e:
             _logger.debug('No tubes to get the document from right now: %s',
                           e)
-            self._alert('Failure', 'No tubes to get the document from right now: '  + e)
+            self._alert('Failure', 'No tubes to get the document from right now')
             return False
 
         # Avoid trying to download the document multiple times at once
@@ -466,7 +466,7 @@ class ViewSlidesActivity(activity.Activity):
 
     def _list_tubes_error_cb(self, e):
         _logger.error('ListTubes() failed: %s', e)
-        self._alert('Failure', 'ListTubes() failed: '  + e)
+        self._alert('Failure', 'ListTubes() failed')
 
     def _shared_cb(self, activity):
         # We initiated this activity and have now shared it, so by
