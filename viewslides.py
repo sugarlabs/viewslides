@@ -89,7 +89,7 @@ class ViewSlidesActivity(activity.Activity):
         self.scrolled.props.shadow_type = gtk.SHADOW_NONE
         self.image = gtk.Image()
         self.image.show()
-        self.scrolled.add(self.image)
+        self.scrolled.add_with_viewport(self.image)
         self.set_canvas(self.scrolled)
         self.scrolled.show()
         self.scrolled.connect("key_press_event", self.keypress_cb)
@@ -371,7 +371,6 @@ class ViewSlidesActivity(activity.Activity):
         addr = iface.AcceptStreamTube(tube_id,
                 telepathy.SOCKET_ADDRESS_TYPE_IPV4,
                 telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0,
-                # 2, 0, 0, 
                 utf8_strings=True)
         _logger.debug('Accepted stream tube: listening address is %r', addr)
         # SOCKET_ADDRESS_TYPE_IPV4 is defined to have addresses of type '(sq)'
@@ -435,11 +434,9 @@ class ViewSlidesActivity(activity.Activity):
         self._fileserver_tube_id = iface.OfferStreamTube(READ_STREAM_SERVICE,
                 {},
                 telepathy.SOCKET_ADDRESS_TYPE_IPV4,
-                # 2,
                 ('127.0.0.1', dbus.UInt16(self.port)),
                 telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0)
-               # 0)
-
+ 
     def watch_for_tubes(self):
         tubes_chan = self._shared_activity.telepathy_tubes_chan
 
