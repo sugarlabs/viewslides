@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-import sys
 import os
 import logging
 import tempfile
@@ -34,14 +33,10 @@ from sugar.graphics.objectchooser import ObjectChooser
 from sugar.graphics.alert import NotifyAlert
 from readtoolbar import ReadToolbar
 from gettext import gettext as _
-import pango
 import dbus
 import gobject
-import hippo
 import telepathy
-import shutil
 from decimal import *
-from sugar.presence import presenceservice
 
 _HARDWARE_MANAGER_INTERFACE = 'org.laptop.HardwareManager'
 _HARDWARE_MANAGER_SERVICE = 'org.laptop.HardwareManager'
@@ -74,8 +69,6 @@ class ViewSlidesActivity(activity.Activity):
         self.connect("delete_event", self.delete_cb)
         toolbox = activity.ActivityToolbox(self)
         activity_toolbar = toolbox.get_activity_toolbar()
-        # activity_toolbar.remove(activity_toolbar.share)
-        # activity_toolbar.share = None
         activity_toolbar.remove(activity_toolbar.keep)
         activity_toolbar.keep = None
         
@@ -119,10 +112,6 @@ class ViewSlidesActivity(activity.Activity):
         self.port = 1024 + (h % 64511)
 
         self.is_received_document = False
-        
-        presenceService = presenceservice.get_instance()
-        xoOwner = presenceService.get_owner()
-        self.owner = xoOwner.props.nick
         
         if self._shared_activity:
             # We're joining
