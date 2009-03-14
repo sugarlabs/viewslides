@@ -47,13 +47,44 @@ _TOOLBAR_READ = 1
 _logger = logging.getLogger('view-slides')
 
 class ReadHTTPRequestHandler(network.ChunkedGlibHTTPRequestHandler):
+    """HTTP Request Handler for transferring document while collaborating.
+
+    RequestHandler class that integrates with Glib mainloop. It writes
+    the specified file to the client in chunks, returning control to the
+    mainloop between chunks.
+
+    """
     def translate_path(self, path):
-        return self.server._filepath
+        """Return the filepath to the shared document."""
+        return self.server.filepath
+
 
 class ReadHTTPServer(network.GlibTCPServer):
+    """HTTP Server for transferring document while collaborating."""
     def __init__(self, server_address, filepath):
-        self._filepath = filepath
-        network.GlibTCPServer.__init__(self, server_address, ReadHTTPRequestHandler)
+        """Set up the GlibTCPServer with the ReadHTTPRequestHandler.
+
+        filepath -- path to shared document to be served.
+        """
+        self.filepath = filepath
+        network.GlibTCPServer.__init__(self, server_address,
+                                       ReadHTTPRequestHandler)
+
+
+class ReadURLDownloader(network.GlibURLDownloader):
+    """URLDownloader that provides content-length and content-type."""
+
+    def get_content_length(self):
+        """Return the content-length of the download."""
+        if self._info is not None:
+            return int(self._info.headers.get('Content-Length'))
+
+    def get_content_type(self):
+        """Return the content-type of the download."""
+        if self._info is not None:
+            return self._info.headers.get('Content-type')
+        return None
+
 
 READ_STREAM_SERVICE = 'read-activity-http'
 
@@ -334,13 +365,24 @@ class ViewSlidesActivity(activity.Activity):
         
     # The code from here on down is for sharing.
     def _download_result_cb(self, getter, tempfile, suggested_name, tube_id):
+        if self._download_content_type == 'text/html':
+            # got an error page instead
+            self._download_error_cb(getter, 'HTTP Error', tube_id)
+            return
+
         del self.unused_download_tubes
+
+        self._tempfile = tempfile
+        file_path = os.path.join(self.get_activity_root(), 'instance',
+                                    '%i' % time.time())
+        _logger.debug("Saving file %s to datastore...", file_path)
+        os.link(tempfile, file_path)
+        self._jobject.file_path = file_path
+        datastore.write(self._jobject, transfer_ownership=True)
 
         _logger.debug("Got document %s (%s) from tube %u",
                       tempfile, suggested_name, tube_id)
-        self._tempfile = tempfile
         self._load_document(tempfile)
-        _logger.debug("Saving %s to datastore...", tempfile)
         self.save()
 
     def _download_progress_cb(self, getter, bytes_downloaded, tube_id):
@@ -353,10 +395,14 @@ class ViewSlidesActivity(activity.Activity):
                       tube_id, err)
         self._alert('Failure', 'Error getting document from tube')
         self._want_document = True
+        self._download_content_length = 0
+        self._download_content_type = None
         gobject.idle_add(self._get_document)
 
-    def _download_document(self, tube_id):
-        chan = self._shared_activity.telepathy_tubes_chan
+    def _download_document(self, tube_id, path):
+        # FIXME: should ideally have the CM listen on a Unix socket
+        # instead of IPv4 (might be more compatible with Rainbow)
+        chan = self.shared_activity.telepathy_tubes_chan
         iface = chan[telepathy.CHANNEL_TYPE_TUBES]
         addr = iface.AcceptStreamTube(tube_id,
                 telepathy.SOCKET_ADDRESS_TYPE_IPV4,
@@ -371,14 +417,15 @@ class ViewSlidesActivity(activity.Activity):
         assert addr[1] > 0 and addr[1] < 65536
         port = int(addr[1])
 
-        getter = network.GlibURLDownloader("http://%s:%d/document"
+        getter = ReadURLDownloader("http://%s:%d/document"
                                            % (addr[0], port))
         getter.connect("finished", self._download_result_cb, tube_id)
         getter.connect("progress", self._download_progress_cb, tube_id)
         getter.connect("error", self._download_error_cb, tube_id)
-        _logger.debug("Starting download to %s...", self._jobject.file_path)
-        getter.start(self._jobject.file_path)
-        self.is_received_document = True
+        _logger.debug("Starting download to %s...", path)
+        getter.start(path)
+        self._download_content_length = getter.get_content_length()
+        self._download_content_type = getter.get_content_type()
         return False
 
     def _get_document(self):
@@ -387,8 +434,10 @@ class ViewSlidesActivity(activity.Activity):
 
         # Assign a file path to download if one doesn't exist yet
         if not self._jobject.file_path:
-            self._jobject.file_path = os.path.join(tempfile.gettempdir(), '%i' % time.time())
-            self._owns_file = True
+            path = os.path.join(self.get_activity_root(), 'instance',
+                                'tmp%i' % time.time())
+        else:
+            path = self._jobject.file_path
 
         # Pick an arbitrary tube we can try to download the document from
         try:
@@ -396,30 +445,32 @@ class ViewSlidesActivity(activity.Activity):
         except (ValueError, KeyError), e:
             _logger.debug('No tubes to get the document from right now: %s',
                           e)
-            self._alert('Failure', 'No tubes to get the document from right now')
             return False
 
         # Avoid trying to download the document multiple times at once
         self._want_document = False
-        gobject.idle_add(self._download_document, tube_id)
+        gobject.idle_add(self._download_document, tube_id, path)
         return False
 
     def _joined_cb(self, also_self):
+        """Callback for when a shared activity is joined.
+
+        Get the shared document from another participant.
+        """
         self.watch_for_tubes()
         gobject.idle_add(self._get_document)
 
     def _share_document(self):
-        if self._jobject is None:
-            self._jobject = datastore.get(self._object_id)
-        elif not os.path.exists(self._jobject.get_file_path()):
-            self._jobject.destroy()
-            self._jobject = datastore.get(self._object_id)
+        """Share the document."""
+        # FIXME: should ideally have the fileserver listen on a Unix socket
+        # instead of IPv4 (might be more compatible with Rainbow)
 
+        _logger.debug('Starting HTTP server on port %d', self.port)
         self._fileserver = ReadHTTPServer(("", self.port),
-            self._jobject.get_file_path())
+            self._tempfile)
 
         # Make a tube for it
-        chan = self._shared_activity.telepathy_tubes_chan
+        chan = self.shared_activity.telepathy_tubes_chan
         iface = chan[telepathy.CHANNEL_TYPE_TUBES]
         self._fileserver_tube_id = iface.OfferStreamTube(READ_STREAM_SERVICE,
                 {},
@@ -428,7 +479,8 @@ class ViewSlidesActivity(activity.Activity):
                 telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST, 0)
  
     def watch_for_tubes(self):
-        tubes_chan = self._shared_activity.telepathy_tubes_chan
+        """Watch for new tubes."""
+        tubes_chan = self.shared_activity.telepathy_tubes_chan
 
         tubes_chan[telepathy.CHANNEL_TYPE_TUBES].connect_to_signal('NewTube',
             self._new_tube_cb)
@@ -438,10 +490,11 @@ class ViewSlidesActivity(activity.Activity):
 
     def _new_tube_cb(self, tube_id, initiator, tube_type, service, params,
                      state):
+        """Callback when a new tube becomes available."""
         _logger.debug('New tube: ID=%d initator=%d type=%d service=%s '
                       'params=%r state=%d', tube_id, initiator, tube_type,
                       service, params, state)
-        if service == READ_STREAM_SERVICE:
+        if self._document is None and service == READ_STREAM_SERVICE:
             _logger.debug('I could download from that tube')
             self.unused_download_tubes.add(tube_id)
             # if no download is in progress, let's fetch the document
@@ -449,14 +502,20 @@ class ViewSlidesActivity(activity.Activity):
                 gobject.idle_add(self._get_document)
 
     def _list_tubes_reply_cb(self, tubes):
+        """Callback when new tubes are available."""
         for tube_info in tubes:
             self._new_tube_cb(*tube_info)
 
     def _list_tubes_error_cb(self, e):
+        """Handle ListTubes error by logging."""
         _logger.error('ListTubes() failed: %s', e)
-        self._alert('Failure', 'ListTubes() failed')
 
-    def _shared_cb(self, activity):
+    def _shared_cb(self, activityid):
+        """Callback when activity shared.
+
+        Set up to share the document.
+
+        """
         # We initiated this activity and have now shared it, so by
         # definition we have the file.
         _logger.debug('Activity became shared')
