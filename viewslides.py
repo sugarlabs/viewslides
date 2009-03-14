@@ -499,7 +499,7 @@ class ViewSlidesActivity(activity.Activity):
         _logger.debug('New tube: ID=%d initator=%d type=%d service=%s '
                       'params=%r state=%d', tube_id, initiator, tube_type,
                       service, params, state)
-        if self._document is None and service == READ_STREAM_SERVICE:
+        if service == READ_STREAM_SERVICE:
             _logger.debug('I could download from that tube')
             self.unused_download_tubes.add(tube_id)
             # if no download is in progress, let's fetch the document
