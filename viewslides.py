@@ -134,17 +134,19 @@ class ViewSlidesActivity(activity.Activity):
         # start on the read toolbar
         self.toolbox.set_current_toolbar(_TOOLBAR_READ)
         self.unused_download_tubes = set()
-        # Status of temp file used for write_file:
+        self._want_document = True
+        self._download_content_length = 0
+        self._download_content_type = None
+       # Status of temp file used for write_file:
         self._tempfile = None
         self._close_requested = False
-        self._want_document = True
         self.connect("shared", self._shared_cb)
         h = hash(self._activity_id)
         self.port = 1024 + (h % 64511)
 
         self.is_received_document = False
         
-        if self.shared_activity:
+        if self._shared_activity:
             # We're joining
             if self.get_shared():
                 # Already joined for some reason, just get the document
@@ -155,6 +157,9 @@ class ViewSlidesActivity(activity.Activity):
         elif self._object_id is None:
             # Not joining, not resuming
             self._show_journal_object_picker()
+        # uncomment this and adjust the path for easier testing
+        #else:
+        #    self._load_document('file:///home/smcv/tmp/test.pdf')
 
     def _show_journal_object_picker(self):
         """Show the journal object picker to load a document.
@@ -402,7 +407,7 @@ class ViewSlidesActivity(activity.Activity):
     def _download_document(self, tube_id, path):
         # FIXME: should ideally have the CM listen on a Unix socket
         # instead of IPv4 (might be more compatible with Rainbow)
-        chan = self.shared_activity.telepathy_tubes_chan
+        chan = self._shared_activity.telepathy_tubes_chan
         iface = chan[telepathy.CHANNEL_TYPE_TUBES]
         addr = iface.AcceptStreamTube(tube_id,
                 telepathy.SOCKET_ADDRESS_TYPE_IPV4,
@@ -470,7 +475,7 @@ class ViewSlidesActivity(activity.Activity):
             self._tempfile)
 
         # Make a tube for it
-        chan = self.shared_activity.telepathy_tubes_chan
+        chan = self._shared_activity.telepathy_tubes_chan
         iface = chan[telepathy.CHANNEL_TYPE_TUBES]
         self._fileserver_tube_id = iface.OfferStreamTube(READ_STREAM_SERVICE,
                 {},
@@ -480,7 +485,7 @@ class ViewSlidesActivity(activity.Activity):
  
     def watch_for_tubes(self):
         """Watch for new tubes."""
-        tubes_chan = self.shared_activity.telepathy_tubes_chan
+        tubes_chan = self._shared_activity.telepathy_tubes_chan
 
         tubes_chan[telepathy.CHANNEL_TYPE_TUBES].connect_to_signal('NewTube',
             self._new_tube_cb)
