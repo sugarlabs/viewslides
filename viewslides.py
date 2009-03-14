@@ -391,8 +391,15 @@ class ViewSlidesActivity(activity.Activity):
         self.save()
 
     def _download_progress_cb(self, getter, bytes_downloaded, tube_id):
+        if self._download_content_length > 0:
+            _logger.debug("Downloaded %u of %u bytes from tube %u...",
+                          bytes_downloaded, self._download_content_length, 
+                          tube_id)
+        else:
+            _logger.debug("Downloaded %u bytes from tube %u...",
+                          bytes_downloaded, tube_id)
         # total = getter._info.headers["Content-Length"]
-        total = 0
+        total = self._download_content_length
         self._read_toolbar.set_downloaded_bytes(bytes_downloaded,  total)
 
     def _download_error_cb(self, getter, err, tube_id):
