@@ -144,7 +144,7 @@ class ViewSlidesActivity(activity.Activity):
 
         self.is_received_document = False
         
-        if self._shared_activity:
+        if self.shared_activity:
             # We're joining
             if self.get_shared():
                 # Already joined for some reason, just get the document
