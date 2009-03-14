@@ -23,3 +23,14 @@ po/pt.po
 po/de.po
 po/POTFILES.in
 po/ViewSlides.pot
+locale/es/LC_MESSAGES/org.laptop.ViewSlidesActivity.mo
+locale/pt_BR/LC_MESSAGES/org.laptop.ViewSlidesActivity.mo
+locale/pt/LC_MESSAGES/org.laptop.ViewSlidesActivity.mo
+locale/el/LC_MESSAGES/org.laptop.ViewSlidesActivity.mo
+locale/ne/activity.linfo
+locale/ne/LC_MESSAGES/org.laptop.ViewSlidesActivity.mo
+locale/de/LC_MESSAGES/org.laptop.ViewSlidesActivity.mo
+locale/ar/LC_MESSAGES/org.laptop.ViewSlidesActivity.mo
+locale/fr/LC_MESSAGES/org.laptop.ViewSlidesActivity.mo
+locale/mk/LC_MESSAGES/org.laptop.ViewSlidesActivity.mo
+po/ne.po
