@@ -37,10 +37,7 @@ import dbus
 import gobject
 import telepathy
 from decimal import *
-
-_HARDWARE_MANAGER_INTERFACE = 'org.laptop.HardwareManager'
-_HARDWARE_MANAGER_SERVICE = 'org.laptop.HardwareManager'
-_HARDWARE_MANAGER_OBJECT_PATH = '/org/laptop/HardwareManager'
+import xopower
 
 _TOOLBAR_READ = 1
 
@@ -129,7 +126,13 @@ class ViewSlidesActivity(activity.Activity):
         self.hidden_cursor = gtk.gdk.Cursor(pixmap, pixmap, color, color, 0, 0)
         self.cursor_visible = True
 
-        self.setup_power_management()
+        xopower.setup_idle_timeout()
+        if xopower.service_activated:
+            self.scrolled.props.vadjustment.connect("value-changed", self._user_action_cb)
+            self.scrolled.props.hadjustment.connect("value-changed", self._user_action_cb)
+            self.connect("focus-in-event", self._focus_in_event_cb)
+            self.connect("focus-out-event", self._focus_out_event_cb)
+            self.connect("notify::active", self._now_active_cb)
 
         # start on the read toolbar
         self.toolbox.set_current_toolbar(_TOOLBAR_READ)
@@ -185,6 +188,8 @@ class ViewSlidesActivity(activity.Activity):
 
     def keypress_cb(self, widget, event):
         "Respond when the user presses Escape or one of the arrow keys"
+        if xopower.service_activated:
+            xopower.reset_sleep_timer()
         keyname = gtk.gdk.keyval_name(event.keyval)
         if keyname == 'KP_Right':
             self.next_page()
@@ -547,58 +552,25 @@ class ViewSlidesActivity(activity.Activity):
 
     # From here down is power management stuff.
 
-    def setup_power_management(self):
-                # Set up for idle suspend
-        self._idle_timer = 0
-        self._service = None
-
-        # start with sleep off
-        self._sleep_inhibit = True
-
-        fname = os.path.join('/etc', 'inhibit-ebook-sleep')
-        if not os.path.exists(fname):
-            try:
-                bus = dbus.SystemBus()
-                proxy = bus.get_object(_HARDWARE_MANAGER_SERVICE,
-                                       _HARDWARE_MANAGER_OBJECT_PATH)
-                self._service = dbus.Interface(proxy, _HARDWARE_MANAGER_INTERFACE)
-                self.connect("focus-in-event", self._focus_in_event_cb)
-                self.connect("focus-out-event", self._focus_out_event_cb)
-                self.connect("notify::active", self._now_active_cb)
-
-                logging.debug('Suspend on idle enabled')
-            except dbus.DBusException, e:
-                _logger.info('Hardware manager service not found, no idle suspend.')
-        else:
-            logging.debug('Suspend on idle disabled')
-    
     def _now_active_cb(self, widget, pspec):
         if self.props.active:
             # Now active, start initial suspend timeout
-            if self._idle_timer > 0:
-                gobject.source_remove(self._idle_timer)
-            self._idle_timer = gobject.timeout_add(15000, self._suspend_cb)
-            self._sleep_inhibit = False
+            xopower.reset_sleep_timer()
+            xopower.sleep_inhibit = False
         else:
             # Now inactive
-            self._sleep_inhibit = True
+            xopower.sleep_inhibit = True
 
     def _focus_in_event_cb(self, widget, event):
-        self._sleep_inhibit = False
-        self._user_action_cb(self)
+        xopower.turn_on_sleep_timer()
 
     def _focus_out_event_cb(self, widget, event):
-        self._sleep_inhibit = True
+        xopower.turn_off_sleep_timer()
 
     def _user_action_cb(self, widget):
-        if self._idle_timer > 0:
-            gobject.source_remove(self._idle_timer)
-        self._idle_timer = gobject.timeout_add(5000, self._suspend_cb)
+        xopower.reset_sleep_timer()
 
     def _suspend_cb(self):
-        # If the machine has been idle for 5 seconds, suspend
-        self._idle_timer = 0
-        if not self._sleep_inhibit:
-            self._service.set_kernel_suspend()
+        xopower.suspend()
         return False
         
