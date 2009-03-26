@@ -109,17 +109,22 @@ class ViewSlidesActivity(activity.Activity):
         self.scrolled.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
         self.scrolled.props.shadow_type = gtk.SHADOW_NONE
         self.image = gtk.Image()
+        eventbox = gtk.EventBox()
+        eventbox.add(self.image)
         self.image.show()
-        self.scrolled.add_with_viewport(self.image)
-        self.set_canvas(self.scrolled)
+        eventbox.show()
+        eventbox.set_events(gtk.gdk.KEY_PRESS_MASK | gtk.gdk.BUTTON_PRESS_MASK)
+	eventbox.set_flags(gtk.CAN_FOCUS)
+        eventbox.connect("key_press_event", self.keypress_cb)
+        eventbox.connect("button_press_event", self.buttonpress_cb)
+        self.set_canvas(eventbox)
         self.scrolled.show()
-        self.scrolled.connect("key_press_event", self.keypress_cb)
         self.show_image("ViewSlides.jpg")
         self._read_toolbar.set_activity(self)
         self.page = 0
         self.temp_filename = ''
         self.saved_screen_width = 0
-        self.scrolled.grab_focus()
+        eventbox.grab_focus()
         
         pixmap = gtk.gdk.Pixmap(None, 1, 1, 1)
         color = gtk.gdk.Color()
@@ -185,6 +190,9 @@ class ViewSlidesActivity(activity.Activity):
         finally:
             chooser.destroy()
             del chooser
+
+    def buttonpress_cb(self, widget, event):
+        widget.grab_focus()
 
     def keypress_cb(self, widget, event):
         "Respond when the user presses Escape or one of the arrow keys"
@@ -407,7 +415,7 @@ class ViewSlidesActivity(activity.Activity):
         total = self._download_content_length
         self._read_toolbar.set_downloaded_bytes(bytes_downloaded,  total)
         while gtk.events_pending():
-            gtk.mainiteration()
+            gtk.main_iteration()
 
     def _download_error_cb(self, getter, err, tube_id):
         _logger.debug("Error getting document from tube %u: %s",
