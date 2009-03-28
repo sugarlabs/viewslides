@@ -31,7 +31,7 @@ from sugar import network
 from sugar.datastore import datastore
 from sugar.graphics.objectchooser import ObjectChooser
 from sugar.graphics.alert import NotifyAlert
-from readtoolbar import ReadToolbar
+from readtoolbar import ReadToolbar, ViewToolbar
 from gettext import gettext as _
 import dbus
 import gobject
@@ -92,6 +92,7 @@ class ViewSlidesActivity(activity.Activity):
 
         self._fileserver = None
         self._object_id = handle.object_id
+        self.zoom_image_to_fit = True
 
         self.connect("expose_event", self.area_expose_cb)
         self.connect("delete_event", self.delete_cb)
@@ -103,28 +104,37 @@ class ViewSlidesActivity(activity.Activity):
         self._read_toolbar = ReadToolbar()
         toolbox.add_toolbar(_('Read'), self._read_toolbar)
         self._read_toolbar.show()
+
+        self._view_toolbar = ViewToolbar()
+        toolbox.add_toolbar(_('View'), self._view_toolbar)
+        self._view_toolbar.set_activity(self)
+        self._view_toolbar.connect('go-fullscreen',
+                self.__view_toolbar_go_fullscreen_cb)
+        self._view_toolbar.show()
+
         self.set_toolbox(toolbox)
         toolbox.show()
         self.scrolled = gtk.ScrolledWindow()
         self.scrolled.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
         self.scrolled.props.shadow_type = gtk.SHADOW_NONE
         self.image = gtk.Image()
-        eventbox = gtk.EventBox()
-        eventbox.add(self.image)
+        self.eventbox = gtk.EventBox()
+        self.eventbox.add(self.image)
         self.image.show()
-        eventbox.show()
-        eventbox.set_events(gtk.gdk.KEY_PRESS_MASK | gtk.gdk.BUTTON_PRESS_MASK)
-	eventbox.set_flags(gtk.CAN_FOCUS)
-        eventbox.connect("key_press_event", self.keypress_cb)
-        eventbox.connect("button_press_event", self.buttonpress_cb)
-        self.set_canvas(eventbox)
+        self.eventbox.show()
+        self.scrolled.add_with_viewport(self.eventbox)
+        self.eventbox.set_events(gtk.gdk.KEY_PRESS_MASK | gtk.gdk.BUTTON_PRESS_MASK)
+	self.eventbox.set_flags(gtk.CAN_FOCUS)
+        self.eventbox.connect("key_press_event", self.keypress_cb)
+        self.eventbox.connect("button_press_event", self.buttonpress_cb)
+        self.set_canvas(self.scrolled)
         self.scrolled.show()
         self.show_image("ViewSlides.jpg")
         self._read_toolbar.set_activity(self)
         self.page = 0
         self.temp_filename = ''
         self.saved_screen_width = 0
-        eventbox.grab_focus()
+        self.eventbox.grab_focus()
         
         pixmap = gtk.gdk.Pixmap(None, 1, 1, 1)
         color = gtk.gdk.Color()
@@ -193,6 +203,17 @@ class ViewSlidesActivity(activity.Activity):
 
     def buttonpress_cb(self, widget, event):
         widget.grab_focus()
+
+    def __view_toolbar_go_fullscreen_cb(self, view_toolbar):
+        self.fullscreen()
+
+    def zoom_to_width(self):
+        self.zoom_image_to_fit = False
+        self.show_page(self.page)
+
+    def zoom_to_fit(self):
+        self.zoom_image_to_fit = True
+        self.show_page(self.page)
 
     def keypress_cb(self, widget, event):
         "Respond when the user presses Escape or one of the arrow keys"
@@ -275,7 +296,29 @@ class ViewSlidesActivity(activity.Activity):
         i_a_ratio = Decimal(image_height) / Decimal(image_width)
         new_width = image_width
         new_height = image_height
-        if s_a_ratio >= i_a_ratio:
+        if self.zoom_image_to_fit == True:
+            if s_a_ratio >= i_a_ratio:
+                new_width = screen_width
+                new_height = image_height * screen_width
+                if image_width > 1:
+                    new_height /= image_width
+
+                if new_height > screen_width:
+                    new_height *= screen_width
+                    if new_width > 1:
+                        new_height /= new_width
+                    new_width = screen_width
+            else:
+                new_height = screen_height
+                new_width = image_width * screen_height
+                if image_height > 1:
+                    new_width /= image_height
+                if new_width > screen_height:
+                    new_width *= screen_height
+                    if new_height > 1:
+                        new_width /= new_height
+                    new_height = screen_height
+        else:
             new_width = screen_width
             new_height = image_height * screen_width
             if image_width > 1:
@@ -286,16 +329,7 @@ class ViewSlidesActivity(activity.Activity):
                 if new_width > 1:
                     new_height /= new_width
                 new_width = screen_width
-        else:
-            new_height = screen_height
-            new_width = image_width * screen_height
-            if image_height > 1:
-                new_width /= image_height
-            if new_width > screen_height:
-                new_width *= screen_height
-                if new_height > 1:
-                    new_width /= new_height
-                new_height = screen_height
+        
         pixbuf = gtk.gdk.pixbuf_new_from_file(filename)
         scaled_buf = pixbuf.scale_simple(new_width, new_height, gtk.gdk.INTERP_BILINEAR)
         self.image.set_from_pixbuf(scaled_buf)
