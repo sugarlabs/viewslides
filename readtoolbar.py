@@ -194,6 +194,14 @@ class ViewToolbar(gtk.Toolbar):
         self._zoom_out.props.sensitive = False
         self.activity.zoom_to_fit()
 
+    def enable_zoom_in(self):
+        self._zoom_in.props.sensitive = True
+        self._zoom_out.props.sensitive = False
+
+    def enable_zoom_out(self):
+        self._zoom_in.props.sensitive = False
+        self._zoom_out.props.sensitive = True
+
     def set_activity(self, activity):
         self.activity = activity
 

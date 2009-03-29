@@ -247,9 +247,11 @@ class ViewSlidesActivity(activity.Activity):
                 self.cursor_visible = True
             return True
         if keyname == 'plus':
+            self._view_toolbar.enable_zoom_out()
             self.zoom_to_width()
             return True
         if keyname == 'minus':
+            self._view_toolbar.enable_zoom_in()
             self.zoom_to_fit()
             return True
         return False
