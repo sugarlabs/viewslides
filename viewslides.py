@@ -220,17 +220,23 @@ class ViewSlidesActivity(activity.Activity):
         if xopower.service_activated:
             xopower.reset_sleep_timer()
         keyname = gtk.gdk.keyval_name(event.keyval)
-        if keyname == 'KP_Right':
+        if keyname == 'Page_Up':
+            self.previous_page()
+            return True
+        if keyname == 'Page_Down' :
             self.next_page()
             return True
-        if keyname == 'Up' or keyname == 'KP_Up':
-            self.previous_page()
-            return True
-        if keyname == 'KP_Left':
-            self.previous_page()
+        if keyname == 'KP_Right':
+            self.scroll_down()
             return True
         if keyname == 'Down' or keyname == 'KP_Down':
-            self.next_page()
+            self.scroll_down()
+            return True
+        if keyname == 'Up' or keyname == 'KP_Up':
+            self.scroll_up()
+            return True
+        if keyname == 'KP_Left':
+            self.scroll_up()
             return True
         if keyname == 'KP_Home':
             if self.cursor_visible:
@@ -240,7 +246,35 @@ class ViewSlidesActivity(activity.Activity):
                 self.window.set_cursor(None)
                 self.cursor_visible = True
             return True
+        if keyname == 'plus':
+            self.zoom_to_width()
+            return True
+        if keyname == 'minus':
+            self.zoom_to_fit()
+            return True
         return False
+
+    def scroll_down(self):
+        v_adjustment = self.scrolled.get_vadjustment()
+        if v_adjustment.value == v_adjustment.upper - v_adjustment.page_size:
+            self.next_page()
+            return
+        if v_adjustment.value < v_adjustment.upper - v_adjustment.page_size:
+            new_value = v_adjustment.value + v_adjustment.step_increment
+            if new_value > v_adjustment.upper - v_adjustment.page_size:
+                new_value = v_adjustment.upper - v_adjustment.page_size
+            v_adjustment.value = new_value
+
+    def scroll_up(self):
+        v_adjustment = self.scrolled.get_vadjustment()
+        if v_adjustment.value == v_adjustment.lower:
+            self.previous_page()
+            return
+        if v_adjustment.value > v_adjustment.lower:
+            new_value = v_adjustment.value - v_adjustment.step_increment
+            if new_value < v_adjustment.lower:
+                new_value = v_adjustment.lower
+            v_adjustment.value = new_value
 
     def previous_page(self):
         page = self.page
@@ -250,6 +284,8 @@ class ViewSlidesActivity(activity.Activity):
             fname = "/tmp/" + self.make_new_filename(self.image_files[page])
             self.show_image(fname)
             os.remove(fname)
+        v_adjustment = self.scrolled.get_vadjustment()
+        v_adjustment.value = v_adjustment.upper - v_adjustment.page_size
         self._read_toolbar.set_current_page(page)
         self.page = page
 
@@ -264,6 +300,8 @@ class ViewSlidesActivity(activity.Activity):
             fname = "/tmp/" + self.make_new_filename(self.image_files[page])
             self.show_image(fname)
             os.remove(fname)
+        v_adjustment = self.scrolled.get_vadjustment()
+        v_adjustment.value = v_adjustment.lower
         self._read_toolbar.set_current_page(page)
         self.page = page
 
