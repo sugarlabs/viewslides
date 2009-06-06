@@ -124,7 +124,7 @@ class ViewSlidesActivity(activity.Activity):
         self.eventbox.show()
         self.scrolled.add_with_viewport(self.eventbox)
         self.eventbox.set_events(gtk.gdk.KEY_PRESS_MASK | gtk.gdk.BUTTON_PRESS_MASK)
-	self.eventbox.set_flags(gtk.CAN_FOCUS)
+        self.eventbox.set_flags(gtk.CAN_FOCUS)
         self.eventbox.connect("key_press_event", self.keypress_cb)
         self.eventbox.connect("button_press_event", self.buttonpress_cb)
         self.set_canvas(self.scrolled)
@@ -409,6 +409,36 @@ class ViewSlidesActivity(activity.Activity):
         partition_tuple = filename.rpartition('/')
         return partition_tuple[2]
     
+    def get_saved_page_number(self):
+        title = self.metadata.get('title', '')
+        if not title[len(title)- 1].isdigit():
+            self.page = 0
+        else:
+            i = len(title) - 1
+            page = ''
+            while (title[i].isdigit() and i > 0):
+                page = title[i] + page
+                i = i - 1
+            if title[i] == 'P':
+                self.page = int(page) - 1
+            else:
+                # not a page number; maybe a volume number.
+                self.page = 0
+        
+    def save_page_number(self):
+        title = self.metadata.get('title', '')
+        if not title[len(title)- 1].isdigit():
+            title = title + ' P' +  str(self.page + 1)
+        else:
+            i = len(title) - 1
+            while (title[i].isdigit() and i > 0):
+                i = i - 1
+            if title[i] == 'P':
+                title = title[0:i] + 'P' + str(self.page + 1)
+            else:
+                title = title + ' P' + str(self.page + 1)
+        self.metadata['title'] = title
+
     def _load_document(self, file_path):
         "Read the Zip file containing the images"
         if zipfile.is_zipfile(file_path):
@@ -416,14 +446,14 @@ class ViewSlidesActivity(activity.Activity):
             self.image_files = self.zf.namelist()
             self.image_files.sort()
             i = 0
-            valid_endings = ('.jpg', '.JPG', '.gif', '.GIF', '.tiff', '.TIFF', '.png', '.PNG',  '.bmp', '.BMP')
+            valid_endings = ('.jpg', '.JPG', '.gif', '.GIF', '.tiff', '.TIFF', '.png', '.PNG')
             while i < len(self.image_files):
                 newfn = self.make_new_filename(self.image_files[i])
                 if newfn.endswith(valid_endings):
                     i = i + 1
                 else:   
                     del self.image_files[i]
-            self.page = int(self.metadata.get('current_image', '0'))
+            self.get_saved_page_number()
             self.save_extracted_file(self.zf, self.image_files[self.page])
             currentFileName = "/tmp/" + self.make_new_filename(self.image_files[self.page])
             self.show_image(currentFileName)
@@ -443,7 +473,8 @@ class ViewSlidesActivity(activity.Activity):
         if self._tempfile is None:
             raise NotImplementedError
 
-        self.metadata['current_image']  = str(self.page)
+        self.save_page_number()
+        self.metadata['activity'] = self.get_bundle_id()
         os.link(self._tempfile,  file_path)
  
         if self._close_requested:
