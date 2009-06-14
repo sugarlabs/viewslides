@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-# Copyright (C) 2008 James D. Simmons
+# Copyright (C) 2008, 2009 James D. Simmons
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,9 +29,8 @@ from pygame.locals import *
 from sugar.activity import activity
 from sugar import network
 from sugar.datastore import datastore
-from sugar.graphics.objectchooser import ObjectChooser
 from sugar.graphics.alert import NotifyAlert
-from readtoolbar import ReadToolbar, ViewToolbar
+from readtoolbar import ReadToolbar, ViewToolbar,  SlidesToolbar
 from gettext import gettext as _
 import dbus
 import gobject
@@ -40,6 +39,9 @@ from decimal import *
 import xopower
 
 _TOOLBAR_READ = 1
+_TOOLBAR_SLIDES = 3
+COLUMN_IMAGE = 0
+COLUMN_PATH = 1
 
 _logger = logging.getLogger('view-slides')
 
@@ -112,6 +114,11 @@ class ViewSlidesActivity(activity.Activity):
                 self.__view_toolbar_go_fullscreen_cb)
         self._view_toolbar.show()
 
+        self._slides_toolbar = SlidesToolbar()
+        toolbox.add_toolbar(_('Slides'), self._slides_toolbar)
+        self._slides_toolbar.set_activity(self)
+        self._slides_toolbar.show()
+
         self.set_toolbox(toolbox)
         toolbox.show()
         self.scrolled = gtk.ScrolledWindow()
@@ -127,8 +134,67 @@ class ViewSlidesActivity(activity.Activity):
         self.eventbox.set_flags(gtk.CAN_FOCUS)
         self.eventbox.connect("key_press_event", self.keypress_cb)
         self.eventbox.connect("button_press_event", self.buttonpress_cb)
-        self.set_canvas(self.scrolled)
+ 
+        self.ls_left = gtk.ListStore(gobject.TYPE_STRING)
+        tv_left = gtk.TreeView(self.ls_left)
+        tv_left.set_rules_hint(True)
+        tv_left.set_search_column(COLUMN_IMAGE)
+        selection_left = tv_left.get_selection()
+        selection_left.set_mode(gtk.SELECTION_SINGLE)
+        selection_left.connect("changed", self.selection_left_cb)
+        renderer = gtk.CellRendererText()
+        col_left = gtk.TreeViewColumn('Slideshow Image', renderer, text=COLUMN_IMAGE)
+        col_left.set_sort_column_id(COLUMN_IMAGE)
+        tv_left.append_column(col_left)
+
+        self.list_scroller_left = gtk.ScrolledWindow(hadjustment=None, vadjustment=None)
+        self.list_scroller_left.set_policy(gtk.POLICY_NEVER,  gtk.POLICY_AUTOMATIC)
+        self.list_scroller_left.add(tv_left)
+
+        self.ls_right = gtk.ListStore(gobject.TYPE_STRING,  gobject.TYPE_STRING)
+        tv_right = gtk.TreeView(self.ls_right)
+        tv_right.set_rules_hint(True)
+        tv_right.set_search_column(COLUMN_IMAGE)
+        selection_right = tv_right.get_selection()
+        selection_right.set_mode(gtk.SELECTION_SINGLE)
+        selection_right.connect("changed", self.selection_right_cb)
+        renderer = gtk.CellRendererText()
+        col_right = gtk.TreeViewColumn('Journal Image', renderer, text=COLUMN_IMAGE)
+        col_right.set_sort_column_id(COLUMN_IMAGE)
+        tv_right.append_column(col_right)
+        
+        col_right = gtk.TreeViewColumn('File Path', renderer, text=COLUMN_PATH)
+        col_right.set_sort_column_id(COLUMN_PATH)
+        tv_right.append_column(col_right)
+
+        self.list_scroller_right = gtk.ScrolledWindow(hadjustment=None, vadjustment=None)
+        self.list_scroller_right.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+        self.list_scroller_right.add(tv_right)
+
+        self.hpane = gtk.HPaned()
+        self.hpane.add1(self.list_scroller_left)
+        self.hpane.add2(self.list_scroller_right)
+        
+        vbox = gtk.VBox()
+        vbox.add(self.scrolled)
+        vbox.add(self.hpane)
+
+        self.set_canvas(vbox)
         self.scrolled.show()
+        tv_left.show()
+        self.list_scroller_left.show()
+        tv_right.show()
+        self.list_scroller_right.show()
+        self.hpane.show()
+        vbox.show()
+        self.hpane.hide()
+
+        ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gig', 'image/tiff',  'image/png']})
+        for i in xrange (0, num_objects, 1):
+            iter = self.ls_right.append()
+            self.ls_right.set(iter, COLUMN_IMAGE, ds_objects[i].metadata['title'])
+            self.ls_right.set(iter,  COLUMN_PATH,  ds_objects[i].get_file_path())
+
         self.show_image("ViewSlides.jpg")
         self._read_toolbar.set_activity(self)
         self.page = 0
@@ -172,34 +238,50 @@ class ViewSlidesActivity(activity.Activity):
             else:
                 # Wait for a successful join before trying to get the document
                 self.connect("joined", self._joined_cb)
-        elif self._object_id is None:
-            # Not joining, not resuming
-            self._show_journal_object_picker()
-        # uncomment this and adjust the path for easier testing
-        #else:
-        #    self._load_document('file:///home/smcv/tmp/test.pdf')
 
-    def _show_journal_object_picker(self):
-        """Show the journal object picker to load a document.
-        This is for if View Slides is launched without a document.
-        """
-        if not self._want_document:
-            return
-        chooser = ObjectChooser(_('Choose document'), self, 
-                                gtk.DIALOG_MODAL | 
-                                gtk.DIALOG_DESTROY_WITH_PARENT)
-        try:
-            result = chooser.run()
-            if result == gtk.RESPONSE_ACCEPT:
-                logging.debug('ObjectChooser: %r' % 
-                              chooser.get_selected_object())
-                jobject = chooser.get_selected_object()
-                if jobject and jobject.file_path:
-                    self.metadata['title'] = jobject.metadata['title']
-                    self.read_file(jobject.file_path)
-        finally:
-            chooser.destroy()
-            del chooser
+    def  show_image_tables(self,  state):
+        if state == True:
+            self.hpane.show()
+        else:
+            self.hpane.hide()
+
+    def selection_left_cb(self, selection):
+        tv = selection.get_tree_view()
+        model = tv.get_model()
+        sel = selection.get_selected()
+        if sel:
+            model, iter = sel
+            selected_file = model.get_value(iter, COLUMN_IMAGE)
+            try:
+                zf = zipfile.ZipFile(self._tempfile, 'r')
+                filebytes = zf.read(selected_file)
+            except BadZipfile, err:
+                print 'Error opening the zip file: %s' % (err)
+                self._alert('Error', 'Error opening the zip file')
+            outfn = self.make_new_filename(selected_file)
+            f = open("/tmp/" + outfn, 'w')
+            try:
+                f.write(filebytes)
+            finally:
+                f.close
+            fname = "/tmp/" + outfn
+            self.show_image(fname)
+            os.remove(fname)
+
+    def selection_right_cb(self, selection):
+        tv = selection.get_tree_view()
+        model = tv.get_model()
+        sel = selection.get_selected()
+        if sel:
+            model, iter = sel
+            fname = model.get_value(iter,COLUMN_PATH)
+            self.show_image(fname)
+
+    def add_image(self):
+        print 'add an image'
+        
+    def remove_image(self):
+        print 'remove an image'
 
     def buttonpress_cb(self, widget, event):
         widget.grab_focus()
@@ -450,6 +532,8 @@ class ViewSlidesActivity(activity.Activity):
             while i < len(self.image_files):
                 newfn = self.make_new_filename(self.image_files[i])
                 if newfn.endswith(valid_endings):
+                    iter = self.ls_left.append()
+                    self.ls_left.set(iter, COLUMN_IMAGE, self.image_files[i])
                     i = i + 1
                 else:   
                     del self.image_files[i]
