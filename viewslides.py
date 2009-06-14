@@ -185,7 +185,7 @@ class ViewSlidesActivity(activity.Activity):
         vbox.show()
         self.hpane.hide()
 
-        ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gig', 'image/tiff',  'image/png']})
+        ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gig', 'image/tiff',  'image/png']},  'title')
         for i in xrange (0, num_objects, 1):
             iter = self.ls_right.append()
             self.ls_right.set(iter, COLUMN_IMAGE, ds_objects[i].metadata['title'])
