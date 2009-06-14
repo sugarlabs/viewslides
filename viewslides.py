@@ -151,7 +151,7 @@ class ViewSlidesActivity(activity.Activity):
         self.list_scroller_left.set_policy(gtk.POLICY_NEVER,  gtk.POLICY_AUTOMATIC)
         self.list_scroller_left.add(tv_left)
 
-        self.ls_right = gtk.ListStore(gobject.TYPE_STRING,  gobject.TYPE_STRING)
+        self.ls_right = gtk.ListStore(gobject.TYPE_STRING,  gobject.TYPE_PYOBJECT)
         tv_right = gtk.TreeView(self.ls_right)
         tv_right.set_rules_hint(True)
         tv_right.set_search_column(COLUMN_IMAGE)
@@ -163,10 +163,6 @@ class ViewSlidesActivity(activity.Activity):
         col_right.set_sort_column_id(COLUMN_IMAGE)
         tv_right.append_column(col_right)
         
-        col_right = gtk.TreeViewColumn('File Path', renderer, text=COLUMN_PATH)
-        col_right.set_sort_column_id(COLUMN_PATH)
-        tv_right.append_column(col_right)
-
         self.list_scroller_right = gtk.ScrolledWindow(hadjustment=None, vadjustment=None)
         self.list_scroller_right.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
         self.list_scroller_right.add(tv_right)
@@ -193,7 +189,7 @@ class ViewSlidesActivity(activity.Activity):
         for i in xrange (0, num_objects, 1):
             iter = self.ls_right.append()
             self.ls_right.set(iter, COLUMN_IMAGE, ds_objects[i].metadata['title'])
-            self.ls_right.set(iter,  COLUMN_PATH,  ds_objects[i].get_file_path())
+            self.ls_right.set(iter,  COLUMN_PATH,  ds_objects[i])
 
         self.show_image("ViewSlides.jpg")
         self._read_toolbar.set_activity(self)
@@ -274,7 +270,8 @@ class ViewSlidesActivity(activity.Activity):
         sel = selection.get_selected()
         if sel:
             model, iter = sel
-            fname = model.get_value(iter,COLUMN_PATH)
+            jobject = model.get_value(iter,COLUMN_PATH)
+            fname = jobject.get_file_path()
             self.show_image(fname)
 
     def add_image(self):
