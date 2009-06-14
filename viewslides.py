@@ -185,7 +185,7 @@ class ViewSlidesActivity(activity.Activity):
         vbox.show()
         self.hpane.hide()
 
-        ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gig', 'image/tiff',  'image/png']},  'title')
+        ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gif', 'image/tiff',  'image/png']},  'title')
         for i in xrange (0, num_objects, 1):
             iter = self.ls_right.append()
             self.ls_right.set(iter, COLUMN_IMAGE, ds_objects[i].metadata['title'])
@@ -225,6 +225,8 @@ class ViewSlidesActivity(activity.Activity):
         self.port = 1024 + (h % 64511)
 
         self.is_received_document = False
+        self.selected_journal_entry = None
+        self.selection_left = None
         
         if self._shared_activity and handle.object_id == None:
             # We're joining, and we don't already have the document.
@@ -234,19 +236,25 @@ class ViewSlidesActivity(activity.Activity):
             else:
                 # Wait for a successful join before trying to get the document
                 self.connect("joined", self._joined_cb)
+        else:
+            # Assign a file path to create if one doesn't exist yet
+            if handle.object_id == None:
+                self._tempfile = os.path.join(self.get_activity_root(), 'instance',
+                                    'tmp%i' % time.time())
 
     def  show_image_tables(self,  state):
         if state == True:
             self.hpane.show()
         else:
             self.hpane.hide()
+            self._load_document(self._tempfile)
 
     def selection_left_cb(self, selection):
         tv = selection.get_tree_view()
         model = tv.get_model()
-        sel = selection.get_selected()
-        if sel:
-            model, iter = sel
+        self.selection_left = selection.get_selected()
+        if self.selection_left:
+            model, iter = self.selection_left
             selected_file = model.get_value(iter, COLUMN_IMAGE)
             try:
                 zf = zipfile.ZipFile(self._tempfile, 'r')
@@ -273,12 +281,30 @@ class ViewSlidesActivity(activity.Activity):
             jobject = model.get_value(iter,COLUMN_PATH)
             fname = jobject.get_file_path()
             self.show_image(fname)
+            self.selected_journal_entry = jobject
 
     def add_image(self):
-        print 'add an image'
-        
+        if self.selected_journal_entry == None:
+            return
+        try:
+            if os.path.exists(self._tempfile):
+                zf = zipfile.ZipFile(self._tempfile, 'a')
+            else:
+                zf = zipfile.ZipFile(self._tempfile, 'w')
+            selected_file = self.selected_journal_entry.get_file_path()
+            arcname = os.path.basename(selected_file)
+            zf.write(selected_file.encode( "utf-8" ),  arcname.encode( "utf-8" ))
+            zf.close()
+            iter = self.ls_left.append()
+            self.ls_left.set(iter, COLUMN_IMAGE, arcname)
+        except BadZipfile, err:
+            print 'Error opening the zip file: %s' % (err)
+            self._alert('Error', 'Error opening the zip file')
+    
     def remove_image(self):
-        print 'remove an image'
+        if self.selection_left:
+            model, iter = self.selection_left
+            self.ls_left.remove(iter)
 
     def buttonpress_cb(self, widget, event):
         widget.grab_focus()
