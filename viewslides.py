@@ -247,6 +247,8 @@ class ViewSlidesActivity(activity.Activity):
             self.hpane.show()
         else:
             self.hpane.hide()
+            self.rewrite_zip()
+            self.set_current_page(0)
             self._load_document(self._tempfile)
 
     def selection_left_cb(self, selection):
@@ -305,6 +307,29 @@ class ViewSlidesActivity(activity.Activity):
         if self.selection_left:
             model, iter = self.selection_left
             self.ls_left.remove(iter)
+
+    def rewrite_zip(self):
+        new_zipfile = os.path.join(self.get_activity_root(), 'instance',
+                'tmp%i' % time.time())
+        zf_new = zipfile.ZipFile(new_zipfile, 'w')
+        zf_old = zipfile.ZipFile(self._tempfile, 'r')
+        for row in self.ls_left:
+            copied_file = row [COLUMN_IMAGE]
+            filebytes = zf_old.read(copied_file)
+            outfn = self.make_new_filename(copied_file)
+            f = open("/tmp/" + outfn, 'w')
+            try:
+                f.write(filebytes)
+            finally:
+                f.close
+            fname = "/tmp/" + outfn
+            zf_new.write(fname.encode( "utf-8" ),  copied_file.encode( "utf-8" ))
+            print 'rewriting',  copied_file
+            os.remove(fname)
+        zf_old.close()
+        zf_new.close()
+        os.remove(self._tempfile)
+        self._tempfile = new_zipfile
 
     def buttonpress_cb(self, widget, event):
         widget.grab_focus()
@@ -503,6 +528,7 @@ class ViewSlidesActivity(activity.Activity):
         tempfile = os.path.join(self.get_activity_root(),  'instance', 'tmp%i' % time.time())
         os.link(file_path,  tempfile)
         self._tempfile = tempfile
+        self.get_saved_page_number()
         self._load_document(self._tempfile)
 
     def delete_cb(self, widget, event):
@@ -552,6 +578,7 @@ class ViewSlidesActivity(activity.Activity):
             self.image_files.sort()
             i = 0
             valid_endings = ('.jpg', '.JPG', '.gif', '.GIF', '.tiff', '.TIFF', '.png', '.PNG')
+            self.ls_left.clear()
             while i < len(self.image_files):
                 newfn = self.make_new_filename(self.image_files[i])
                 if newfn.endswith(valid_endings):
@@ -560,7 +587,6 @@ class ViewSlidesActivity(activity.Activity):
                     i = i + 1
                 else:   
                     del self.image_files[i]
-            self.get_saved_page_number()
             self.save_extracted_file(self.zf, self.image_files[self.page])
             currentFileName = "/tmp/" + self.make_new_filename(self.image_files[self.page])
             self.show_image(currentFileName)
