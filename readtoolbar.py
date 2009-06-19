@@ -223,6 +223,7 @@ class SlidesToolbar(gtk.Toolbar):
         self._hide_image_tables.set_tooltip(_('Hide Image Tables'))
         self._hide_image_tables.connect('clicked', self._hide_image_tables_cb)
         self.insert(self._hide_image_tables, -1)
+        self._hide_image_tables.props.sensitive = False
         self._hide_image_tables.show()
 
         spacer = gtk.SeparatorToolItem()
@@ -234,13 +235,14 @@ class SlidesToolbar(gtk.Toolbar):
         self._add_image.set_tooltip(_('Add Image'))
         self._add_image.connect('clicked', self._add_image_cb)
         self.insert(self._add_image, -1)
-        self._add_image.props.sensitive = True
+        self._add_image.props.sensitive = False
         self._add_image.show()
 
         self._remove_image = ToolButton('list-remove')
         self._remove_image.set_tooltip(_('Remove Image'))
         self._remove_image.connect('clicked', self._remove_image_cb)
         self.insert(self._remove_image, -1)
+        self._remove_image.props.sensitive = False
         self._remove_image.show()
 
     def set_activity(self, activity):
@@ -253,7 +255,13 @@ class SlidesToolbar(gtk.Toolbar):
         self.activity.remove_image()
         
     def _show_image_tables_cb(self,  button):
+        self._hide_image_tables.props.sensitive = True
+        self._show_image_tables.props.sensitive = False
         self.activity.show_image_tables(True)
 
     def _hide_image_tables_cb(self,  button):
+        self._hide_image_tables.props.sensitive = False
+        self._show_image_tables.props.sensitive = True
+        self._add_image.props.sensitive = False
+        self._remove_image.props.sensitive = False
         self.activity.show_image_tables(False)

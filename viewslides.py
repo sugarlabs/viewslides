@@ -272,6 +272,7 @@ class ViewSlidesActivity(activity.Activity):
                 f.close
             fname = "/tmp/" + outfn
             self.show_image(fname)
+            self._slides_toolbar._remove_image.props.sensitive = True
             os.remove(fname)
 
     def selection_right_cb(self, selection):
@@ -283,6 +284,7 @@ class ViewSlidesActivity(activity.Activity):
             jobject = model.get_value(iter,COLUMN_PATH)
             fname = jobject.get_file_path()
             self.show_image(fname)
+            self._slides_toolbar._add_image.props.sensitive = True
             self.selected_journal_entry = jobject
 
     def add_image(self):
@@ -299,6 +301,7 @@ class ViewSlidesActivity(activity.Activity):
             zf.close()
             iter = self.ls_left.append()
             self.ls_left.set(iter, COLUMN_IMAGE, arcname)
+            self._slides_toolbar._add_image.props.sensitive = False
         except BadZipfile, err:
             print 'Error opening the zip file: %s' % (err)
             self._alert('Error', 'Error opening the zip file')
@@ -307,6 +310,7 @@ class ViewSlidesActivity(activity.Activity):
         if self.selection_left:
             model, iter = self.selection_left
             self.ls_left.remove(iter)
+            self._slides_toolbar._remove_image.props.sensitive = True
 
     def rewrite_zip(self):
         new_zipfile = os.path.join(self.get_activity_root(), 'instance',
