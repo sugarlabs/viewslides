@@ -42,6 +42,7 @@ _TOOLBAR_READ = 1
 _TOOLBAR_SLIDES = 3
 COLUMN_IMAGE = 0
 COLUMN_PATH = 1
+COLUMN_OLD_NAME = 1
 
 _logger = logging.getLogger('view-slides')
 
@@ -135,7 +136,7 @@ class ViewSlidesActivity(activity.Activity):
         self.eventbox.connect("key_press_event", self.keypress_cb)
         self.eventbox.connect("button_press_event", self.buttonpress_cb)
  
-        self.ls_left = gtk.ListStore(gobject.TYPE_STRING)
+        self.ls_left = gtk.ListStore(gobject.TYPE_STRING,  gobject.TYPE_STRING)
         tv_left = gtk.TreeView(self.ls_left)
         tv_left.set_rules_hint(True)
         tv_left.set_search_column(COLUMN_IMAGE)
@@ -145,6 +146,8 @@ class ViewSlidesActivity(activity.Activity):
         renderer = gtk.CellRendererText()
         col_left = gtk.TreeViewColumn('Slideshow Image', renderer, text=COLUMN_IMAGE)
         col_left.set_sort_column_id(COLUMN_IMAGE)
+        renderer.set_property('editable',  True)
+        renderer.connect('edited',  self.col_left_edited_cb,  self.ls_left)
         tv_left.append_column(col_left)
 
         self.list_scroller_left = gtk.ScrolledWindow(hadjustment=None, vadjustment=None)
@@ -184,8 +187,11 @@ class ViewSlidesActivity(activity.Activity):
         self.hpane.show()
         vbox.show()
         self.hpane.hide()
+        
+        self.is_dirty = False
 
-        ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gif', 'image/tiff',  'image/png']},  'title')
+        ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gif', 'image/tiff',  \
+            'image/png']},  'title')
         for i in xrange (0, num_objects, 1):
             iter = self.ls_right.append()
             self.ls_right.set(iter, COLUMN_IMAGE, ds_objects[i].metadata['title'])
@@ -242,6 +248,12 @@ class ViewSlidesActivity(activity.Activity):
                 self._tempfile = os.path.join(self.get_activity_root(), 'instance',
                                     'tmp%i' % time.time())
 
+    def col_left_edited_cb(self, cell,  path,  new_text,  user_data):
+        liststore = user_data
+        liststore[path][COLUMN_IMAGE] = new_text
+        self.is_dirty = True
+        return
+    
     def  show_image_tables(self,  state):
         if state == True:
             self.hpane.show()
@@ -257,7 +269,7 @@ class ViewSlidesActivity(activity.Activity):
         self.selection_left = selection.get_selected()
         if self.selection_left:
             model, iter = self.selection_left
-            selected_file = model.get_value(iter, COLUMN_IMAGE)
+            selected_file = model.get_value(iter, COLUMN_OLD_NAME)
             try:
                 zf = zipfile.ZipFile(self._tempfile, 'r')
                 filebytes = zf.read(selected_file)
@@ -311,29 +323,34 @@ class ViewSlidesActivity(activity.Activity):
             model, iter = self.selection_left
             self.ls_left.remove(iter)
             self._slides_toolbar._remove_image.props.sensitive = True
+            self.is_dirty = True
 
     def rewrite_zip(self):
+        if self.is_dirty == False:
+            return
         new_zipfile = os.path.join(self.get_activity_root(), 'instance',
                 'tmp%i' % time.time())
         zf_new = zipfile.ZipFile(new_zipfile, 'w')
         zf_old = zipfile.ZipFile(self._tempfile, 'r')
         for row in self.ls_left:
-            copied_file = row [COLUMN_IMAGE]
+            copied_file = row [COLUMN_OLD_NAME]
+            new_file = row[COLUMN_IMAGE]
             filebytes = zf_old.read(copied_file)
-            outfn = self.make_new_filename(copied_file)
+            outfn = self.make_new_filename(new_file)
             f = open("/tmp/" + outfn, 'w')
             try:
                 f.write(filebytes)
             finally:
                 f.close
             fname = "/tmp/" + outfn
-            zf_new.write(fname.encode( "utf-8" ),  copied_file.encode( "utf-8" ))
-            print 'rewriting',  copied_file
+            zf_new.write(fname.encode( "utf-8" ),  new_file.encode( "utf-8" ))
+            print 'rewriting',  new_file
             os.remove(fname)
         zf_old.close()
         zf_new.close()
         os.remove(self._tempfile)
         self._tempfile = new_zipfile
+        self.is_dirty = False
 
     def buttonpress_cb(self, widget, event):
         widget.grab_focus()
@@ -587,7 +604,7 @@ class ViewSlidesActivity(activity.Activity):
                 newfn = self.make_new_filename(self.image_files[i])
                 if newfn.endswith(valid_endings):
                     iter = self.ls_left.append()
-                    self.ls_left.set(iter, COLUMN_IMAGE, self.image_files[i])
+                    self.ls_left.set(iter, COLUMN_IMAGE, self.image_files[i],  COLUMN_OLD_NAME,  self.image_files[i])
                     i = i + 1
                 else:   
                     del self.image_files[i]
@@ -612,6 +629,7 @@ class ViewSlidesActivity(activity.Activity):
 
         self.save_page_number()
         self.metadata['activity'] = self.get_bundle_id()
+        self.rewrite_zip()
         os.link(self._tempfile,  file_path)
  
         if self._close_requested:
