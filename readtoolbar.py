@@ -219,6 +219,13 @@ class SlidesToolbar(gtk.Toolbar):
         self.insert(self._show_image_tables, -1)
         self._show_image_tables.show()
 
+        self._reload_journal_table = ToolButton('reload')
+        self._reload_journal_table.set_tooltip(_('Reload Journal Table'))
+        self._reload_journal_table.connect('clicked', self._reload_journal_table_cb)
+        self.insert(self._reload_journal_table, -1)
+        self._reload_journal_table.props.sensitive = False
+        self._reload_journal_table.show()
+
         self._hide_image_tables = ToolButton('dialog-cancel')
         self._hide_image_tables.set_tooltip(_('Hide Image Tables'))
         self._hide_image_tables.connect('clicked', self._hide_image_tables_cb)
@@ -248,6 +255,9 @@ class SlidesToolbar(gtk.Toolbar):
     def set_activity(self, activity):
         self.activity = activity
 
+    def _reload_journal_table_cb(self, button):
+        self.activity.load_journal_table()
+
     def _add_image_cb(self, button):
         self.activity.add_image()
     
@@ -256,11 +266,13 @@ class SlidesToolbar(gtk.Toolbar):
         
     def _show_image_tables_cb(self,  button):
         self._hide_image_tables.props.sensitive = True
+        self._reload_journal_table.props.sensitive = True
         self._show_image_tables.props.sensitive = False
         self.activity.show_image_tables(True)
 
     def _hide_image_tables_cb(self,  button):
         self._hide_image_tables.props.sensitive = False
+        self._reload_journal_table.props.sensitive = False
         self._show_image_tables.props.sensitive = True
         self._add_image.props.sensitive = False
         self._remove_image.props.sensitive = False

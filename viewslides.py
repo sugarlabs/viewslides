@@ -190,12 +190,7 @@ class ViewSlidesActivity(activity.Activity):
         
         self.is_dirty = False
 
-        ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gif', 'image/tiff',  \
-            'image/png']},  'title')
-        for i in xrange (0, num_objects, 1):
-            iter = self.ls_right.append()
-            self.ls_right.set(iter, COLUMN_IMAGE, ds_objects[i].metadata['title'])
-            self.ls_right.set(iter,  COLUMN_PATH,  ds_objects[i])
+        self.load_journal_table()
 
         self.show_image("ViewSlides.jpg")
         self._read_toolbar.set_activity(self)
@@ -247,6 +242,15 @@ class ViewSlidesActivity(activity.Activity):
             if handle.object_id == None:
                 self._tempfile = os.path.join(self.get_activity_root(), 'instance',
                                     'tmp%i' % time.time())
+                self.toolbox.set_current_toolbar(_TOOLBAR_SLIDES)
+
+    def load_journal_table(self):
+        ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gif', 'image/tiff',  \
+            'image/png']},  'title')
+        for i in xrange (0, num_objects, 1):
+            iter = self.ls_right.append()
+            self.ls_right.set(iter, COLUMN_IMAGE, ds_objects[i].metadata['title'])
+            self.ls_right.set(iter,  COLUMN_PATH,  ds_objects[i])
 
     def col_left_edited_cb(self, cell,  path,  new_text,  user_data):
         liststore = user_data
@@ -263,6 +267,7 @@ class ViewSlidesActivity(activity.Activity):
             self.set_current_page(0)
             self._load_document(self._tempfile)
 
+
     def selection_left_cb(self, selection):
         tv = selection.get_tree_view()
         model = tv.get_model()
@@ -270,22 +275,12 @@ class ViewSlidesActivity(activity.Activity):
         if self.selection_left:
             model, iter = self.selection_left
             selected_file = model.get_value(iter, COLUMN_OLD_NAME)
-            try:
-                zf = zipfile.ZipFile(self._tempfile, 'r')
-                filebytes = zf.read(selected_file)
-            except BadZipfile, err:
-                print 'Error opening the zip file: %s' % (err)
-                self._alert('Error', 'Error opening the zip file')
-            outfn = self.make_new_filename(selected_file)
-            f = open("/tmp/" + outfn, 'w')
-            try:
-                f.write(filebytes)
-            finally:
-                f.close
-            fname = "/tmp/" + outfn
-            self.show_image(fname)
+            zf = zipfile.ZipFile(self._tempfile, 'r')
+            if self.save_extracted_file(zf, selected_file) == True:
+                fname = "/tmp/" + self.make_new_filename(selected_file)
+                self.show_image(fname)
+                os.remove(fname)
             self._slides_toolbar._remove_image.props.sensitive = True
-            os.remove(fname)
 
     def selection_right_cb(self, selection):
         tv = selection.get_tree_view()
@@ -335,17 +330,12 @@ class ViewSlidesActivity(activity.Activity):
         for row in self.ls_left:
             copied_file = row [COLUMN_OLD_NAME]
             new_file = row[COLUMN_IMAGE]
-            filebytes = zf_old.read(copied_file)
-            outfn = self.make_new_filename(new_file)
-            f = open("/tmp/" + outfn, 'w')
-            try:
-                f.write(filebytes)
-            finally:
-                f.close
-            fname = "/tmp/" + outfn
-            zf_new.write(fname.encode( "utf-8" ),  new_file.encode( "utf-8" ))
-            print 'rewriting',  new_file
-            os.remove(fname)
+            if self.save_extracted_file(zf_old, copied_file) == True:
+                outfn = self.make_new_filename(copied_file)
+                fname = "/tmp/" + outfn
+                zf_new.write(fname.encode( "utf-8" ),  new_file.encode( "utf-8" ))
+                print 'rewriting',  new_file
+                os.remove(fname)
         zf_old.close()
         zf_new.close()
         os.remove(self._tempfile)
