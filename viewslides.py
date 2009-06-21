@@ -255,6 +255,9 @@ class ViewSlidesActivity(activity.Activity):
 
     def col_left_edited_cb(self, cell,  path,  new_text,  user_data):
         liststore = user_data
+        if self.check_for_duplicates(new_text)  == True:
+            self._alert("Duplicate Filename",  'File ' + str(new_text) + ' already exists in slideshow!')
+            return
         liststore[path][COLUMN_IMAGE] = new_text
         self.is_dirty = True
         return
@@ -267,7 +270,6 @@ class ViewSlidesActivity(activity.Activity):
             self.rewrite_zip()
             self.set_current_page(0)
             self._load_document(self._tempfile)
-
 
     def selection_left_cb(self, selection):
         tv = selection.get_tree_view()
@@ -298,13 +300,16 @@ class ViewSlidesActivity(activity.Activity):
     def add_image(self):
         if self.selected_journal_entry == None:
             return
+        selected_file = self.selected_journal_entry.get_file_path()
+        arcname = os.path.basename(selected_file)
+        if self.check_for_duplicates(arcname)  == True:
+            self._alert("Duplicate Filename",  'File ' + str(arcname) + ' already exists in slideshow!')
+            return
         try:
             if os.path.exists(self._tempfile):
                 zf = zipfile.ZipFile(self._tempfile, 'a')
             else:
                 zf = zipfile.ZipFile(self._tempfile, 'w')
-            selected_file = self.selected_journal_entry.get_file_path()
-            arcname = os.path.basename(selected_file)
             zf.write(selected_file.encode( "utf-8" ),  arcname.encode( "utf-8" ))
             zf.close()
             iter = self.ls_left.append()
@@ -321,6 +326,14 @@ class ViewSlidesActivity(activity.Activity):
             self._slides_toolbar._remove_image.props.sensitive = True
             self.is_dirty = True
 
+    def check_for_duplicates(self,  filename):
+        for row in self.ls_left:
+            if row [COLUMN_OLD_NAME] == filename:
+                return True
+            if row [COLUMN_IMAGE] == filename:
+                return True
+        return False
+ 
     def rewrite_zip(self):
         if self.is_dirty == False:
             return
@@ -619,8 +632,10 @@ class ViewSlidesActivity(activity.Activity):
 
     def write_file(self, file_path):
         "Save meta data for the file."
-        if self._tempfile is None:
-            raise NotImplementedError
+        if not os.path.exists(self._tempfile):
+            zf = zipfile.ZipFile(self._tempfile, 'w')
+            zf.writestr("filler.txt", "filler")
+            zf.close()
 
         self.save_page_number()
         self.metadata['activity'] = self.get_bundle_id()
@@ -805,7 +820,7 @@ class ViewSlidesActivity(activity.Activity):
         self._share_document()
 
     def _alert(self, title, text=None):
-        alert = NotifyAlert(timeout=5)
+        alert = NotifyAlert(timeout=15)
         alert.props.title = title
         alert.props.msg = text
         self.add_alert(alert)
