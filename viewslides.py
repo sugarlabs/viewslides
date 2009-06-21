@@ -243,6 +243,7 @@ class ViewSlidesActivity(activity.Activity):
                 self._tempfile = os.path.join(self.get_activity_root(), 'instance',
                                     'tmp%i' % time.time())
                 self.toolbox.set_current_toolbar(_TOOLBAR_SLIDES)
+                self.show_image_tables(True)
 
     def load_journal_table(self):
         ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gif', 'image/tiff',  \
@@ -307,7 +308,7 @@ class ViewSlidesActivity(activity.Activity):
             zf.write(selected_file.encode( "utf-8" ),  arcname.encode( "utf-8" ))
             zf.close()
             iter = self.ls_left.append()
-            self.ls_left.set(iter, COLUMN_IMAGE, arcname)
+            self.ls_left.set(iter, COLUMN_IMAGE, arcname,  COLUMN_OLD_NAME,  arcname)
             self._slides_toolbar._add_image.props.sensitive = False
         except BadZipfile, err:
             print 'Error opening the zip file: %s' % (err)
@@ -324,7 +325,8 @@ class ViewSlidesActivity(activity.Activity):
         if self.is_dirty == False:
             return
         new_zipfile = os.path.join(self.get_activity_root(), 'instance',
-                'tmp%i' % time.time())
+                'rewrite%i' % time.time())
+        print self._tempfile,  new_zipfile
         zf_new = zipfile.ZipFile(new_zipfile, 'w')
         zf_old = zipfile.ZipFile(self._tempfile, 'r')
         for row in self.ls_left:
@@ -523,7 +525,10 @@ class ViewSlidesActivity(activity.Activity):
         except BadZipfile, err:
             print 'Error opening the zip file: %s' % (err)
             # self._alert('Error', 'Error opening the zip file')
-            return False    
+            return False
+        except KeyError,  err:
+            self._alert('Key Error', 'Zipfile key not found: '  + str(filename))
+            return
         outfn = self.make_new_filename(filename)
         if (outfn == ''):
             return False
