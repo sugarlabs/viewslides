@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-# Copyright (C) 2008 James D. Simmons
+# Copyright (C) 2008, 2009 James D. Simmons
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,9 +29,8 @@ from pygame.locals import *
 from sugar.activity import activity
 from sugar import network
 from sugar.datastore import datastore
-from sugar.graphics.objectchooser import ObjectChooser
 from sugar.graphics.alert import NotifyAlert
-from readtoolbar import ReadToolbar, ViewToolbar
+from readtoolbar import ReadToolbar, ViewToolbar,  SlidesToolbar
 from gettext import gettext as _
 import dbus
 import gobject
@@ -40,6 +39,10 @@ from decimal import *
 import xopower
 
 _TOOLBAR_READ = 1
+_TOOLBAR_SLIDES = 3
+COLUMN_IMAGE = 0
+COLUMN_PATH = 1
+COLUMN_OLD_NAME = 1
 
 _logger = logging.getLogger('view-slides')
 
@@ -112,6 +115,11 @@ class ViewSlidesActivity(activity.Activity):
                 self.__view_toolbar_go_fullscreen_cb)
         self._view_toolbar.show()
 
+        self._slides_toolbar = SlidesToolbar()
+        toolbox.add_toolbar(_('Slides'), self._slides_toolbar)
+        self._slides_toolbar.set_activity(self)
+        self._slides_toolbar.show()
+
         self.set_toolbox(toolbox)
         toolbox.show()
         self.scrolled = gtk.ScrolledWindow()
@@ -127,8 +135,63 @@ class ViewSlidesActivity(activity.Activity):
         self.eventbox.set_flags(gtk.CAN_FOCUS)
         self.eventbox.connect("key_press_event", self.keypress_cb)
         self.eventbox.connect("button_press_event", self.buttonpress_cb)
-        self.set_canvas(self.scrolled)
+ 
+        self.ls_left = gtk.ListStore(gobject.TYPE_STRING,  gobject.TYPE_STRING)
+        tv_left = gtk.TreeView(self.ls_left)
+        tv_left.set_rules_hint(True)
+        tv_left.set_search_column(COLUMN_IMAGE)
+        selection_left = tv_left.get_selection()
+        selection_left.set_mode(gtk.SELECTION_SINGLE)
+        selection_left.connect("changed", self.selection_left_cb)
+        renderer = gtk.CellRendererText()
+        col_left = gtk.TreeViewColumn('Slideshow Image', renderer, text=COLUMN_IMAGE)
+        col_left.set_sort_column_id(COLUMN_IMAGE)
+        renderer.set_property('editable',  True)
+        renderer.connect('edited',  self.col_left_edited_cb,  self.ls_left)
+        tv_left.append_column(col_left)
+
+        self.list_scroller_left = gtk.ScrolledWindow(hadjustment=None, vadjustment=None)
+        self.list_scroller_left.set_policy(gtk.POLICY_NEVER,  gtk.POLICY_AUTOMATIC)
+        self.list_scroller_left.add(tv_left)
+
+        self.ls_right = gtk.ListStore(gobject.TYPE_STRING,  gobject.TYPE_PYOBJECT)
+        tv_right = gtk.TreeView(self.ls_right)
+        tv_right.set_rules_hint(True)
+        tv_right.set_search_column(COLUMN_IMAGE)
+        selection_right = tv_right.get_selection()
+        selection_right.set_mode(gtk.SELECTION_SINGLE)
+        selection_right.connect("changed", self.selection_right_cb)
+        renderer = gtk.CellRendererText()
+        col_right = gtk.TreeViewColumn('Journal Image', renderer, text=COLUMN_IMAGE)
+        col_right.set_sort_column_id(COLUMN_IMAGE)
+        tv_right.append_column(col_right)
+        
+        self.list_scroller_right = gtk.ScrolledWindow(hadjustment=None, vadjustment=None)
+        self.list_scroller_right.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+        self.list_scroller_right.add(tv_right)
+
+        self.hpane = gtk.HPaned()
+        self.hpane.add1(self.list_scroller_left)
+        self.hpane.add2(self.list_scroller_right)
+        
+        vbox = gtk.VBox()
+        vbox.add(self.scrolled)
+        vbox.add(self.hpane)
+
+        self.set_canvas(vbox)
         self.scrolled.show()
+        tv_left.show()
+        self.list_scroller_left.show()
+        tv_right.show()
+        self.list_scroller_right.show()
+        self.hpane.show()
+        vbox.show()
+        self.hpane.hide()
+        
+        self.is_dirty = False
+
+        self.load_journal_table()
+
         self.show_image("ViewSlides.jpg")
         self._read_toolbar.set_activity(self)
         self.page = 0
@@ -163,6 +226,8 @@ class ViewSlidesActivity(activity.Activity):
         self.port = 1024 + (h % 64511)
 
         self.is_received_document = False
+        self.selected_journal_entry = None
+        self.selection_left = None
         
         if self._shared_activity and handle.object_id == None:
             # We're joining, and we don't already have the document.
@@ -172,34 +237,125 @@ class ViewSlidesActivity(activity.Activity):
             else:
                 # Wait for a successful join before trying to get the document
                 self.connect("joined", self._joined_cb)
-        elif self._object_id is None:
-            # Not joining, not resuming
-            self._show_journal_object_picker()
-        # uncomment this and adjust the path for easier testing
-        #else:
-        #    self._load_document('file:///home/smcv/tmp/test.pdf')
+        else:
+            # Assign a file path to create if one doesn't exist yet
+            if handle.object_id == None:
+                self._tempfile = os.path.join(self.get_activity_root(), 'instance',
+                                    'tmp%i' % time.time())
+                self.toolbox.set_current_toolbar(_TOOLBAR_SLIDES)
+                self.show_image_tables(True)
 
-    def _show_journal_object_picker(self):
-        """Show the journal object picker to load a document.
-        This is for if View Slides is launched without a document.
-        """
-        if not self._want_document:
+    def load_journal_table(self):
+        ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gif', 'image/tiff',  \
+            'image/png']},  'title')
+        for i in xrange (0, num_objects, 1):
+            iter = self.ls_right.append()
+            self.ls_right.set(iter, COLUMN_IMAGE, ds_objects[i].metadata['title'])
+            self.ls_right.set(iter,  COLUMN_PATH,  ds_objects[i])
+
+    def col_left_edited_cb(self, cell,  path,  new_text,  user_data):
+        liststore = user_data
+        if self.check_for_duplicates(new_text)  == True:
+            self._alert("Duplicate Filename",  'File ' + str(new_text) + ' already exists in slideshow!')
             return
-        chooser = ObjectChooser(_('Choose document'), self, 
-                                gtk.DIALOG_MODAL | 
-                                gtk.DIALOG_DESTROY_WITH_PARENT)
+        liststore[path][COLUMN_IMAGE] = new_text
+        self.is_dirty = True
+        return
+    
+    def  show_image_tables(self,  state):
+        if state == True:
+            self.hpane.show()
+        else:
+            self.hpane.hide()
+            self.rewrite_zip()
+            self.set_current_page(0)
+            self._load_document(self._tempfile)
+
+    def selection_left_cb(self, selection):
+        tv = selection.get_tree_view()
+        model = tv.get_model()
+        self.selection_left = selection.get_selected()
+        if self.selection_left:
+            model, iter = self.selection_left
+            selected_file = model.get_value(iter, COLUMN_OLD_NAME)
+            zf = zipfile.ZipFile(self._tempfile, 'r')
+            if self.save_extracted_file(zf, selected_file) == True:
+                fname = "/tmp/" + self.make_new_filename(selected_file)
+                self.show_image(fname)
+                os.remove(fname)
+            self._slides_toolbar._remove_image.props.sensitive = True
+
+    def selection_right_cb(self, selection):
+        tv = selection.get_tree_view()
+        model = tv.get_model()
+        sel = selection.get_selected()
+        if sel:
+            model, iter = sel
+            jobject = model.get_value(iter,COLUMN_PATH)
+            fname = jobject.get_file_path()
+            self.show_image(fname)
+            self._slides_toolbar._add_image.props.sensitive = True
+            self.selected_journal_entry = jobject
+
+    def add_image(self):
+        if self.selected_journal_entry == None:
+            return
+        selected_file = self.selected_journal_entry.get_file_path()
+        arcname = os.path.basename(selected_file)
+        if self.check_for_duplicates(arcname)  == True:
+            self._alert("Duplicate Filename",  'File ' + str(arcname) + ' already exists in slideshow!')
+            return
         try:
-            result = chooser.run()
-            if result == gtk.RESPONSE_ACCEPT:
-                logging.debug('ObjectChooser: %r' % 
-                              chooser.get_selected_object())
-                jobject = chooser.get_selected_object()
-                if jobject and jobject.file_path:
-                    self.metadata['title'] = jobject.metadata['title']
-                    self.read_file(jobject.file_path)
-        finally:
-            chooser.destroy()
-            del chooser
+            if os.path.exists(self._tempfile):
+                zf = zipfile.ZipFile(self._tempfile, 'a')
+            else:
+                zf = zipfile.ZipFile(self._tempfile, 'w')
+            zf.write(selected_file.encode( "utf-8" ),  arcname.encode( "utf-8" ))
+            zf.close()
+            iter = self.ls_left.append()
+            self.ls_left.set(iter, COLUMN_IMAGE, arcname,  COLUMN_OLD_NAME,  arcname)
+            self._slides_toolbar._add_image.props.sensitive = False
+        except BadZipfile, err:
+            print 'Error opening the zip file: %s' % (err)
+            self._alert('Error', 'Error opening the zip file')
+    
+    def remove_image(self):
+        if self.selection_left:
+            model, iter = self.selection_left
+            self.ls_left.remove(iter)
+            self._slides_toolbar._remove_image.props.sensitive = True
+            self.is_dirty = True
+
+    def check_for_duplicates(self,  filename):
+        for row in self.ls_left:
+            if row [COLUMN_OLD_NAME] == filename:
+                return True
+            if row [COLUMN_IMAGE] == filename:
+                return True
+        return False
+ 
+    def rewrite_zip(self):
+        if self.is_dirty == False:
+            return
+        new_zipfile = os.path.join(self.get_activity_root(), 'instance',
+                'rewrite%i' % time.time())
+        print self._tempfile,  new_zipfile
+        zf_new = zipfile.ZipFile(new_zipfile, 'w')
+        zf_old = zipfile.ZipFile(self._tempfile, 'r')
+        for row in self.ls_left:
+            copied_file = row [COLUMN_OLD_NAME]
+            new_file = row[COLUMN_IMAGE]
+            if self.save_extracted_file(zf_old, copied_file) == True:
+                outfn = self.make_new_filename(copied_file)
+                fname = "/tmp/" + outfn
+                zf_new.write(fname.encode( "utf-8" ),  new_file.encode( "utf-8" ))
+                print 'rewriting',  new_file
+                os.remove(fname)
+        zf_old.close()
+        zf_new.close()
+        os.remove(self._tempfile)
+        self._tempfile = new_zipfile
+        self.is_dirty = False
 
     def buttonpress_cb(self, widget, event):
         widget.grab_focus()
@@ -382,7 +538,10 @@ class ViewSlidesActivity(activity.Activity):
         except BadZipfile, err:
             print 'Error opening the zip file: %s' % (err)
             # self._alert('Error', 'Error opening the zip file')
-            return False    
+            return False
+        except KeyError,  err:
+            self._alert('Key Error', 'Zipfile key not found: '  + str(filename))
+            return
         outfn = self.make_new_filename(filename)
         if (outfn == ''):
             return False
@@ -398,6 +557,7 @@ class ViewSlidesActivity(activity.Activity):
         tempfile = os.path.join(self.get_activity_root(),  'instance', 'tmp%i' % time.time())
         os.link(file_path,  tempfile)
         self._tempfile = tempfile
+        self.get_saved_page_number()
         self._load_document(self._tempfile)
 
     def delete_cb(self, widget, event):
@@ -447,13 +607,15 @@ class ViewSlidesActivity(activity.Activity):
             self.image_files.sort()
             i = 0
             valid_endings = ('.jpg', '.JPG', '.gif', '.GIF', '.tiff', '.TIFF', '.png', '.PNG')
+            self.ls_left.clear()
             while i < len(self.image_files):
                 newfn = self.make_new_filename(self.image_files[i])
                 if newfn.endswith(valid_endings):
+                    iter = self.ls_left.append()
+                    self.ls_left.set(iter, COLUMN_IMAGE, self.image_files[i],  COLUMN_OLD_NAME,  self.image_files[i])
                     i = i + 1
                 else:   
                     del self.image_files[i]
-            self.get_saved_page_number()
             self.save_extracted_file(self.zf, self.image_files[self.page])
             currentFileName = "/tmp/" + self.make_new_filename(self.image_files[self.page])
             self.show_image(currentFileName)
@@ -470,11 +632,14 @@ class ViewSlidesActivity(activity.Activity):
 
     def write_file(self, file_path):
         "Save meta data for the file."
-        if self._tempfile is None:
-            raise NotImplementedError
+        if not os.path.exists(self._tempfile):
+            zf = zipfile.ZipFile(self._tempfile, 'w')
+            zf.writestr("filler.txt", "filler")
+            zf.close()
 
         self.save_page_number()
         self.metadata['activity'] = self.get_bundle_id()
+        self.rewrite_zip()
         os.link(self._tempfile,  file_path)
  
         if self._close_requested:
@@ -655,7 +820,7 @@ class ViewSlidesActivity(activity.Activity):
         self._share_document()
 
     def _alert(self, title, text=None):
-        alert = NotifyAlert(timeout=5)
+        alert = NotifyAlert(timeout=15)
         alert.props.title = title
         alert.props.msg = text
         self.add_alert(alert)
