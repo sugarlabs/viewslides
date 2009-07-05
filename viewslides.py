@@ -174,9 +174,14 @@ class ViewSlidesActivity(activity.Activity):
         self.hpane.add1(self.list_scroller_left)
         self.hpane.add2(self.list_scroller_right)
         
+        self.progressbar = gtk.ProgressBar()
+        self.progressbar.set_orientation(gtk.PROGRESS_LEFT_TO_RIGHT)
+        self.progressbar.set_fraction(0.0)
+        
         vbox = gtk.VBox()
-        vbox.add(self.scrolled)
-        vbox.add(self.hpane)
+        vbox.pack_start(self.progressbar,  False,  False,  10)
+        vbox.pack_start(self.scrolled)
+        vbox.pack_end(self.hpane)
 
         self.set_canvas(vbox)
         self.scrolled.show()
@@ -652,6 +657,13 @@ class ViewSlidesActivity(activity.Activity):
         return True
         
     # The code from here on down is for sharing.
+    def set_downloaded_bytes(self, bytes,  total):
+        fraction = float(bytes) / float(total)
+        self.progressbar.set_fraction(fraction)
+        
+    def clear_downloaded_bytes(self):
+        self.progressbar.set_fraction(0.0)
+
     def _download_result_cb(self, getter, tempfile, suggested_name, tube_id):
         if self._download_content_type == 'text/html':
             # got an error page instead
@@ -672,6 +684,7 @@ class ViewSlidesActivity(activity.Activity):
                       tempfile, suggested_name, tube_id)
         self._load_document(tempfile)
         self.save()
+        self.progressbar.hide()
 
     def _download_progress_cb(self, getter, bytes_downloaded, tube_id):
         if self._download_content_length > 0:
@@ -681,13 +694,15 @@ class ViewSlidesActivity(activity.Activity):
         else:
             _logger.debug("Downloaded %u bytes from tube %u...",
                           bytes_downloaded, tube_id)
-        # total = getter._info.headers["Content-Length"]
         total = self._download_content_length
-        self._read_toolbar.set_downloaded_bytes(bytes_downloaded,  total)
+        self.set_downloaded_bytes(bytes_downloaded,  total)
+        gtk.gdk.threads_enter()
         while gtk.events_pending():
             gtk.main_iteration()
+        gtk.gdk.threads_leave()
 
     def _download_error_cb(self, getter, err, tube_id):
+        self.progressbar.hide()
         _logger.debug("Error getting document from tube %u: %s",
                       tube_id, err)
         self._alert('Failure', 'Error getting document from tube')
@@ -746,6 +761,7 @@ class ViewSlidesActivity(activity.Activity):
 
         # Avoid trying to download the document multiple times at once
         self._want_document = False
+        self.progressbar.show()
         gobject.idle_add(self._download_document, tube_id, path)
         return False
 
