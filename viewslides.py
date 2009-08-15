@@ -370,7 +370,7 @@ class ViewSlidesActivity(activity.Activity):
             selected_file = model.get_value(iter, COLUMN_OLD_NAME)
             zf = zipfile.ZipFile(self.tempfile, 'r')
             if self.save_extracted_file(zf, selected_file) == True:
-                fname = "/tmp/" + self.make_new_filename(selected_file)
+                fname = os.path.join(self.get_activity_root(), 'instance',  self.make_new_filename(selected_file))
                 self.show_image(fname)
                 os.remove(fname)
             self._slides_toolbar._remove_image.props.sensitive = True
@@ -437,7 +437,7 @@ class ViewSlidesActivity(activity.Activity):
             new_file = row[COLUMN_IMAGE]
             if self.save_extracted_file(zf_old, copied_file) == True:
                 outfn = self.make_new_filename(copied_file)
-                fname = "/tmp/" + outfn
+                fname = os.path.join(self.get_activity_root(), 'instance',  outfn)
                 zf_new.write(fname.encode( "utf-8" ),  new_file.encode( "utf-8" ))
                 print 'rewriting',  new_file
                 os.remove(fname)
@@ -600,7 +600,7 @@ class ViewSlidesActivity(activity.Activity):
         page=page-1
         if page < 0: page=0
         if self.save_extracted_file(self.zf, self.image_files[page]) == True:
-            fname = "/tmp/" + self.make_new_filename(self.image_files[page])
+            fname = os.path.join(self.get_activity_root(), 'instance',  self.make_new_filename(self.image_files[page]))
             self.show_image(fname)
             os.remove(fname)
             self.show_bookmark_state(page)
@@ -619,7 +619,7 @@ class ViewSlidesActivity(activity.Activity):
         page = page + 1
         if page >= len(self.image_files): page=len(self.image_files) - 1
         if self.save_extracted_file(self.zf, self.image_files[page]) == True:
-            fname = "/tmp/" + self.make_new_filename(self.image_files[page])
+            fname = os.path.join(self.get_activity_root(), 'instance',  self.make_new_filename(self.image_files[page]))
             self.show_image(fname)
             os.remove(fname)
             self.show_bookmark_state(page)
@@ -641,7 +641,7 @@ class ViewSlidesActivity(activity.Activity):
     def show_page(self, page):
         self.show_bookmark_state(page)
         if self.save_extracted_file(self.zf, self.image_files[page]) == True:
-            fname = "/tmp/" + self.make_new_filename(self.image_files[page])
+            fname = os.path.join(self.get_activity_root(), 'instance',  self.make_new_filename(self.image_files[page]))
             self.show_image(fname)
             os.remove(fname)
             annotation_textbuffer = self.annotation_textview.get_buffer()
@@ -715,7 +715,8 @@ class ViewSlidesActivity(activity.Activity):
         outfn = self.make_new_filename(filename)
         if (outfn == ''):
             return False
-        f = open("/tmp/" + outfn, 'w')
+        fname = os.path.join(self.get_activity_root(), 'instance',  outfn)
+        f = open(fname, 'w')
         try:
             f.write(filebytes)
         finally:
@@ -790,7 +791,7 @@ class ViewSlidesActivity(activity.Activity):
             self.image_files = self.zf.namelist()
             self.image_files.sort()
             i = 0
-            valid_endings = ('.jpg', '.JPG', '.gif', '.GIF', '.tiff', '.TIFF', '.png', '.PNG')
+            valid_endings = ('.jpg',  '.jpeg', '.JPEG',  '.JPG', '.gif', '.GIF', '.tiff', '.TIFF', '.png', '.PNG')
             self.ls_left.clear()
             while i < len(self.image_files):
                 newfn = self.make_new_filename(self.image_files[i])
@@ -800,13 +801,11 @@ class ViewSlidesActivity(activity.Activity):
                     i = i + 1
                 else:   
                     del self.image_files[i]
-            self.save_extracted_file(self.zf, self.image_files[self.page])
-            currentFileName = "/tmp/" + self.make_new_filename(self.image_files[self.page])
-            self.show_image(currentFileName)
-            os.remove(currentFileName)
+            self.extract_pickle_file()
+            self.annotations.restore()
+            self.show_page(self.page)
             self.read_toolbar.set_total_pages(len(self.image_files))
             self.read_toolbar.set_current_page(self.page)
-            self.annotations.restore()
             if self.is_received_document == True:
                 self.metadata['title'] = self.annotations.get_title()
                 self.metadata['title_set_by_user'] = '1'
@@ -828,14 +827,20 @@ class ViewSlidesActivity(activity.Activity):
 
         self.save_page_number()
         self.metadata['activity'] = self.get_bundle_id()
-        self.annotations.save()
-        self.final_rewrite_zip()
-        os.link(self.tempfile,  file_path)
  
         if self._close_requested:
+            textbuffer = self.annotation_textview.get_buffer()
+            self.annotations.add_note(self.page,  textbuffer.get_text(textbuffer.get_start_iter(),  textbuffer.get_end_iter()))
+            title = self.metadata.get('title', '')
+            self.annotations.set_title(str(title))
+            self.annotations.save()
+            self.final_rewrite_zip()
+            os.link(self.tempfile,  file_path)
             _logger.debug("Removing temp file %s because we will close", self.tempfile)
             os.unlink(self.tempfile)
+            os.remove(self.pickle_file_temp)
             self.tempfile = None
+            self.pickle_file_temp = None
 
     def can_close(self):
         self._close_requested = True
