@@ -31,10 +31,12 @@ from sugar import network
 from sugar.datastore import datastore
 from sugar.graphics.alert import NotifyAlert
 from readtoolbar import ReadToolbar, ViewToolbar,  SlidesToolbar
+from readsidebar import Sidebar
 from gettext import gettext as _
 import dbus
 import gobject
 import telepathy
+import cPickle as pickle
 from decimal import *
 import xopower
 
@@ -45,6 +47,70 @@ COLUMN_PATH = 1
 COLUMN_OLD_NAME = 1
 
 _logger = logging.getLogger('view-slides')
+
+class Annotations():
+    
+    def __init__(self,  pickle_file_name):
+        self.title = ''
+        self.notes = {0:''}
+        self.bookmarks = []
+        self.pickle_file_name = pickle_file_name
+
+    def get_title(self):
+        return self.title
+        
+    def set_title(self,  title):
+        self.title = title
+    
+    def get_notes(self):
+        return self.notes
+        
+    def get_note(self,  page):
+        try:
+            return self.notes[page]
+        except KeyError:
+            return ''
+        
+    def add_note(self,  page,  text):
+        self.notes[page] = text
+        if text == '':
+            del self.notes[page]
+
+    def is_bookmarked(self,  page):
+        bookmark = self.bookmarks.count(page)
+        if bookmark > 0:
+            return True
+        else:
+            return False
+
+    def add_bookmark(self,  page):
+        self.bookmarks.append(page)
+        
+    def remove_bookmark(self,  page):
+        try:
+            self.bookmarks.remove(page)
+            # print 'bookmarks=',  self.bookmarks
+        except ValueError:
+            print 'page already not bookmarked',  page
+
+    def get_bookmarks(self):
+        self.bookmarks.sort()
+        return self.bookmarks
+        
+    def restore(self):
+        if os.path.exists(self.pickle_file_name):
+            pickle_input = open(self.pickle_file_name,  'rb')
+            self.title = pickle.load(pickle_input)
+            self.bookmarks = pickle.load(pickle_input)
+            self.notes = pickle.load(pickle_input)
+            pickle_input.close()
+
+    def save(self):
+        pickle_output = open(self.pickle_file_name,  'wb')
+        pickle.dump(self.title,  pickle_output)
+        pickle.dump(self.bookmarks,  pickle_output)
+        pickle.dump(self.notes,  pickle_output)
+        pickle_output.close()
 
 class ReadHTTPRequestHandler(network.ChunkedGlibHTTPRequestHandler):
     """HTTP Request Handler for transferring document while collaborating.
@@ -104,9 +170,9 @@ class ViewSlidesActivity(activity.Activity):
         activity_toolbar.remove(activity_toolbar.keep)
         activity_toolbar.keep = None
         
-        self._read_toolbar = ReadToolbar()
-        toolbox.add_toolbar(_('Read'), self._read_toolbar)
-        self._read_toolbar.show()
+        self.read_toolbar = ReadToolbar()
+        toolbox.add_toolbar(_('Read'), self.read_toolbar)
+        self.read_toolbar.show()
 
         self._view_toolbar = ViewToolbar()
         toolbox.add_toolbar(_('View'), self._view_toolbar)
@@ -136,6 +202,14 @@ class ViewSlidesActivity(activity.Activity):
         self.eventbox.connect("key_press_event", self.keypress_cb)
         self.eventbox.connect("button_press_event", self.buttonpress_cb)
  
+        self.annotation_textview = gtk.TextView()
+        self.annotation_textview.set_left_margin(50)
+        self.annotation_textview.set_right_margin(50)
+        self.annotation_textview.set_wrap_mode(gtk.WRAP_WORD)
+        self.annotation_textview.show()
+        self.sidebar = Sidebar()
+        self.sidebar.show()
+
         self.ls_left = gtk.ListStore(gobject.TYPE_STRING,  gobject.TYPE_STRING)
         tv_left = gtk.TreeView(self.ls_left)
         tv_left.set_rules_hint(True)
@@ -182,8 +256,15 @@ class ViewSlidesActivity(activity.Activity):
         vbox.pack_start(self.progressbar,  False,  False,  10)
         vbox.pack_start(self.scrolled)
         vbox.pack_end(self.hpane)
+        vbox.pack_end(self.annotation_textview,  False,  False,  10)
 
-        self.set_canvas(vbox)
+        sidebar_hbox = gtk.HBox()
+        sidebar_hbox.pack_start(self.sidebar, expand=False, fill=False)
+        sidebar_hbox.pack_start(vbox,  expand=True, fill=True)
+        self.set_canvas(sidebar_hbox)
+        sidebar_hbox.show()
+
+        # self.set_canvas(vbox)
         self.scrolled.show()
         tv_left.show()
         self.list_scroller_left.show()
@@ -198,7 +279,7 @@ class ViewSlidesActivity(activity.Activity):
         self.load_journal_table()
 
         self.show_image("ViewSlides.jpg")
-        self._read_toolbar.set_activity(self)
+        self.read_toolbar.set_activity(self)
         self.page = 0
         self.temp_filename = ''
         self.saved_screen_width = 0
@@ -208,6 +289,9 @@ class ViewSlidesActivity(activity.Activity):
         color = gtk.gdk.Color()
         self.hidden_cursor = gtk.gdk.Cursor(pixmap, pixmap, color, color, 0, 0)
         self.cursor_visible = True
+
+        self.pickle_file_temp = os.path.join(self.get_activity_root(),  'instance', 'pkl%i' % time.time())
+        self.annotations = Annotations(self.pickle_file_temp)
 
         xopower.setup_idle_timeout()
         if xopower.service_activated:
@@ -224,7 +308,7 @@ class ViewSlidesActivity(activity.Activity):
         self._download_content_length = 0
         self._download_content_type = None
        # Status of temp file used for write_file:
-        self._tempfile = None
+        self.tempfile = None
         self._close_requested = False
         self.connect("shared", self._shared_cb)
         h = hash(self._activity_id)
@@ -245,7 +329,7 @@ class ViewSlidesActivity(activity.Activity):
         else:
             # Assign a file path to create if one doesn't exist yet
             if handle.object_id == None:
-                self._tempfile = os.path.join(self.get_activity_root(), 'instance',
+                self.tempfile = os.path.join(self.get_activity_root(), 'instance',
                                     'tmp%i' % time.time())
                 self.toolbox.set_current_toolbar(_TOOLBAR_SLIDES)
                 self.show_image_tables(True)
@@ -253,6 +337,7 @@ class ViewSlidesActivity(activity.Activity):
     def load_journal_table(self):
         ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gif', 'image/tiff',  \
             'image/png']},  'title')
+        self.ls_right.clear()
         for i in xrange (0, num_objects, 1):
             iter = self.ls_right.append()
             self.ls_right.set(iter, COLUMN_IMAGE, ds_objects[i].metadata['title'])
@@ -274,7 +359,7 @@ class ViewSlidesActivity(activity.Activity):
             self.hpane.hide()
             self.rewrite_zip()
             self.set_current_page(0)
-            self._load_document(self._tempfile)
+            self._load_document(self.tempfile)
 
     def selection_left_cb(self, selection):
         tv = selection.get_tree_view()
@@ -283,7 +368,7 @@ class ViewSlidesActivity(activity.Activity):
         if self.selection_left:
             model, iter = self.selection_left
             selected_file = model.get_value(iter, COLUMN_OLD_NAME)
-            zf = zipfile.ZipFile(self._tempfile, 'r')
+            zf = zipfile.ZipFile(self.tempfile, 'r')
             if self.save_extracted_file(zf, selected_file) == True:
                 fname = "/tmp/" + self.make_new_filename(selected_file)
                 self.show_image(fname)
@@ -311,10 +396,10 @@ class ViewSlidesActivity(activity.Activity):
             self._alert("Duplicate Filename",  'File ' + str(arcname) + ' already exists in slideshow!')
             return
         try:
-            if os.path.exists(self._tempfile):
-                zf = zipfile.ZipFile(self._tempfile, 'a')
+            if os.path.exists(self.tempfile):
+                zf = zipfile.ZipFile(self.tempfile, 'a')
             else:
-                zf = zipfile.ZipFile(self._tempfile, 'w')
+                zf = zipfile.ZipFile(self.tempfile, 'w')
             zf.write(selected_file.encode( "utf-8" ),  arcname.encode( "utf-8" ))
             zf.close()
             iter = self.ls_left.append()
@@ -344,9 +429,9 @@ class ViewSlidesActivity(activity.Activity):
             return
         new_zipfile = os.path.join(self.get_activity_root(), 'instance',
                 'rewrite%i' % time.time())
-        print self._tempfile,  new_zipfile
+        print self.tempfile,  new_zipfile
         zf_new = zipfile.ZipFile(new_zipfile, 'w')
-        zf_old = zipfile.ZipFile(self._tempfile, 'r')
+        zf_old = zipfile.ZipFile(self.tempfile, 'r')
         for row in self.ls_left:
             copied_file = row [COLUMN_OLD_NAME]
             new_file = row[COLUMN_IMAGE]
@@ -358,9 +443,32 @@ class ViewSlidesActivity(activity.Activity):
                 os.remove(fname)
         zf_old.close()
         zf_new.close()
-        os.remove(self._tempfile)
-        self._tempfile = new_zipfile
+        os.remove(self.tempfile)
+        self.tempfile = new_zipfile
         self.is_dirty = False
+
+    def final_rewrite_zip(self):
+        new_zipfile = os.path.join(self.get_activity_root(), 'instance',
+                 'rewrite%i' % time.time())
+        print self.tempfile,  new_zipfile
+        zf_new = zipfile.ZipFile(new_zipfile, 'w')
+        zf_old = zipfile.ZipFile(self.tempfile, 'r')
+        image_files = self.zf.namelist()
+        i = 0
+        while (i < len(image_files)):
+            if (image_files[i] != 'annotations.pkl'):
+                self.save_extracted_file(zf_old, image_files[i])
+                outfn = self.make_new_filename(image_files[i])
+                fname = os.path.join(self.get_activity_root(), 'instance',  outfn)
+                zf_new.write(fname.encode( "utf-8" ),  outfn.encode( "utf-8" ))
+                os.remove(fname)
+            i = i + 1
+        zf_new.write(self.pickle_file_temp,  'annotations.pkl')
+        
+        zf_old.close()
+        zf_new.close()
+        os.remove(self.tempfile)
+        self.tempfile = new_zipfile
 
     def buttonpress_cb(self, widget, event):
         widget.grab_focus()
@@ -417,6 +525,54 @@ class ViewSlidesActivity(activity.Activity):
             return True
         return False
 
+    def bookmarker_clicked(self,  button):
+        if button.get_active() == True:
+            self.annotations.add_bookmark(self.page)
+        else:
+            self.annotations.remove_bookmark(self.page)
+        self.show_bookmark_state(self.page)
+
+    def show_bookmark_state(self,  page):
+        bookmark = self.annotations.is_bookmarked(page)
+        if bookmark == True:
+            self.sidebar.show_bookmark_icon(True)
+            self.read_toolbar.update_bookmark_button(True)
+        else:
+            self.sidebar.show_bookmark_icon(False)
+            self.read_toolbar.update_bookmark_button(False)
+
+    def prev_bookmark(self):
+        bookmarks = self.annotations.get_bookmarks()
+        count = len(bookmarks) - 1
+        while count >= 0:
+            if bookmarks[count] < self.page:
+                self.page = bookmarks[count]
+                self.show_page(self.page)
+                self.read_toolbar.set_current_page(self.page)
+                return
+            count = count - 1
+        # if we're before the first bookmark wrap to the last.
+        if len(bookmarks) > 0:
+            self.page = bookmarks[len(bookmarks) - 1]
+            self.show_page(self.page)
+            self.read_toolbar.set_current_page(self.page)
+
+    def next_bookmark(self):
+        bookmarks = self.annotations.get_bookmarks()
+        count = 0
+        while count < len(bookmarks):
+            if bookmarks[count] > self.page:
+                self.page = bookmarks[count]
+                self.show_page(self.page)
+                self.read_toolbar.set_current_page(self.page)
+                return
+            count = count + 1
+        # if we're after the last bookmark wrap to the first.
+        if len(bookmarks) > 0:
+            self.page = bookmarks[0]
+            self.show_page(self.page)
+            self.read_toolbar.set_current_page(self.page)
+
     def scroll_down(self):
         v_adjustment = self.scrolled.get_vadjustment()
         if v_adjustment.value == v_adjustment.upper - v_adjustment.page_size:
@@ -447,10 +603,13 @@ class ViewSlidesActivity(activity.Activity):
             fname = "/tmp/" + self.make_new_filename(self.image_files[page])
             self.show_image(fname)
             os.remove(fname)
+            self.show_bookmark_state(page)
         v_adjustment = self.scrolled.get_vadjustment()
         v_adjustment.value = v_adjustment.upper - v_adjustment.page_size
-        self._read_toolbar.set_current_page(page)
+        self.read_toolbar.set_current_page(page)
         self.page = page
+        annotation_textbuffer = self.annotation_textview.get_buffer()
+        annotation_textbuffer.set_text(self.annotations.get_note(page))
 
     def set_current_page(self, page):
         self.page = page
@@ -463,10 +622,13 @@ class ViewSlidesActivity(activity.Activity):
             fname = "/tmp/" + self.make_new_filename(self.image_files[page])
             self.show_image(fname)
             os.remove(fname)
+            self.show_bookmark_state(page)
         v_adjustment = self.scrolled.get_vadjustment()
         v_adjustment.value = v_adjustment.lower
-        self._read_toolbar.set_current_page(page)
+        self.read_toolbar.set_current_page(page)
         self.page = page
+        annotation_textbuffer = self.annotation_textview.get_buffer()
+        annotation_textbuffer.set_text(self.annotations.get_note(page))
 
     def area_expose_cb(self, area, event):
         screen_width = gtk.gdk.screen_width()
@@ -477,10 +639,13 @@ class ViewSlidesActivity(activity.Activity):
         return False
 
     def show_page(self, page):
+        self.show_bookmark_state(page)
         if self.save_extracted_file(self.zf, self.image_files[page]) == True:
             fname = "/tmp/" + self.make_new_filename(self.image_files[page])
             self.show_image(fname)
             os.remove(fname)
+            annotation_textbuffer = self.annotation_textview.get_buffer()
+            annotation_textbuffer.set_text(self.annotations.get_note(page))
         
     def show_image(self, filename):
         "display a resized image in a full screen window"
@@ -557,13 +722,27 @@ class ViewSlidesActivity(activity.Activity):
             f.close
         return True
 
+    def extract_pickle_file(self):
+        "Extract the pickle file to an instance directory for viewing"
+        try:
+            self.zf.getinfo('annotations.pkl')
+            filebytes = self.zf.read('annotations.pkl')
+            f = open(self.pickle_file_temp,  'wb')
+            try:
+                f.write(filebytes)
+            finally:
+                f.close
+            return True
+        except KeyError:
+            return False
+
     def read_file(self, file_path):
         """Load a file from the datastore on activity start"""
         tempfile = os.path.join(self.get_activity_root(),  'instance', 'tmp%i' % time.time())
         os.link(file_path,  tempfile)
-        self._tempfile = tempfile
+        self.tempfile = tempfile
         self.get_saved_page_number()
-        self._load_document(self._tempfile)
+        self._load_document(self.tempfile)
 
     def delete_cb(self, widget, event):
         os.remove(self.temp_filename)
@@ -625,8 +804,13 @@ class ViewSlidesActivity(activity.Activity):
             currentFileName = "/tmp/" + self.make_new_filename(self.image_files[self.page])
             self.show_image(currentFileName)
             os.remove(currentFileName)
-            self._read_toolbar.set_total_pages(len(self.image_files))
-            self._read_toolbar.set_current_page(self.page)
+            self.read_toolbar.set_total_pages(len(self.image_files))
+            self.read_toolbar.set_current_page(self.page)
+            self.annotations.restore()
+            if self.is_received_document == True:
+                self.metadata['title'] = self.annotations.get_title()
+                self.metadata['title_set_by_user'] = '1'
+                print self.annotations.get_title()
             # We've got the document, so if we're a shared activity, offer it
             if self.get_shared():
                 self.watch_for_tubes()
@@ -637,20 +821,21 @@ class ViewSlidesActivity(activity.Activity):
 
     def write_file(self, file_path):
         "Save meta data for the file."
-        if not os.path.exists(self._tempfile):
-            zf = zipfile.ZipFile(self._tempfile, 'w')
+        if not os.path.exists(self.tempfile):
+            zf = zipfile.ZipFile(self.tempfile, 'w')
             zf.writestr("filler.txt", "filler")
             zf.close()
 
         self.save_page_number()
         self.metadata['activity'] = self.get_bundle_id()
-        self.rewrite_zip()
-        os.link(self._tempfile,  file_path)
+        self.annotations.save()
+        self.final_rewrite_zip()
+        os.link(self.tempfile,  file_path)
  
         if self._close_requested:
-            _logger.debug("Removing temp file %s because we will close", self._tempfile)
-            os.unlink(self._tempfile)
-            self._tempfile = None
+            _logger.debug("Removing temp file %s because we will close", self.tempfile)
+            os.unlink(self.tempfile)
+            self.tempfile = None
 
     def can_close(self):
         self._close_requested = True
@@ -672,7 +857,7 @@ class ViewSlidesActivity(activity.Activity):
 
         del self.unused_download_tubes
 
-        self._tempfile = tempfile
+        self.tempfile = tempfile
         file_path = os.path.join(self.get_activity_root(), 'instance',
                                     '%i' % time.time())
         _logger.debug("Saving file %s to datastore...", file_path)
@@ -780,7 +965,7 @@ class ViewSlidesActivity(activity.Activity):
 
         _logger.debug('Starting HTTP server on port %d', self.port)
         self._fileserver = ReadHTTPServer(("", self.port),
-            self._tempfile)
+            self.tempfile)
 
         # Make a tube for it
         chan = self._shared_activity.telepathy_tubes_chan
