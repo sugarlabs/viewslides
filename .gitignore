@@ -4,4 +4,6 @@ View Slides.e4p
 .ropeproject/config.py
 .ropeproject/history
 .ropeproject/objectdb
+*.pyc
+dist
 
