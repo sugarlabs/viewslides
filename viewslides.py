@@ -29,6 +29,7 @@ from pygame.locals import *
 from sugar.activity import activity
 from sugar import network
 from sugar.datastore import datastore
+from sugar import profile
 from sugar.graphics.alert import NotifyAlert
 from readtoolbar import ReadToolbar, ViewToolbar,  SlidesToolbar
 from readsidebar import Sidebar
@@ -174,12 +175,12 @@ class ViewSlidesActivity(activity.Activity):
         toolbox.add_toolbar(_('Read'), self.read_toolbar)
         self.read_toolbar.show()
 
-        self._view_toolbar = ViewToolbar()
-        toolbox.add_toolbar(_('View'), self._view_toolbar)
-        self._view_toolbar.set_activity(self)
-        self._view_toolbar.connect('go-fullscreen',
+        self.view_toolbar = ViewToolbar()
+        toolbox.add_toolbar(_('View'), self.view_toolbar)
+        self.view_toolbar.set_activity(self)
+        self.view_toolbar.connect('go-fullscreen',
                 self.__view_toolbar_go_fullscreen_cb)
-        self._view_toolbar.show()
+        self.view_toolbar.show()
 
         self._slides_toolbar = SlidesToolbar()
         toolbox.add_toolbar(_('Slides'), self._slides_toolbar)
@@ -355,8 +356,20 @@ class ViewSlidesActivity(activity.Activity):
     def  show_image_tables(self,  state):
         if state == True:
             self.hpane.show()
+            self.annotation_textview.hide()
+            self.sidebar.hide()
+            self._slides_toolbar._hide_image_tables.props.sensitive = True
+            self._slides_toolbar._reload_journal_table.props.sensitive = True
+            self._slides_toolbar._show_image_tables.props.sensitive = False
+            self.read_toolbar.props.sensitive = False
+            self.view_toolbar.props.sensitive = False
+            self.show_image("ViewSlides.jpg")
         else:
             self.hpane.hide()
+            self.annotation_textview.show()
+            self.sidebar.show()
+            self.read_toolbar.props.sensitive =True
+            self.view_toolbar.props.sensitive = True
             self.rewrite_zip()
             self.set_current_page(0)
             self._load_document(self.tempfile)
@@ -374,6 +387,7 @@ class ViewSlidesActivity(activity.Activity):
                 self.show_image(fname)
                 os.remove(fname)
             self._slides_toolbar._remove_image.props.sensitive = True
+            self._slides_toolbar.extract_image.props.sensitive = True
 
     def selection_right_cb(self, selection):
         tv = selection.get_tree_view()
@@ -391,7 +405,8 @@ class ViewSlidesActivity(activity.Activity):
         if self.selected_journal_entry == None:
             return
         selected_file = self.selected_journal_entry.get_file_path()
-        arcname = os.path.basename(selected_file)
+        arcname = self.selected_journal_entry.metadata['title']
+        # arcname = os.path.basename(selected_file)
         if self.check_for_duplicates(arcname)  == True:
             self._alert("Duplicate Filename",  'File ' + str(arcname) + ' already exists in slideshow!')
             return
@@ -415,6 +430,37 @@ class ViewSlidesActivity(activity.Activity):
             self.ls_left.remove(iter)
             self._slides_toolbar._remove_image.props.sensitive = True
             self.is_dirty = True
+
+    def extract_image(self):
+        if self.selection_left:
+            model, iter = self.selection_left
+            selected_file = model.get_value(iter, COLUMN_OLD_NAME)
+            zf = zipfile.ZipFile(self.tempfile, 'r')
+            if self.save_extracted_file(zf, selected_file) == True:
+                fname = os.path.join(self.get_activity_root(), 'instance',  self.make_new_filename(selected_file))
+                self.create_journal_entry(fname,  selected_file)
+                os.remove(fname)
+
+    def create_journal_entry(self,  tempfile,  title):
+        journal_entry = datastore.create()
+        journal_entry.metadata['title'] = title
+        journal_entry.metadata['title_set_by_user'] = '1'
+        journal_entry.metadata['keep'] = '0'
+        mime_type = 'image/jpeg'
+        if title.endswith('.tiff') or title.endswith('.TIFF'):
+            mime_type = 'image/tiff'
+        elif  title.endswith('.gif') or title.endswith('.GIF'):
+            mime_type = 'image/gif'
+        elif title.endswith('.png') or title.endswith('.PNG'):
+            mime_type = 'image/png'
+        journal_entry.metadata['mime_type'] = mime_type
+        journal_entry.metadata['buddies'] = ''
+        journal_entry.metadata['preview'] = ''
+        journal_entry.metadata['icon-color'] = profile.get_color().to_string()
+        journal_entry.file_path = tempfile
+        datastore.write(journal_entry)
+        self.load_journal_table()
+        self._alert(_('Success'),  title +  _(' added to Journal.'))
 
     def check_for_duplicates(self,  filename):
         for row in self.ls_left:
@@ -516,11 +562,11 @@ class ViewSlidesActivity(activity.Activity):
                 self.cursor_visible = True
             return True
         if keyname == 'plus':
-            self._view_toolbar.enable_zoom_out()
+            self.view_toolbar.enable_zoom_out()
             self.zoom_to_width()
             return True
         if keyname == 'minus':
-            self._view_toolbar.enable_zoom_in()
+            self.view_toolbar.enable_zoom_in()
             self.zoom_to_fit()
             return True
         return False

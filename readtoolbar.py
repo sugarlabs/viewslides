@@ -287,6 +287,13 @@ class SlidesToolbar(gtk.Toolbar):
         self._remove_image.props.sensitive = False
         self._remove_image.show()
 
+        self.extract_image = ToolButton('gnome-mime-image')
+        self.extract_image.set_tooltip(_('Extract Image'))
+        self.extract_image.connect('clicked', self.extract_image_cb)
+        self.insert(self.extract_image, -1)
+        self.extract_image.props.sensitive = False
+        self.extract_image.show()
+
     def set_activity(self, activity):
         self.activity = activity
 
@@ -298,6 +305,9 @@ class SlidesToolbar(gtk.Toolbar):
     
     def _remove_image_cb(self, button):
         self.activity.remove_image()
+        
+    def extract_image_cb(self, button):
+        self.activity.extract_image()
         
     def _show_image_tables_cb(self,  button):
         self._hide_image_tables.props.sensitive = True
@@ -311,4 +321,5 @@ class SlidesToolbar(gtk.Toolbar):
         self._show_image_tables.props.sensitive = True
         self._add_image.props.sensitive = False
         self._remove_image.props.sensitive = False
+        self.extract_image.props.sensitive = False
         self.activity.show_image_tables(False)
