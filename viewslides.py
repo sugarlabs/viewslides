@@ -336,8 +336,8 @@ class ViewSlidesActivity(activity.Activity):
                 self.show_image_tables(True)
 
     def load_journal_table(self):
-        ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gif', 'image/tiff',  'image/png']})
-        # ,  'title')
+        ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gif', \
+                'image/tiff',  'image/png']},  'title')
         self.ls_right.clear()
         for i in xrange (0, num_objects, 1):
             iter = self.ls_right.append()
@@ -409,6 +409,10 @@ class ViewSlidesActivity(activity.Activity):
         if self.check_for_duplicates(arcname)  == True:
             self._alert("Duplicate Filename",  'File ' + str(arcname) + ' already exists in slideshow!')
             return
+        # Assign a file path to create if one doesn't exist yet
+        if self.tempfile == None:
+            self.tempfile = os.path.join(self.get_activity_root(), 'instance',\
+                                'tmp%i' % time.time())
         try:
             if os.path.exists(self.tempfile):
                 zf = zipfile.ZipFile(self.tempfile, 'a')
