@@ -336,8 +336,12 @@ class ViewSlidesActivity(activity.Activity):
                 self.show_image_tables(True)
 
     def load_journal_table(self):
-        ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gif', \
-                'image/tiff',  'image/png']},  'title')
+        try:
+            ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gif', \
+                    'image/tiff',  'image/png']},  'title')
+        except UnicodeDecodeError:
+            ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gif', \
+                    'image/tiff',  'image/png']})
         self.ls_right.clear()
         for i in xrange (0, num_objects, 1):
             iter = self.ls_right.append()
