@@ -339,7 +339,7 @@ class ViewSlidesActivity(activity.Activity):
         try:
             ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gif', \
                     'image/tiff',  'image/png']},  'title')
-        except UnicodeDecodeError:
+        except DBusException,  err:
             ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gif', \
                     'image/tiff',  'image/png']})
         self.ls_right.clear()
