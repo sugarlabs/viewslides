@@ -344,8 +344,15 @@ class ViewSlidesActivity(activity.Activity):
             iter = self.ls_right.append()
             title = ds_objects[i].metadata['title']
             mime_type = ds_objects[i].metadata['mime_type']
-            if mime_type == 'image/jpeg':
+            if mime_type == 'image/jpeg' and not title.endswith('.jpg') and not title.endswith('.jpeg')  \
+                and not title.endswith('.JPG')  and not title.endswith('.JPEG') :
                 title = title + '.jpg'
+            if mime_type == 'image/png' and not title.endswith('.png') and not title.endswith('.PNG'):
+                title = title + '.png'
+            if mime_type == 'image/gif' and not title.endswith('.gif') and not title.endswith('.GIF'):
+                title = title + '.gif'
+            if mime_type == 'image/tiff' and not title.endswith('.tiff') and not title.endswith('.TIFF'):
+                title = title + '.tiff'
             self.ls_right.set(iter, COLUMN_IMAGE, title)
             self.ls_right.set(iter,  COLUMN_PATH,  ds_objects[i])
         self.ls_right.set_sort_column_id(COLUMN_IMAGE,  gtk.SORT_ASCENDING)
