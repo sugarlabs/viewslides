@@ -237,9 +237,9 @@ class ViewSlidesActivity(activity.Activity):
         selection_right.set_mode(gtk.SELECTION_SINGLE)
         selection_right.connect("changed", self.selection_right_cb)
         renderer = gtk.CellRendererText()
-        col_right = gtk.TreeViewColumn('Journal Image', renderer, text=COLUMN_IMAGE)
-        col_right.set_sort_column_id(COLUMN_IMAGE)
-        tv_right.append_column(col_right)
+        self.col_right = gtk.TreeViewColumn('Journal Image', renderer, text=COLUMN_IMAGE)
+        self.col_right.set_sort_column_id(COLUMN_IMAGE)
+        tv_right.append_column(self.col_right)
         
         self.list_scroller_right = gtk.ScrolledWindow(hadjustment=None, vadjustment=None)
         self.list_scroller_right.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
@@ -317,6 +317,7 @@ class ViewSlidesActivity(activity.Activity):
 
         self.is_received_document = False
         self.selected_journal_entry = None
+        self.selected_title = None
         self.selection_left = None
         
         if self._shared_activity and handle.object_id == None:
@@ -341,8 +342,13 @@ class ViewSlidesActivity(activity.Activity):
         self.ls_right.clear()
         for i in xrange (0, num_objects, 1):
             iter = self.ls_right.append()
-            self.ls_right.set(iter, COLUMN_IMAGE, ds_objects[i].metadata['title'])
+            title = ds_objects[i].metadata['title']
+            mime_type = ds_objects[i].metadata['mime_type']
+            if mime_type == 'image/jpeg':
+                title = title + '.jpg'
+            self.ls_right.set(iter, COLUMN_IMAGE, title)
             self.ls_right.set(iter,  COLUMN_PATH,  ds_objects[i])
+        self.ls_right.set_sort_column_id(COLUMN_IMAGE,  gtk.SORT_ASCENDING)
 
     def col_left_edited_cb(self, cell,  path,  new_text,  user_data):
         liststore = user_data
@@ -400,12 +406,13 @@ class ViewSlidesActivity(activity.Activity):
             self.show_image(fname)
             self._slides_toolbar._add_image.props.sensitive = True
             self.selected_journal_entry = jobject
+            self.selected_title = model.get_value(iter,COLUMN_IMAGE)
 
     def add_image(self):
         if self.selected_journal_entry == None:
             return
         selected_file = self.selected_journal_entry.get_file_path()
-        arcname = self.selected_journal_entry.metadata['title']
+        arcname = self.selected_title
         if self.check_for_duplicates(arcname)  == True:
             self._alert("Duplicate Filename",  'File ' + str(arcname) + ' already exists in slideshow!')
             return
@@ -869,6 +876,10 @@ class ViewSlidesActivity(activity.Activity):
 
     def write_file(self, file_path):
         "Save meta data for the file."
+        # Assign a file path to create if one doesn't exist yet
+        if self.tempfile == None:
+            self.tempfile = os.path.join(self.get_activity_root(), 'instance',\
+                                'tmp%i' % time.time())
         if not os.path.exists(self.tempfile):
             zf = zipfile.ZipFile(self.tempfile, 'w')
             zf.writestr("filler.txt", "filler")
