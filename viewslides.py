@@ -516,7 +516,7 @@ class ViewSlidesActivity(activity.Activity):
         print self.tempfile,  new_zipfile
         zf_new = zipfile.ZipFile(new_zipfile, 'w')
         zf_old = zipfile.ZipFile(self.tempfile, 'r')
-        image_files = self.zf.namelist()
+        image_files = zf_old.namelist()
         i = 0
         while (i < len(image_files)):
             if (image_files[i] != 'annotations.pkl'):
@@ -879,7 +879,7 @@ class ViewSlidesActivity(activity.Activity):
                 self._share_document()
         else:
             print 'Not a zipfile',  file_path
-            # self._alert('Invalid', 'Not a zipfile: '  + file_path)
+            self.tempfile = None
 
     def write_file(self, file_path):
         "Save meta data for the file."
