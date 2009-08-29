@@ -49,6 +49,23 @@ COLUMN_OLD_NAME = 1
 
 _logger = logging.getLogger('view-slides')
 
+class JobjectWrapper():
+    def __init__(self):
+        self.__jobject = None
+        self.__file_path = None
+
+    def set_jobject(self,  jobject):
+        self.__jobject = jobject
+        
+    def set_file_path(self,  file_path):
+        self.__file_path = file_path
+        
+    def get_file_path(self):
+        if  self.__jobject != None:
+            return self.__jobject.get_file_path()
+        else:
+            return self.__file_path
+
 class Annotations():
     
     def __init__(self,  pickle_file_name):
@@ -354,7 +371,20 @@ class ViewSlidesActivity(activity.Activity):
             if mime_type == 'image/tiff' and not title.endswith('.tiff') and not title.endswith('.TIFF'):
                 title = title + '.tiff'
             self.ls_right.set(iter, COLUMN_IMAGE, title)
-            self.ls_right.set(iter,  COLUMN_PATH,  ds_objects[i])
+            jobject_wrapper = JobjectWrapper()
+            jobject_wrapper.set_jobject(ds_objects[i])
+            self.ls_right.set(iter,  COLUMN_PATH,  jobject_wrapper)
+            
+        valid_endings = ('.jpg',  '.jpeg', '.JPEG',  '.JPG', '.gif', '.GIF', '.tiff', '.TIFF', '.png', '.PNG')
+        for dirname,  dirnames,  filenames in os.walk('/media'):
+            for filename in filenames:
+                if filename.endswith(valid_endings):
+                    iter = self.ls_right.append()
+                    jobject_wrapper = JobjectWrapper()
+                    jobject_wrapper.set_file_path(os.path.join(dirname,  filename))
+                    self.ls_right.set(iter,  COLUMN_IMAGE,  filename)
+                    self.ls_right.set(iter,  COLUMN_PATH,  jobject_wrapper)
+
         self.ls_right.set_sort_column_id(COLUMN_IMAGE,  gtk.SORT_ASCENDING)
 
     def col_left_edited_cb(self, cell,  path,  new_text,  user_data):
@@ -712,7 +742,7 @@ class ViewSlidesActivity(activity.Activity):
         
     def show_image(self, filename):
         "display a resized image in a full screen window"
-        TOOLBOX_HEIGHT = 100
+        TOOLBOX_HEIGHT = 40
         # get the size of the fullscreen display
         screen_width = gtk.gdk.screen_width()
         screen_height = gtk.gdk.screen_height()
