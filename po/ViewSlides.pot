@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-16 19:39-0500\n"
+"POT-Creation-Date: 2009-08-30 15:15-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -84,23 +84,31 @@ msgstr ""
 msgid "Extract Image"
 msgstr ""
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:175
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:192
 msgid "Read"
 msgstr ""
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:179
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:196
 msgid "View"
 msgstr ""
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:186
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:203
 msgid "Slides"
 msgstr ""
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:463
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:239
+msgid "Slideshow Image"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:257
+msgid "Available Images"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:512
 msgid "Success"
 msgstr ""
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:463
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:512
 msgid " added to Journal."
 msgstr ""
 

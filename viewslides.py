@@ -236,7 +236,7 @@ class ViewSlidesActivity(activity.Activity):
         selection_left.set_mode(gtk.SELECTION_SINGLE)
         selection_left.connect("changed", self.selection_left_cb)
         renderer = gtk.CellRendererText()
-        col_left = gtk.TreeViewColumn('Slideshow Image', renderer, text=COLUMN_IMAGE)
+        col_left = gtk.TreeViewColumn(_('Slideshow Image'), renderer, text=COLUMN_IMAGE)
         col_left.set_sort_column_id(COLUMN_IMAGE)
         renderer.set_property('editable',  True)
         renderer.connect('edited',  self.col_left_edited_cb,  self.ls_left)
@@ -254,7 +254,7 @@ class ViewSlidesActivity(activity.Activity):
         selection_right.set_mode(gtk.SELECTION_SINGLE)
         selection_right.connect("changed", self.selection_right_cb)
         renderer = gtk.CellRendererText()
-        self.col_right = gtk.TreeViewColumn('Journal Image', renderer, text=COLUMN_IMAGE)
+        self.col_right = gtk.TreeViewColumn(_('Available Images'), renderer, text=COLUMN_IMAGE)
         self.col_right.set_sort_column_id(COLUMN_IMAGE)
         tv_right.append_column(self.col_right)
         
