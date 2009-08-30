@@ -377,8 +377,10 @@ class ViewSlidesActivity(activity.Activity):
             
         valid_endings = ('.jpg',  '.jpeg', '.JPEG',  '.JPG', '.gif', '.GIF', '.tiff', '.TIFF', '.png', '.PNG')
         for dirname,  dirnames,  filenames in os.walk('/media'):
+            if '.olpc.store' in dirnames:
+                dirnames.remove('.olpc.store')  # don't visit .olpc.store directories
             for filename in filenames:
-                if filename.endswith(valid_endings):
+               if filename.endswith(valid_endings):
                     iter = self.ls_right.append()
                     jobject_wrapper = JobjectWrapper()
                     jobject_wrapper.set_file_path(os.path.join(dirname,  filename))
