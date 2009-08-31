@@ -375,6 +375,11 @@ class ViewSlidesActivity(activity.Activity):
             jobject_wrapper.set_jobject(ds_objects[i])
             self.ls_right.set(iter,  COLUMN_PATH,  jobject_wrapper)
             
+        ds_mounts = datastore.mounts()
+        for i in xrange(0, len(ds_mounts), 1):
+            print '---------MOUNT---------'
+            print  ds_mounts[i]['id']
+        
         valid_endings = ('.jpg',  '.jpeg', '.JPEG',  '.JPG', '.gif', '.GIF', '.tiff', '.TIFF', '.png', '.PNG')
         for dirname,  dirnames,  filenames in os.walk('/media'):
             if '.olpc.store' in dirnames:
