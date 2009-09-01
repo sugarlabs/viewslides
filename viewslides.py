@@ -379,18 +379,20 @@ class ViewSlidesActivity(activity.Activity):
         for i in xrange(0, len(ds_mounts), 1):
             print '---------MOUNT---------'
             print  ds_mounts[i]['id']
-        
+
         valid_endings = ('.jpg',  '.jpeg', '.JPEG',  '.JPG', '.gif', '.GIF', '.tiff', '.TIFF', '.png', '.PNG')
-        for dirname,  dirnames,  filenames in os.walk('/media'):
-            if '.olpc.store' in dirnames:
-                dirnames.remove('.olpc.store')  # don't visit .olpc.store directories
-            for filename in filenames:
-               if filename.endswith(valid_endings):
-                    iter = self.ls_right.append()
-                    jobject_wrapper = JobjectWrapper()
-                    jobject_wrapper.set_file_path(os.path.join(dirname,  filename))
-                    self.ls_right.set(iter,  COLUMN_IMAGE,  filename)
-                    self.ls_right.set(iter,  COLUMN_PATH,  jobject_wrapper)
+        if len(ds_mounts) == 1 and ds_mounts[0]['id'] == 1:
+            # datastore.mounts() is stubbed out, we're running .84 or better
+            for dirname,  dirnames,  filenames in os.walk('/media'):
+                if '.olpc.store' in dirnames:
+                    dirnames.remove('.olpc.store')  # don't visit .olpc.store directories
+                for filename in filenames:
+                    if filename.endswith(valid_endings):
+                        iter = self.ls_right.append()
+                        jobject_wrapper = JobjectWrapper()
+                        jobject_wrapper.set_file_path(os.path.join(dirname,  filename))
+                        self.ls_right.set(iter,  COLUMN_IMAGE,  filename)
+                        self.ls_right.set(iter,  COLUMN_PATH,  jobject_wrapper)
 
         self.ls_right.set_sort_column_id(COLUMN_IMAGE,  gtk.SORT_ASCENDING)
 
