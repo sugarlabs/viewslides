@@ -1,0 +1,9 @@
+View Slides.e4p
+.eric4project/View Slides.e4q
+.eric4project/View Slides.e4t
+.ropeproject/config.py
+.ropeproject/history
+.ropeproject/objectdb
+*.pyc
+dist
+

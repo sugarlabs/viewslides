@@ -25,6 +25,7 @@ import gtk
 
 from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.menuitem import MenuItem
+from sugar.graphics.toggletoolbutton import ToggleToolButton
 from sugar.activity import activity
 
 class ReadToolbar(gtk.Toolbar):
@@ -32,19 +33,37 @@ class ReadToolbar(gtk.Toolbar):
 
     def __init__(self):
         gtk.Toolbar.__init__(self)
-        self._back = ToolButton('go-previous')
-        self._back.set_tooltip(_('Back'))
-        self._back.props.sensitive = False
-        self._back.connect('clicked', self._go_back_cb)
-        self.insert(self._back, -1)
-        self._back.show()
+        self.back = ToolButton('go-previous')
+        self.back.set_tooltip(_('Back'))
+        self.back.props.sensitive = False
+        palette = self.back.get_palette()
+        self.prev_page = MenuItem(text_label= _("Previous page"))
+        palette.menu.append(self.prev_page) 
+        self.prev_page.show_all()        
+        self.prev_bookmark = MenuItem(text_label= _("Previous bookmark"))
+        palette.menu.append(self.prev_bookmark) 
+        self.prev_bookmark.show_all()
+        self.back.connect('clicked', self.go_back_cb)
+        self.prev_page.connect('activate', self.go_back_cb)
+        self.prev_bookmark.connect('activate', self.prev_bookmark_activate_cb)
+        self.insert(self.back, -1)
+        self.back.show()
 
-        self._forward = ToolButton('go-next')
-        self._forward.set_tooltip(_('Forward'))
-        self._forward.props.sensitive = False
-        self._forward.connect('clicked', self._go_forward_cb)
-        self.insert(self._forward, -1)
-        self._forward.show()
+        self.forward = ToolButton('go-next')
+        self.forward.set_tooltip(_('Forward'))
+        self.forward.props.sensitive = False
+        palette = self.forward.get_palette()
+        self.next_page = MenuItem(text_label= _("Next page"))
+        palette.menu.append(self.next_page) 
+        self.next_page.show_all()        
+        self.next_bookmark = MenuItem(text_label= _("Next bookmark"))
+        palette.menu.append(self.next_bookmark) 
+        self.next_bookmark.show_all()
+        self.forward.connect('clicked', self.go_forward_cb)
+        self.next_page.connect('activate', self.go_forward_cb)
+        self.next_bookmark.connect('activate', self.next_bookmark_activate_cb)
+        self.insert(self.forward, -1)
+        self.forward.show()
 
         num_page_item = gtk.ToolItem()
 
@@ -80,6 +99,21 @@ class ReadToolbar(gtk.Toolbar):
         self.insert(total_page_item, -1)
         total_page_item.show()
 
+        spacer = gtk.SeparatorToolItem()
+        self.insert(spacer, -1)
+        spacer.show()
+  
+        bookmarkitem = gtk.ToolItem()
+        self.bookmarker = ToggleToolButton('emblem-favorite')
+        self.bookmarker.set_tooltip(_('Toggle Bookmark'))
+        self.bookmarker_handler_id = self.bookmarker.connect('clicked',
+                                      self.bookmarker_clicked_cb)
+  
+        bookmarkitem.add(self.bookmarker)
+
+        self.insert(bookmarkitem, -1)
+        bookmarkitem.show_all()
+
     def _num_page_entry_insert_text_cb(self, entry, text, length, position):
         if not re.match('[0-9]', text):
             entry.emit_stop_by_name('insert-text')
@@ -103,16 +137,16 @@ class ReadToolbar(gtk.Toolbar):
         entry.props.text = str(page + 1)
         self._update_nav_buttons()
         
-    def _go_back_cb(self, button):
+    def go_back_cb(self, button):
         self.activity.previous_page()
     
-    def _go_forward_cb(self, button):
+    def go_forward_cb(self, button):
         self.activity.next_page()
     
     def _update_nav_buttons(self):
         current_page = self.current_page
-        self._back.props.sensitive = current_page > 0
-        self._forward.props.sensitive = \
+        self.back.props.sensitive = current_page > 0
+        self.forward.props.sensitive = \
             current_page < self.total_pages - 1
         
         self._num_page_entry.props.text = str(current_page + 1)
@@ -128,6 +162,23 @@ class ReadToolbar(gtk.Toolbar):
         
     def set_activity(self, activity):
         self.activity = activity
+
+    def prev_bookmark_activate_cb(self, menuitem):
+        self.activity.prev_bookmark()
+ 
+    def next_bookmark_activate_cb(self, menuitem):
+        self.activity.next_bookmark()
+        
+    def bookmarker_clicked_cb(self, button):
+        self.activity.bookmarker_clicked(button)
+
+    def setToggleButtonState(self,button,b,id):
+        button.handler_block(id)
+        button.set_active(b)
+        button.handler_unblock(id)
+
+    def update_bookmark_button(self,  state):
+        self.setToggleButtonState(self.bookmarker,  state,  self.bookmarker_handler_id)
 
 class ViewToolbar(gtk.Toolbar):
     __gtype_name__ = 'ViewToolbar'
@@ -236,6 +287,13 @@ class SlidesToolbar(gtk.Toolbar):
         self._remove_image.props.sensitive = False
         self._remove_image.show()
 
+        self.extract_image = ToolButton('gnome-mime-image')
+        self.extract_image.set_tooltip(_('Extract Image'))
+        self.extract_image.connect('clicked', self.extract_image_cb)
+        self.insert(self.extract_image, -1)
+        self.extract_image.props.sensitive = False
+        self.extract_image.show()
+
     def set_activity(self, activity):
         self.activity = activity
 
@@ -247,6 +305,9 @@ class SlidesToolbar(gtk.Toolbar):
     
     def _remove_image_cb(self, button):
         self.activity.remove_image()
+        
+    def extract_image_cb(self, button):
+        self.activity.extract_image()
         
     def _show_image_tables_cb(self,  button):
         self._hide_image_tables.props.sensitive = True
@@ -260,4 +321,5 @@ class SlidesToolbar(gtk.Toolbar):
         self._show_image_tables.props.sensitive = True
         self._add_image.props.sensitive = False
         self._remove_image.props.sensitive = False
+        self.extract_image.props.sensitive = False
         self.activity.show_image_tables(False)
