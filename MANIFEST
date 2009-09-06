@@ -25,6 +25,8 @@ po/pt.po
 po/de.po
 po/ne.po
 po/sq.po
+po/tzo.po
+po/kos.po
 po/POTFILES.in
 po/ViewSlides.pot
 locale/es/LC_MESSAGES/org.laptop.ViewSlidesActivity.mo
