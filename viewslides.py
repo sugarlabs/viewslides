@@ -90,9 +90,13 @@ class Annotations():
             return ''
         
     def add_note(self,  page,  text):
+        status = False
+        if self.get_note(page) != text:
+            status = True
         self.notes[page] = text
         if text == '':
             del self.notes[page]
+        return status
 
     def is_bookmarked(self,  page):
         bookmark = self.bookmarks.count(page)
@@ -293,6 +297,7 @@ class ViewSlidesActivity(activity.Activity):
         self.hpane.hide()
         
         self.is_dirty = False
+        self.annotations_dirty = False
 
         self.load_journal_table()
 
@@ -546,6 +551,9 @@ class ViewSlidesActivity(activity.Activity):
         self.is_dirty = False
 
     def final_rewrite_zip(self):
+        if  self.annotations_dirty == False:
+            return
+
         new_zipfile = os.path.join(self.get_activity_root(), 'instance',
                  'rewrite%i' % time.time())
         print self.tempfile,  new_zipfile
@@ -629,6 +637,7 @@ class ViewSlidesActivity(activity.Activity):
         else:
             self.annotations.remove_bookmark(self.page)
         self.show_bookmark_state(self.page)
+        self.annotations_dirty = True
 
     def show_bookmark_state(self,  page):
         bookmark = self.annotations.is_bookmarked(page)
@@ -640,6 +649,9 @@ class ViewSlidesActivity(activity.Activity):
             self.read_toolbar.update_bookmark_button(False)
 
     def prev_bookmark(self):
+        textbuffer = self.annotation_textview.get_buffer()
+        if self.annotations.add_note(self.page,  textbuffer.get_text(textbuffer.get_start_iter(),  textbuffer.get_end_iter())):
+            self.annotations_dirty = True
         bookmarks = self.annotations.get_bookmarks()
         count = len(bookmarks) - 1
         while count >= 0:
@@ -656,6 +668,9 @@ class ViewSlidesActivity(activity.Activity):
             self.read_toolbar.set_current_page(self.page)
 
     def next_bookmark(self):
+        textbuffer = self.annotation_textview.get_buffer()
+        if self.annotations.add_note(self.page,  textbuffer.get_text(textbuffer.get_start_iter(),  textbuffer.get_end_iter())):
+            self.annotations_dirty = True
         bookmarks = self.annotations.get_bookmarks()
         count = 0
         while count < len(bookmarks):
@@ -694,6 +709,9 @@ class ViewSlidesActivity(activity.Activity):
             v_adjustment.value = new_value
 
     def previous_page(self):
+        textbuffer = self.annotation_textview.get_buffer()
+        if self.annotations.add_note(self.page,  textbuffer.get_text(textbuffer.get_start_iter(),  textbuffer.get_end_iter())):
+            self.annotations_dirty = True
         page = self.page
         page=page-1
         if page < 0: page=0
@@ -713,6 +731,9 @@ class ViewSlidesActivity(activity.Activity):
         self.page = page
 
     def next_page(self):
+        textbuffer = self.annotation_textview.get_buffer()
+        if self.annotations.add_note(self.page,  textbuffer.get_text(textbuffer.get_start_iter(),  textbuffer.get_end_iter())):
+            self.annotations_dirty = True
         page = self.page
         page = page + 1
         if page >= len(self.image_files): page=len(self.image_files) - 1
@@ -932,7 +953,8 @@ class ViewSlidesActivity(activity.Activity):
  
         if self._close_requested:
             textbuffer = self.annotation_textview.get_buffer()
-            self.annotations.add_note(self.page,  textbuffer.get_text(textbuffer.get_start_iter(),  textbuffer.get_end_iter()))
+            if self.annotations.add_note(self.page,  textbuffer.get_text(textbuffer.get_start_iter(),  textbuffer.get_end_iter())):
+                self.annotations_dirty = True
             title = self.metadata.get('title', '')
             self.annotations.set_title(str(title))
             self.annotations.save()
