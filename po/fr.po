@@ -2,31 +2,36 @@
 # Copyright (C) 2009 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # James Simmons <ja.simmons@sbcglobal.net>, 2009.
-#
+# 
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-22 13:44-0600\n"
-"PO-Revision-Date: 2009-03-15 19:43+0100\n"
-"Last-Translator: Bastien Guerry <bzg@laptop.org>\n"
+"POT-Creation-Date: 2009-07-04 00:30-0400\n"
+"PO-Revision-Date: 2009-09-08 09:48+0200\n"
+"Last-Translator:  <samy boutayeb <s.boutayeb@free.fr>\n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ASCII\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);"
 
 #: activity/activity.info:2
 msgid "View Slides"
 msgstr "Voir les diapositives"
 
-#: viewslides.py:82
+#: viewslides.py:108
 msgid "Read"
 msgstr "Lire"
 
-#: viewslides.py:161
-msgid "Choose document"
-msgstr "Choisir un document"
+#: viewslides.py:112
+msgid "View"
+msgstr "Vue"
+
+#: viewslides.py:119
+msgid "Slides"
+msgstr "Diapositives"
 
 #: readtoolbar.py:36
 msgid "Back"
@@ -35,3 +40,38 @@ msgstr "Retour"
 #: readtoolbar.py:43
 msgid "Forward"
 msgstr "Suite"
+
+#: readtoolbar.py:163
+msgid "Zoom out"
+msgstr "Zoom arrière"
+
+#: readtoolbar.py:170
+msgid "Zoom in"
+msgstr "Zoom avant"
+
+#: readtoolbar.py:182
+msgid "Fullscreen"
+msgstr "Plein écran"
+
+#: readtoolbar.py:217
+msgid "Show Image Table"
+msgstr "Afficher la table des images"
+
+#: readtoolbar.py:223
+msgid "Reload Journal Table"
+msgstr "Recharger la table journal"
+
+#: readtoolbar.py:230
+msgid "Hide Image Tables"
+msgstr "Masquer les tables des images"
+
+#: readtoolbar.py:242
+msgid "Add Image"
+msgstr "Ajouter une image"
+
+#: readtoolbar.py:249
+msgid "Remove Image"
+msgstr "Retirer une image"
+
+#~ msgid "Choose document"
+#~ msgstr "Choisir un document"
