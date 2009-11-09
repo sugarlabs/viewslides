@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-04 00:30-0400\n"
-"PO-Revision-Date: 2009-08-25 17:21-0400\n"
+"POT-Creation-Date: 2009-08-30 15:15-0500\n"
+"PO-Revision-Date: 2009-11-09 11:40-0400\n"
 "Last-Translator: Carlo Falciola <cfalciola@yahoo.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: it\n"
@@ -21,57 +21,101 @@ msgstr ""
 msgid "View Slides"
 msgstr "Visualizza Diapositive"
 
-#: viewslides.py:108
-msgid "Read"
-msgstr "Leggi"
-
-#: viewslides.py:112
-msgid "View"
-msgstr "Visualizza"
-
-#: viewslides.py:119
-msgid "Slides"
-msgstr "Diapositive"
-
-#: readtoolbar.py:36
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:37
 msgid "Back"
 msgstr "Indietro"
 
-#: readtoolbar.py:43
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:40
+msgid "Previous page"
+msgstr "Pagina precedente"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:43
+msgid "Previous bookmark"
+msgstr "Segnalibro precedente"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:53
 msgid "Forward"
 msgstr "Avanti"
 
-#: readtoolbar.py:163
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:56
+msgid "Next page"
+msgstr "Prossima Pagina"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:59
+msgid "Next bookmark"
+msgstr "Prossimo Segnalibro"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:108
+msgid "Toggle Bookmark"
+msgstr "Attiva/Disattiva Segnalibro"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:198
 msgid "Zoom out"
 msgstr "Zoom indietro"
 
-#: readtoolbar.py:170
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:205
 msgid "Zoom in"
 msgstr "Zoom avanti"
 
-#: readtoolbar.py:182
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:217
 msgid "Fullscreen"
 msgstr "Schermo intero"
 
-#: readtoolbar.py:217
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:252
 msgid "Show Image Table"
 msgstr "Mostra la tavola delle immagini"
 
-#: readtoolbar.py:223
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:258
 msgid "Reload Journal Table"
 msgstr "Ricarica la tavola dal Diario"
 
-#: readtoolbar.py:230
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:265
 msgid "Hide Image Tables"
 msgstr "Nascondila tavola delle immagini"
 
-#: readtoolbar.py:242
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:277
 msgid "Add Image"
 msgstr "Aggiungi Immagine"
 
-#: readtoolbar.py:249
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:284
 msgid "Remove Image"
 msgstr "Elimina Immagine"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:291
+msgid "Extract Image"
+msgstr "Estrai Immagine"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:192
+msgid "Read"
+msgstr "Leggi"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:196
+msgid "View"
+msgstr "Visualizza"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:203
+msgid "Slides"
+msgstr "Diapositive"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:239
+msgid "Slideshow Image"
+msgstr "Presentazione Immagini"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:257
+msgid "Available Images"
+msgstr "Immagini disponibili"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:512
+msgid "Success"
+msgstr "Successo"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:512
+msgid " added to Journal."
+msgstr " inserito nel Diario."
+
+#: /home/jim/olpc/viewslides/mainline/readsidebar.py:47
+msgid "Bookmark"
+msgstr "Segnalibro"
 
 #~ msgid "Choose document"
 #~ msgstr "Scegli documento"
