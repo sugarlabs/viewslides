@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-04 00:30-0400\n"
-"PO-Revision-Date: 2009-10-10 11:56-0400\n"
+"POT-Creation-Date: 2009-08-30 15:15-0500\n"
+"PO-Revision-Date: 2010-01-22 04:45+0200\n"
 "Last-Translator: korakurider <korakurider@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ja\n"
@@ -15,63 +15,107 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Pootle 1.2.1\n"
+"X-Generator: Pootle 2.0.1\n"
 
 #: activity/activity.info:2
 msgid "View Slides"
 msgstr "スライド表示"
 
-#: viewslides.py:108
-msgid "Read"
-msgstr "閲覧"
-
-#: viewslides.py:112
-msgid "View"
-msgstr "表示"
-
-#: viewslides.py:119
-msgid "Slides"
-msgstr "スライド"
-
-#: readtoolbar.py:36
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:37
 msgid "Back"
 msgstr "戻る"
 
-#: readtoolbar.py:43
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:40
+msgid "Previous page"
+msgstr "前ページ"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:43
+msgid "Previous bookmark"
+msgstr "前のブックマーク"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:53
 msgid "Forward"
 msgstr "進む"
 
-#: readtoolbar.py:163
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:56
+msgid "Next page"
+msgstr "次ページ"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:59
+msgid "Next bookmark"
+msgstr "次のブックマーク"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:108
+msgid "Toggle Bookmark"
+msgstr "ブックマークを切り替える"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:198
 msgid "Zoom out"
 msgstr "縮小"
 
-#: readtoolbar.py:170
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:205
 msgid "Zoom in"
 msgstr "拡大"
 
-#: readtoolbar.py:182
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:217
 msgid "Fullscreen"
 msgstr "全画面"
 
-#: readtoolbar.py:217
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:252
 msgid "Show Image Table"
 msgstr "画像一覧を表示"
 
-#: readtoolbar.py:223
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:258
 msgid "Reload Journal Table"
 msgstr "ジャーナルの画像一覧を再読み込みする"
 
-#: readtoolbar.py:230
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:265
 msgid "Hide Image Tables"
 msgstr "画像一覧を隠す"
 
-#: readtoolbar.py:242
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:277
 msgid "Add Image"
 msgstr "画像を追加"
 
-#: readtoolbar.py:249
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:284
 msgid "Remove Image"
 msgstr "画像を削除"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:291
+msgid "Extract Image"
+msgstr "画像を切り出す"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:192
+msgid "Read"
+msgstr "閲覧"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:196
+msgid "View"
+msgstr "表示"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:203
+msgid "Slides"
+msgstr "スライド"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:239
+msgid "Slideshow Image"
+msgstr "画像をスライドショー表示する"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:257
+msgid "Available Images"
+msgstr "利用可能な画像"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:512
+msgid "Success"
+msgstr "成功"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:512
+msgid " added to Journal."
+msgstr "ジャーナルに追加しました。"
+
+#: /home/jim/olpc/viewslides/mainline/readsidebar.py:47
+msgid "Bookmark"
+msgstr "ブックマーク"
 
 #~ msgid "Choose document"
 #~ msgstr "文書を選ぶ"
