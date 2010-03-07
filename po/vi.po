@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-04 00:30-0400\n"
-"PO-Revision-Date: 2009-09-25 10:50-0400\n"
+"POT-Creation-Date: 2009-08-30 15:15-0500\n"
+"PO-Revision-Date: 2010-03-07 17:28+0200\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: vi\n"
@@ -15,60 +15,104 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Pootle 1.2.1\n"
+"X-Generator: Pootle 2.0.1\n"
 
 #: activity/activity.info:2
 msgid "View Slides"
 msgstr "Xem ảnh chiếu"
 
-#: viewslides.py:108
-msgid "Read"
-msgstr "Đọc"
-
-#: viewslides.py:112
-msgid "View"
-msgstr "Xem"
-
-#: viewslides.py:119
-msgid "Slides"
-msgstr "Ảnh chiếu"
-
-#: readtoolbar.py:36
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:37
 msgid "Back"
 msgstr "Lùi"
 
-#: readtoolbar.py:43
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:40
+msgid "Previous page"
+msgstr "Trang trước"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:43
+msgid "Previous bookmark"
+msgstr "Dấu nhớ trước"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:53
 msgid "Forward"
 msgstr "Tiếp"
 
-#: readtoolbar.py:163
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:56
+msgid "Next page"
+msgstr "Trang tiếp"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:59
+msgid "Next bookmark"
+msgstr "Dấu nhớ tiếp"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:108
+msgid "Toggle Bookmark"
+msgstr "Bật/tắt dấu nhớ"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:198
 msgid "Zoom out"
 msgstr "Thu nhỏ"
 
-#: readtoolbar.py:170
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:205
 msgid "Zoom in"
 msgstr "Phóng to"
 
-#: readtoolbar.py:182
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:217
 msgid "Fullscreen"
 msgstr "Toàn màn hình"
 
-#: readtoolbar.py:217
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:252
 msgid "Show Image Table"
 msgstr "Hiện bảng ảnh"
 
-#: readtoolbar.py:223
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:258
 msgid "Reload Journal Table"
 msgstr "Nạp lại bảng Nhật ký"
 
-#: readtoolbar.py:230
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:265
 msgid "Hide Image Tables"
 msgstr "Ẩn các bảng ảnh"
 
-#: readtoolbar.py:242
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:277
 msgid "Add Image"
 msgstr "Thêm ảnh"
 
-#: readtoolbar.py:249
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:284
 msgid "Remove Image"
 msgstr "Bỏ ảnh"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:291
+msgid "Extract Image"
+msgstr "Giải ảnh"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:192
+msgid "Read"
+msgstr "Đọc"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:196
+msgid "View"
+msgstr "Xem"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:203
+msgid "Slides"
+msgstr "Ảnh chiếu"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:239
+msgid "Slideshow Image"
+msgstr "Ảnh trình chiếu"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:257
+msgid "Available Images"
+msgstr "Các ảnh sẵn sàng"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:512
+msgid "Success"
+msgstr "Thành công"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:512
+msgid " added to Journal."
+msgstr " được thêm vào Nhật ký."
+
+#: /home/jim/olpc/viewslides/mainline/readsidebar.py:47
+msgid "Bookmark"
+msgstr "Dấu nhớ"
