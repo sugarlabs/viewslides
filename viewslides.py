@@ -17,21 +17,33 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 import os
 import logging
-import tempfile
 import time
 import zipfile
 from zipfile import BadZipfile
-import pygtk
 import gtk
-import string
 import pygame, pygame.display
-from pygame.locals import *
+import re
+import pango
 from sugar.activity import activity
 from sugar import network
 from sugar.datastore import datastore
 from sugar import profile
 from sugar.graphics.alert import NotifyAlert
-from readtoolbar import ReadToolbar, ViewToolbar,  SlidesToolbar
+
+_NEW_TOOLBAR_SUPPORT = True
+try:
+    from sugar.graphics.toolbarbox import ToolbarBox
+    from sugar.graphics.toolbarbox import ToolbarButton
+    from sugar.activity.widgets import StopButton
+    from readtoolbar import ViewToolbar, SlidesToolbar
+    from sugar.graphics.toolbutton import ToolButton
+    from sugar.graphics.menuitem import MenuItem
+    from sugar.graphics.toggletoolbutton import ToggleToolButton
+    from mybutton import MyActivityToolbarButton
+except:
+    _NEW_TOOLBAR_SUPPORT = False
+    from readtoolbar import ReadToolbar, ViewToolbar, SlidesToolbar
+
 from readsidebar import Sidebar
 from gettext import gettext as _
 import dbus
@@ -187,29 +199,12 @@ class ViewSlidesActivity(activity.Activity):
 
         self.connect("expose_event", self.area_expose_cb)
         self.connect("delete_event", self.delete_cb)
-        toolbox = activity.ActivityToolbox(self)
-        activity_toolbar = toolbox.get_activity_toolbar()
-        activity_toolbar.remove(activity_toolbar.keep)
-        activity_toolbar.keep = None
-        
-        self.read_toolbar = ReadToolbar()
-        toolbox.add_toolbar(_('Read'), self.read_toolbar)
-        self.read_toolbar.show()
+       
+        if _NEW_TOOLBAR_SUPPORT:
+            self.create_new_toolbar()
+        else:
+            self.create_old_toolbar()
 
-        self.view_toolbar = ViewToolbar()
-        toolbox.add_toolbar(_('View'), self.view_toolbar)
-        self.view_toolbar.set_activity(self)
-        self.view_toolbar.connect('go-fullscreen',
-                self.__view_toolbar_go_fullscreen_cb)
-        self.view_toolbar.show()
-
-        self._slides_toolbar = SlidesToolbar()
-        toolbox.add_toolbar(_('Slides'), self._slides_toolbar)
-        self._slides_toolbar.set_activity(self)
-        self._slides_toolbar.show()
-
-        self.set_toolbox(toolbox)
-        toolbox.show()
         self.scrolled = gtk.ScrolledWindow()
         self.scrolled.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
         self.scrolled.props.shadow_type = gtk.SHADOW_NONE
@@ -286,7 +281,6 @@ class ViewSlidesActivity(activity.Activity):
         self.set_canvas(sidebar_hbox)
         sidebar_hbox.show()
 
-        # self.set_canvas(vbox)
         self.scrolled.show()
         tv_left.show()
         self.list_scroller_left.show()
@@ -302,7 +296,6 @@ class ViewSlidesActivity(activity.Activity):
         self.load_journal_table()
 
         self.show_image("ViewSlides.jpg")
-        self.read_toolbar.set_activity(self)
         self.page = 0
         self.temp_filename = ''
         self.saved_screen_width = 0
@@ -324,8 +317,6 @@ class ViewSlidesActivity(activity.Activity):
             self.connect("focus-out-event", self._focus_out_event_cb)
             self.connect("notify::active", self._now_active_cb)
 
-        # start on the read toolbar
-        self.toolbox.set_current_toolbar(_TOOLBAR_READ)
         self.unused_download_tubes = set()
         self._want_document = True
         self._download_content_length = 0
@@ -357,6 +348,224 @@ class ViewSlidesActivity(activity.Activity):
                                     'tmp%i' % time.time())
                 self.toolbox.set_current_toolbar(_TOOLBAR_SLIDES)
                 self.show_image_tables(True)
+
+    def create_old_toolbar(self):
+        toolbox = activity.ActivityToolbox(self)
+        activity_toolbar = toolbox.get_activity_toolbar()
+        activity_toolbar.remove(activity_toolbar.keep)
+        activity_toolbar.keep = None
+        
+        self.read_toolbar = ReadToolbar()
+        toolbox.add_toolbar(_('Read'), self.read_toolbar)
+        self.read_toolbar.show()
+        self.read_toolbar.set_activity(self)
+
+        self.view_toolbar = ViewToolbar()
+        toolbox.add_toolbar(_('View'), self.view_toolbar)
+        self.view_toolbar.set_activity(self)
+        self.view_toolbar.connect('go-fullscreen',
+                self.__view_toolbar_go_fullscreen_cb)
+        self.view_toolbar.show()
+
+        self._slides_toolbar = SlidesToolbar()
+        toolbox.add_toolbar(_('Slides'), self._slides_toolbar)
+        self._slides_toolbar.set_activity(self)
+        self._slides_toolbar.show()
+
+        self.set_toolbox(toolbox)
+        toolbox.show()
+
+        # start on the read toolbar
+        self.toolbox.set_current_toolbar(_TOOLBAR_READ)
+
+    def create_new_toolbar(self):
+        toolbar_box = ToolbarBox()
+
+        activity_button = MyActivityToolbarButton(self)
+        toolbar_box.toolbar.insert(activity_button, 0)
+        activity_button.show()
+
+        self._slides_toolbar = SlidesToolbar()
+        self._slides_toolbar.set_activity(self)
+        self._slides_toolbar.show()
+        slides_toolbar_button = ToolbarButton(page=self._slides_toolbar, icon_name='slides')
+        toolbar_box.toolbar.insert(slides_toolbar_button, -1)
+        slides_toolbar_button.show()
+
+        self.view_toolbar = ViewToolbar()
+        self.view_toolbar.connect('go-fullscreen', \
+            self.__view_toolbar_go_fullscreen_cb)
+        self.view_toolbar.set_activity(self)
+        self.view_toolbar.show()
+        view_toolbar_button = ToolbarButton(
+            page=self.view_toolbar,
+            icon_name='toolbar-view')
+        toolbar_box.toolbar.insert(view_toolbar_button, -1)
+        view_toolbar_button.show()
+
+        self.back = ToolButton('go-previous')
+        self.back.set_tooltip(_('Back'))
+        self.back.props.sensitive = False
+        palette = self.back.get_palette()
+        self.prev_page = MenuItem(text_label= _("Previous page"))
+        palette.menu.append(self.prev_page) 
+        self.prev_page.show_all()        
+        self.prev_bookmark = MenuItem(text_label= _("Previous bookmark"))
+        palette.menu.append(self.prev_bookmark) 
+        self.prev_bookmark.show_all()
+        self.back.connect('clicked', self.go_back_cb)
+        self.prev_page.connect('activate', self.go_back_cb)
+        self.prev_bookmark.connect('activate', self.prev_bookmark_activate_cb)
+        toolbar_box.toolbar.insert(self.back, -1)
+        self.back.show()
+
+        self.forward = ToolButton('go-next')
+        self.forward.set_tooltip(_('Forward'))
+        self.forward.props.sensitive = False
+        palette = self.forward.get_palette()
+        self.next_page = MenuItem(text_label= _("Next page"))
+        palette.menu.append(self.next_page) 
+        self.next_page.show_all()        
+        self.next_bookmark = MenuItem(text_label= _("Next bookmark"))
+        palette.menu.append(self.next_bookmark) 
+        self.next_bookmark.show_all()
+        self.forward.connect('clicked', self.go_forward_cb)
+        self.next_page.connect('activate', self.go_forward_cb)
+        self.next_bookmark.connect('activate', self.next_bookmark_activate_cb)
+        toolbar_box.toolbar.insert(self.forward, -1)
+        self.forward.show()
+
+        num_page_item = gtk.ToolItem()
+        self.num_page_entry = gtk.Entry()
+        self.num_page_entry.set_text('0')
+        self.num_page_entry.set_alignment(1)
+        self.num_page_entry.connect('insert-text',
+                               self.__new_num_page_entry_insert_text_cb)
+        self.num_page_entry.connect('activate',
+                               self.__new_num_page_entry_activate_cb)
+        self.num_page_entry.set_width_chars(4)
+        num_page_item.add(self.num_page_entry)
+        self.num_page_entry.show()
+        toolbar_box.toolbar.insert(num_page_item, -1)
+        num_page_item.show()
+
+        total_page_item = gtk.ToolItem()
+        self.total_page_label = gtk.Label()
+
+        label_attributes = pango.AttrList()
+        label_attributes.insert(pango.AttrSize(14000, 0, -1))
+        label_attributes.insert(pango.AttrForeground(65535, 65535, 
+                                                     65535, 0, -1))
+        self.total_page_label.set_attributes(label_attributes)
+
+        self.total_page_label.set_text(' / 0')
+        total_page_item.add(self.total_page_label)
+        self.total_page_label.show()
+        toolbar_box.toolbar.insert(total_page_item, -1)
+        total_page_item.show()
+
+        spacer = gtk.SeparatorToolItem()
+        toolbar_box.toolbar.insert(spacer, -1)
+        spacer.show()
+  
+        bookmarkitem = gtk.ToolItem()
+        self.bookmarker = ToggleToolButton('emblem-favorite')
+        self.bookmarker.set_tooltip(_('Toggle Bookmark'))
+        self.bookmarker_handler_id = self.bookmarker.connect('clicked',
+                                      self.bookmarker_clicked_cb)
+  
+        bookmarkitem.add(self.bookmarker)
+
+        toolbar_box.toolbar.insert(bookmarkitem, -1)
+        bookmarkitem.show_all()
+
+        underline_item = gtk.ToolItem()
+        self.underline = ToggleToolButton('format-text-underline')
+        self.underline.set_tooltip(_('Underline'))
+        self.underline.props.sensitive = False
+        self.underline_id = self.underline.connect('clicked', self.underline_cb)
+        underline_item.add(self.underline)
+        toolbar_box.toolbar.insert(underline_item, -1)
+        underline_item.show_all()
+
+        separator = gtk.SeparatorToolItem()
+        separator.props.draw = False
+        separator.set_expand(True)
+        toolbar_box.toolbar.insert(separator, -1)
+        separator.show()
+
+        stop_button = StopButton(self)
+        stop_button.props.accelerator = '<Ctrl><Shift>Q'
+        toolbar_box.toolbar.insert(stop_button, -1)
+        stop_button.show()
+
+        self.set_toolbar_box(toolbar_box)
+        toolbar_box.show()
+
+    def __new_num_page_entry_insert_text_cb(self, entry, text, length, position):
+        if not re.match('[0-9]', text):
+            entry.emit_stop_by_name('insert-text')
+            return True
+        return False
+
+    def __new_num_page_entry_activate_cb(self, entry):
+        if entry.props.text:
+            page = int(entry.props.text) - 1
+        else:
+            page = 0
+
+        if page >= self.total_pages:
+            page = self.total_pages - 1
+        elif page < 0:
+            page = 0
+
+        self.current_page = page
+        self.set_current_page(page)
+        self.show_page(page)
+        entry.props.text = str(page + 1)
+        self.update_nav_buttons()
+
+    def go_back_cb(self, button):
+        self.page_previous()
+    
+    def go_forward_cb(self, button):
+        self.page_next()
+    
+    def update_nav_buttons(self):
+        current_page = self.current_page
+        self.back.props.sensitive = current_page > 0
+        self.forward.props.sensitive = \
+            current_page < self.total_pages - 1
+        
+        self.num_page_entry.props.text = str(current_page + 1)
+        self.total_page_label.props.label = \
+            ' / ' + str(self.total_pages)
+
+    def set_total_pages(self, pages):
+        self.total_pages = pages
+
+    def prev_bookmark_activate_cb(self, menuitem):
+        self.prev_bookmark()
+ 
+    def next_bookmark_activate_cb(self, menuitem):
+        self.next_bookmark()
+        
+    def bookmarker_clicked_cb(self, button):
+        self.bookmarker_clicked(button)
+
+    def underline_cb(self, button):
+        self.underline_clicked(button)
+
+    def setToggleButtonState(self,button,b,id):
+        button.handler_block(id)
+        button.set_active(b)
+        button.handler_unblock(id)
+        
+    def update_underline_button(self,  state):
+        self.setToggleButtonState(self.underline,  state,  self.underline_id)
+
+    def update_bookmark_button(self,  state):
+        self.setToggleButtonState(self.bookmarker,  state,  self.bookmarker_handler_id)
 
     def load_journal_table(self):
         ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gif', \
@@ -414,14 +623,20 @@ class ViewSlidesActivity(activity.Activity):
             self._slides_toolbar._hide_image_tables.props.sensitive = True
             self._slides_toolbar._reload_journal_table.props.sensitive = True
             self._slides_toolbar._show_image_tables.props.sensitive = False
-            self.read_toolbar.props.sensitive = False
+            if _NEW_TOOLBAR_SUPPORT:
+                pass
+            else:
+                self.read_toolbar.props.sensitive = False
             self.view_toolbar.props.sensitive = False
             self.show_image("ViewSlides.jpg")
         else:
             self.hpane.hide()
             self.annotation_textview.show()
             self.sidebar.show()
-            self.read_toolbar.props.sensitive =True
+            if _NEW_TOOLBAR_SUPPORT:
+                pass
+            else:
+                self.read_toolbar.props.sensitive =True
             self.view_toolbar.props.sensitive = True
             self.rewrite_zip()
             self.set_current_page(0)
@@ -643,10 +858,16 @@ class ViewSlidesActivity(activity.Activity):
         bookmark = self.annotations.is_bookmarked(page)
         if bookmark == True:
             self.sidebar.show_bookmark_icon(True)
-            self.read_toolbar.update_bookmark_button(True)
+            if _NEW_TOOLBAR_SUPPORT:
+                self.update_bookmark_button(True)
+            else:
+                self.read_toolbar.update_bookmark_button(True)
         else:
             self.sidebar.show_bookmark_icon(False)
-            self.read_toolbar.update_bookmark_button(False)
+            if _NEW_TOOLBAR_SUPPORT:
+                self.update_bookmark_button(False)
+            else:
+                self.read_toolbar.update_bookmark_button(False)
 
     def prev_bookmark(self):
         textbuffer = self.annotation_textview.get_buffer()
@@ -658,14 +879,20 @@ class ViewSlidesActivity(activity.Activity):
             if bookmarks[count] < self.page:
                 self.page = bookmarks[count]
                 self.show_page(self.page)
-                self.read_toolbar.set_current_page(self.page)
+                if _NEW_TOOLBAR_SUPPORT:
+                    self.set_current_page(self.page)
+                else:
+                    self.read_toolbar.set_current_page(self.page)
                 return
             count = count - 1
         # if we're before the first bookmark wrap to the last.
         if len(bookmarks) > 0:
             self.page = bookmarks[len(bookmarks) - 1]
             self.show_page(self.page)
-            self.read_toolbar.set_current_page(self.page)
+            if _NEW_TOOLBAR_SUPPORT:
+                self.set_current_page(self.page)
+            else:
+                self.read_toolbar.set_current_page(self.page)
 
     def next_bookmark(self):
         textbuffer = self.annotation_textview.get_buffer()
@@ -677,14 +904,20 @@ class ViewSlidesActivity(activity.Activity):
             if bookmarks[count] > self.page:
                 self.page = bookmarks[count]
                 self.show_page(self.page)
-                self.read_toolbar.set_current_page(self.page)
+                if _NEW_TOOLBAR_SUPPORT:
+                    self.set_current_page(self.page)
+                else:
+                    self.read_toolbar.set_current_page(self.page)
                 return
             count = count + 1
         # if we're after the last bookmark wrap to the first.
         if len(bookmarks) > 0:
             self.page = bookmarks[0]
             self.show_page(self.page)
-            self.read_toolbar.set_current_page(self.page)
+            if _NEW_TOOLBAR_SUPPORT:
+                self.set_current_page(self.page)
+            else:
+                self.read_toolbar.set_current_page(self.page)
 
     def scroll_down(self):
         v_adjustment = self.scrolled.get_vadjustment()
@@ -722,7 +955,10 @@ class ViewSlidesActivity(activity.Activity):
             self.show_bookmark_state(page)
         v_adjustment = self.scrolled.get_vadjustment()
         v_adjustment.value = v_adjustment.upper - v_adjustment.page_size
-        self.read_toolbar.set_current_page(page)
+        if _NEW_TOOLBAR_SUPPORT:
+            self.set_current_page(page)
+        else:
+            self.read_toolbar.set_current_page(page)
         self.page = page
         annotation_textbuffer = self.annotation_textview.get_buffer()
         annotation_textbuffer.set_text(self.annotations.get_note(page))
@@ -744,7 +980,10 @@ class ViewSlidesActivity(activity.Activity):
             self.show_bookmark_state(page)
         v_adjustment = self.scrolled.get_vadjustment()
         v_adjustment.value = v_adjustment.lower
-        self.read_toolbar.set_current_page(page)
+        if _NEW_TOOLBAR_SUPPORT:
+            self.set_current_page(page)
+        else:
+            self.read_toolbar.set_current_page(page)
         self.page = page
         annotation_textbuffer = self.annotation_textview.get_buffer()
         annotation_textbuffer.set_text(self.annotations.get_note(page))
@@ -923,12 +1162,15 @@ class ViewSlidesActivity(activity.Activity):
             self.extract_pickle_file()
             self.annotations.restore()
             self.show_page(self.page)
-            self.read_toolbar.set_total_pages(len(self.image_files))
-            self.read_toolbar.set_current_page(self.page)
+            if _NEW_TOOLBAR_SUPPORT:
+                self.set_total_pages(len(self.image_files))
+                self.set_current_page(self.page)
+            else:
+                self.read_toolbar.set_total_pages(len(self.image_files))
+                self.read_toolbar.set_current_page(self.page)
             if self.is_received_document == True:
                 self.metadata['title'] = self.annotations.get_title()
                 self.metadata['title_set_by_user'] = '1'
-                print self.annotations.get_title()
             # We've got the document, so if we're a shared activity, offer it
             if self.get_shared():
                 self.watch_for_tubes()
