@@ -181,12 +181,7 @@ class ReadToolbar(gtk.Toolbar):
         self.setToggleButtonState(self.bookmarker,  state,  self.bookmarker_handler_id)
 
 class ViewToolbar(gtk.Toolbar):
-    __gtype_name__ = 'ViewToolbar'
-
     __gsignals__ = {
-        'needs-update-size': (gobject.SIGNAL_RUN_FIRST,
-                              gobject.TYPE_NONE,
-                              ([])),
         'go-fullscreen': (gobject.SIGNAL_RUN_FIRST,
                           gobject.TYPE_NONE,
                           ([]))
