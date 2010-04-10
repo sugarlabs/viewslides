@@ -1036,9 +1036,11 @@ class ViewSlidesActivity(activity.Activity):
         
     def show_image(self, filename):
         "display a resized image in a full screen window"
-        TOOLBOX_HEIGHT = 40
+        TOOLBOX_HEIGHT = 60
+        BORDER_WIDTH =  30
         # get the size of the fullscreen display
         screen_width = gtk.gdk.screen_width()
+        screen_width = screen_width - BORDER_WIDTH
         screen_height = gtk.gdk.screen_height()
         screen_height = screen_height - TOOLBOX_HEIGHT
         # get the size of the image.
