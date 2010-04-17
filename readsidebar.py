@@ -25,7 +25,7 @@ from sugar.graphics.icon import Icon
 
 from gettext import gettext as _
 
-_logger = logging.getLogger('read-activity')
+_logger = logging.getLogger('viewslides-activity')
 
 class Sidebar(gtk.EventBox):
     def __init__(self):

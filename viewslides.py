@@ -186,7 +186,7 @@ class ReadURLDownloader(network.GlibURLDownloader):
         return None
 
 
-READ_STREAM_SERVICE = 'read-activity-http'
+READ_STREAM_SERVICE = 'viewslides-activity-http'
 
 class ViewSlidesActivity(activity.Activity):
     __gsignals__ = {
@@ -202,6 +202,7 @@ class ViewSlidesActivity(activity.Activity):
         self._fileserver = None
         self._object_id = handle.object_id
         self.zoom_image_to_fit = True
+        self.total_pages = 0
 
         self.connect("expose_event", self.area_expose_cb)
         self.connect("delete_event", self.delete_cb)
@@ -596,8 +597,8 @@ class ViewSlidesActivity(activity.Activity):
         self.setToggleButtonState(self.bookmarker,  state,  self.bookmarker_handler_id)
 
     def load_journal_table(self):
-        ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gif', \
-                'image/tiff',  'image/png']})
+        ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gif', 
+                'image/tiff',  'image/png']},  properties=['uid', 'title',  'mime_type'])
         self.ls_right.clear()
         for i in xrange (0, num_objects, 1):
             iter = self.ls_right.append()
@@ -665,7 +666,7 @@ class ViewSlidesActivity(activity.Activity):
                 pass
             else:
                 self.read_toolbar.props.sensitive =True
-            self.view_toolbar.props.sensitive = True
+                self.view_toolbar.props.sensitive = True
             self.rewrite_zip()
             self.set_current_page(0)
             self._load_document(self.tempfile)
@@ -1097,7 +1098,6 @@ class ViewSlidesActivity(activity.Activity):
             filebytes = zipfile.read(filename)
         except BadZipfile, err:
             print 'Error opening the zip file: %s' % (err)
-            # self._alert('Error', 'Error opening the zip file')
             return False
         except KeyError,  err:
             self._alert('Key Error', 'Zipfile key not found: '  + str(filename))
