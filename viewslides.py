@@ -352,7 +352,8 @@ class ViewSlidesActivity(activity.Activity):
             if handle.object_id == None:
                 self.tempfile = os.path.join(self.get_activity_root(), 'instance',
                                     'tmp%i' % time.time())
-                self.toolbox.set_current_toolbar(_TOOLBAR_SLIDES)
+                if not _NEW_TOOLBAR_SUPPORT:
+                    self.toolbox.set_current_toolbar(_TOOLBAR_SLIDES)
                 self.show_image_tables(True)
 
     def create_old_toolbar(self):
@@ -654,7 +655,7 @@ class ViewSlidesActivity(activity.Activity):
                 pass
             else:
                 self.read_toolbar.props.sensitive = False
-            self.view_toolbar.props.sensitive = False
+                self.view_toolbar.props.sensitive = False
             self.show_image("ViewSlides.jpg")
         else:
             self.hpane.hide()
