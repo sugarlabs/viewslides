@@ -1224,6 +1224,7 @@ class ViewSlidesActivity(activity.Activity):
 
         self.save_page_number()
         self.metadata['activity'] = self.get_bundle_id()
+        self.metadata['mime_type'] = 'application/x-cbz'
  
         if self._close_requested:
             textbuffer = self.annotation_textview.get_buffer()
