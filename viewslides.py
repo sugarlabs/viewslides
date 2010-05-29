@@ -206,6 +206,7 @@ class ViewSlidesActivity(activity.Activity):
 
         self.connect("expose_event", self.area_expose_cb)
         self.connect("delete_event", self.delete_cb)
+        self.object_id = handle.object_id
        
         if _NEW_TOOLBAR_SUPPORT:
             self.create_new_toolbar()
@@ -355,6 +356,7 @@ class ViewSlidesActivity(activity.Activity):
                                     'tmp%i' % time.time())
                 if not _NEW_TOOLBAR_SUPPORT:
                     self.toolbox.set_current_toolbar(_TOOLBAR_SLIDES)
+                
                 self.show_image_tables(True)
 
     def create_old_toolbar(self):
@@ -516,6 +518,9 @@ class ViewSlidesActivity(activity.Activity):
 
         self.set_toolbar_box(toolbar_box)
         toolbar_box.show()
+        if self.object_id is None:
+            # Not joining, not resuming
+            slides_toolbar_button.set_expanded(True)
 
     def _zoom_in_cb(self, button):
         self._zoom_in.props.sensitive = False
