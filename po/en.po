@@ -2,12 +2,48 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-22 13:44-0600\n"
+"POT-Creation-Date: 2010-03-12 00:32-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,20 +54,104 @@ msgstr ""
 
 #: activity/activity.info:2
 msgid "View Slides"
-msgstr ""
+msgstr "View Slides"
 
-#: viewslides.py:82
+#: viewslides.py:238
+msgid "Slideshow Image"
+msgstr "Slideshow Image"
+
+#: viewslides.py:256
+msgid "Available Images"
+msgstr "Available Images"
+
+#: viewslides.py:359
 msgid "Read"
-msgstr ""
+msgstr "Read"
 
-#: viewslides.py:161
-msgid "Choose document"
-msgstr ""
+#: viewslides.py:364
+msgid "View"
+msgstr "View"
 
-#: readtoolbar.py:36
+#: viewslides.py:371
+msgid "Slides"
+msgstr "Slides"
+
+#: viewslides.py:407 readtoolbar.py:37
 msgid "Back"
-msgstr ""
+msgstr "Back"
 
-#: readtoolbar.py:43
+#: viewslides.py:410 readtoolbar.py:40
+msgid "Previous page"
+msgstr "Previous page"
+
+#: viewslides.py:413 readtoolbar.py:43
+msgid "Previous bookmark"
+msgstr "Previous bookmark"
+
+#: viewslides.py:423 readtoolbar.py:53
 msgid "Forward"
-msgstr ""
+msgstr "Forward"
+
+#: viewslides.py:426 readtoolbar.py:56
+msgid "Next page"
+msgstr "Next page"
+
+#: viewslides.py:429 readtoolbar.py:59
+msgid "Next bookmark"
+msgstr "Next bookmark"
+
+#: viewslides.py:473 readtoolbar.py:108
+msgid "Toggle Bookmark"
+msgstr "Toggle Bookmark"
+
+#: viewslides.py:484
+msgid "Underline"
+msgstr "Underline"
+
+#: viewslides.py:735
+msgid "Success"
+msgstr "Success"
+
+#: viewslides.py:735
+msgid " added to Journal."
+msgstr " added to Journal."
+
+#: readtoolbar.py:198
+msgid "Zoom out"
+msgstr "Zoom out"
+
+#: readtoolbar.py:205
+msgid "Zoom in"
+msgstr "Zoom in"
+
+#: readtoolbar.py:217
+msgid "Fullscreen"
+msgstr "Fullscreen"
+
+#: readtoolbar.py:252
+msgid "Show Image Table"
+msgstr "Show Image Table"
+
+#: readtoolbar.py:258
+msgid "Reload Journal Table"
+msgstr "Reload Journal Table"
+
+#: readtoolbar.py:265
+msgid "Hide Image Tables"
+msgstr "Hide Image Tables"
+
+#: readtoolbar.py:277
+msgid "Add Image"
+msgstr "Add Image"
+
+#: readtoolbar.py:284
+msgid "Remove Image"
+msgstr "Remove Image"
+
+#: readtoolbar.py:291
+msgid "Extract Image"
+msgstr "Extract Image"
+
+#: readsidebar.py:47
+msgid "Bookmark"
+msgstr "Bookmark"
