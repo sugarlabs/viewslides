@@ -21,7 +21,7 @@ import time
 import zipfile
 from zipfile import BadZipfile
 import gtk
-import pygame
+import pygame, pygame.display
 import re
 import pango
 from sugar.activity import activity
@@ -186,15 +186,9 @@ class ReadURLDownloader(network.GlibURLDownloader):
         return None
 
 
-READ_STREAM_SERVICE = 'viewslides-activity-http'
+READ_STREAM_SERVICE = 'read-activity-http'
 
 class ViewSlidesActivity(activity.Activity):
-    __gsignals__ = {
-        'go-fullscreen': (gobject.SIGNAL_RUN_FIRST,
-                          gobject.TYPE_NONE,
-                          ([]))
-    }
-
     def __init__(self, handle):
         "The entry point to the Activity"
         activity.Activity.__init__(self, handle)
@@ -202,11 +196,9 @@ class ViewSlidesActivity(activity.Activity):
         self._fileserver = None
         self._object_id = handle.object_id
         self.zoom_image_to_fit = True
-        self.total_pages = 0
 
         self.connect("expose_event", self.area_expose_cb)
         self.connect("delete_event", self.delete_cb)
-        self.object_id = handle.object_id
        
         if _NEW_TOOLBAR_SUPPORT:
             self.create_new_toolbar()
@@ -354,9 +346,7 @@ class ViewSlidesActivity(activity.Activity):
             if handle.object_id == None:
                 self.tempfile = os.path.join(self.get_activity_root(), 'instance',
                                     'tmp%i' % time.time())
-                if not _NEW_TOOLBAR_SUPPORT:
-                    self.toolbox.set_current_toolbar(_TOOLBAR_SLIDES)
-                
+                self.toolbox.set_current_toolbar(_TOOLBAR_SLIDES)
                 self.show_image_tables(True)
 
     def create_old_toolbar(self):
@@ -402,22 +392,30 @@ class ViewSlidesActivity(activity.Activity):
         toolbar_box.toolbar.insert(slides_toolbar_button, -1)
         slides_toolbar_button.show()
 
-        self.connect('go-fullscreen', \
+        self.view_toolbar = ViewToolbar()
+        self.view_toolbar.connect('go-fullscreen', \
             self.__view_toolbar_go_fullscreen_cb)
+        self.view_toolbar.set_activity(self)
+        self.view_toolbar.show()
+        view_toolbar_button = ToolbarButton(
+            page=self.view_toolbar,
+            icon_name='toolbar-view')
+        toolbar_box.toolbar.insert(view_toolbar_button, -1)
+        view_toolbar_button.show()
 
         self.back = ToolButton('go-previous')
         self.back.set_tooltip(_('Back'))
         self.back.props.sensitive = False
         palette = self.back.get_palette()
-        self.menu_prev_page = MenuItem(text_label= _("Previous page"))
-        palette.menu.append(self.menu_prev_page) 
-        self.menu_prev_page.show_all()        
-        self.menu_prev_bookmark = MenuItem(text_label= _("Previous bookmark"))
-        palette.menu.append(self.menu_prev_bookmark) 
-        self.menu_prev_bookmark.show_all()
+        self.prev_page = MenuItem(text_label= _("Previous page"))
+        palette.menu.append(self.prev_page) 
+        self.prev_page.show_all()        
+        self.prev_bookmark = MenuItem(text_label= _("Previous bookmark"))
+        palette.menu.append(self.prev_bookmark) 
+        self.prev_bookmark.show_all()
         self.back.connect('clicked', self.go_back_cb)
-        self.menu_prev_page.connect('activate', self.go_back_cb)
-        self.menu_prev_bookmark.connect('activate', self.prev_bookmark_activate_cb)
+        self.prev_page.connect('activate', self.go_back_cb)
+        self.prev_bookmark.connect('activate', self.prev_bookmark_activate_cb)
         toolbar_box.toolbar.insert(self.back, -1)
         self.back.show()
 
@@ -425,15 +423,15 @@ class ViewSlidesActivity(activity.Activity):
         self.forward.set_tooltip(_('Forward'))
         self.forward.props.sensitive = False
         palette = self.forward.get_palette()
-        self.menu_next_page = MenuItem(text_label= _("Next page"))
-        palette.menu.append(self.menu_next_page) 
-        self.menu_next_page.show_all()        
-        self.menu_next_bookmark = MenuItem(text_label= _("Next bookmark"))
-        palette.menu.append(self.menu_next_bookmark) 
-        self.menu_next_bookmark.show_all()
+        self.next_page = MenuItem(text_label= _("Next page"))
+        palette.menu.append(self.next_page) 
+        self.next_page.show_all()        
+        self.next_bookmark = MenuItem(text_label= _("Next bookmark"))
+        palette.menu.append(self.next_bookmark) 
+        self.next_bookmark.show_all()
         self.forward.connect('clicked', self.go_forward_cb)
-        self.menu_next_page.connect('activate', self.go_forward_cb)
-        self.menu_next_bookmark.connect('activate', self.next_bookmark_activate_cb)
+        self.next_page.connect('activate', self.go_forward_cb)
+        self.next_bookmark.connect('activate', self.next_bookmark_activate_cb)
         toolbar_box.toolbar.insert(self.forward, -1)
         self.forward.show()
 
@@ -481,30 +479,15 @@ class ViewSlidesActivity(activity.Activity):
         toolbar_box.toolbar.insert(bookmarkitem, -1)
         bookmarkitem.show_all()
 
-        spacer2 = gtk.SeparatorToolItem()
-        toolbar_box.toolbar.insert(spacer2, -1)
-        spacer2.show()
-  
-        self._zoom_out = ToolButton('zoom-out')
-        self._zoom_out.set_tooltip(_('Zoom out'))
-        self._zoom_out.connect('clicked', self._zoom_out_cb)
-        toolbar_box.toolbar.insert(self._zoom_out, -1)
-        self._zoom_out.props.sensitive = False
-        self._zoom_out.show()
+        underline_item = gtk.ToolItem()
+        self.underline = ToggleToolButton('format-text-underline')
+        self.underline.set_tooltip(_('Underline'))
+        self.underline.props.sensitive = False
+        self.underline_id = self.underline.connect('clicked', self.underline_cb)
+        underline_item.add(self.underline)
+        toolbar_box.toolbar.insert(underline_item, -1)
+        underline_item.show_all()
 
-        self._zoom_in = ToolButton('zoom-in')
-        self._zoom_in.set_tooltip(_('Zoom in'))
-        self._zoom_in.connect('clicked', self._zoom_in_cb)
-        toolbar_box.toolbar.insert(self._zoom_in, -1)
-        self._zoom_in.props.sensitive = True
-        self._zoom_in.show()
-
-        self._fullscreen = ToolButton('view-fullscreen')
-        self._fullscreen.set_tooltip(_('Fullscreen'))
-        self._fullscreen.connect('clicked', self._fullscreen_cb)
-        toolbar_box.toolbar.insert(self._fullscreen, -1)
-        self._fullscreen.show()
-        
         separator = gtk.SeparatorToolItem()
         separator.props.draw = False
         separator.set_expand(True)
@@ -518,30 +501,6 @@ class ViewSlidesActivity(activity.Activity):
 
         self.set_toolbar_box(toolbar_box)
         toolbar_box.show()
-        if self.object_id is None:
-            # Not joining, not resuming
-            slides_toolbar_button.set_expanded(True)
-
-    def _zoom_in_cb(self, button):
-        self._zoom_in.props.sensitive = False
-        self._zoom_out.props.sensitive = True
-        self.zoom_to_width()
-    
-    def _zoom_out_cb(self, button):
-        self._zoom_in.props.sensitive = True
-        self._zoom_out.props.sensitive = False
-        self.zoom_to_fit()
-
-    def enable_zoom_in(self):
-        self._zoom_in.props.sensitive = True
-        self._zoom_out.props.sensitive = False
-
-    def enable_zoom_out(self):
-        self._zoom_in.props.sensitive = False
-        self._zoom_out.props.sensitive = True
-
-    def _fullscreen_cb(self, button):
-        self.emit('go-fullscreen')
 
     def __new_num_page_entry_insert_text_cb(self, entry, text, length, position):
         if not re.match('[0-9]', text):
@@ -560,19 +519,20 @@ class ViewSlidesActivity(activity.Activity):
         elif page < 0:
             page = 0
 
+        self.current_page = page
         self.set_current_page(page)
         self.show_page(page)
         entry.props.text = str(page + 1)
         self.update_nav_buttons()
 
     def go_back_cb(self, button):
-        self.previous_page()
+        self.page_previous()
     
     def go_forward_cb(self, button):
-        self.next_page()
+        self.page_next()
     
     def update_nav_buttons(self):
-        current_page = self.page
+        current_page = self.current_page
         self.back.props.sensitive = current_page > 0
         self.forward.props.sensitive = \
             current_page < self.total_pages - 1
@@ -593,17 +553,23 @@ class ViewSlidesActivity(activity.Activity):
     def bookmarker_clicked_cb(self, button):
         self.bookmarker_clicked(button)
 
+    def underline_cb(self, button):
+        self.underline_clicked(button)
+
     def setToggleButtonState(self,button,b,id):
         button.handler_block(id)
         button.set_active(b)
         button.handler_unblock(id)
         
+    def update_underline_button(self,  state):
+        self.setToggleButtonState(self.underline,  state,  self.underline_id)
+
     def update_bookmark_button(self,  state):
         self.setToggleButtonState(self.bookmarker,  state,  self.bookmarker_handler_id)
 
     def load_journal_table(self):
-        ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gif', 
-                'image/tiff',  'image/png']},  properties=['uid', 'title',  'mime_type'])
+        ds_objects, num_objects = datastore.find({'mime_type':['image/jpeg',  'image/gif', \
+                'image/tiff',  'image/png']})
         self.ls_right.clear()
         for i in xrange (0, num_objects, 1):
             iter = self.ls_right.append()
@@ -661,7 +627,7 @@ class ViewSlidesActivity(activity.Activity):
                 pass
             else:
                 self.read_toolbar.props.sensitive = False
-                self.view_toolbar.props.sensitive = False
+            self.view_toolbar.props.sensitive = False
             self.show_image("ViewSlides.jpg")
         else:
             self.hpane.hide()
@@ -671,7 +637,7 @@ class ViewSlidesActivity(activity.Activity):
                 pass
             else:
                 self.read_toolbar.props.sensitive =True
-                self.view_toolbar.props.sensitive = True
+            self.view_toolbar.props.sensitive = True
             self.rewrite_zip()
             self.set_current_page(0)
             self._load_document(self.tempfile)
@@ -999,8 +965,6 @@ class ViewSlidesActivity(activity.Activity):
 
     def set_current_page(self, page):
         self.page = page
-        if _NEW_TOOLBAR_SUPPORT:
-            self.update_nav_buttons()
 
     def next_page(self):
         textbuffer = self.annotation_textview.get_buffer()
@@ -1043,11 +1007,9 @@ class ViewSlidesActivity(activity.Activity):
         
     def show_image(self, filename):
         "display a resized image in a full screen window"
-        TOOLBOX_HEIGHT = 60
-        BORDER_WIDTH =  30
+        TOOLBOX_HEIGHT = 40
         # get the size of the fullscreen display
         screen_width = gtk.gdk.screen_width()
-        screen_width = screen_width - BORDER_WIDTH
         screen_height = gtk.gdk.screen_height()
         screen_height = screen_height - TOOLBOX_HEIGHT
         # get the size of the image.
@@ -1103,6 +1065,7 @@ class ViewSlidesActivity(activity.Activity):
             filebytes = zipfile.read(filename)
         except BadZipfile, err:
             print 'Error opening the zip file: %s' % (err)
+            # self._alert('Error', 'Error opening the zip file')
             return False
         except KeyError,  err:
             self._alert('Key Error', 'Zipfile key not found: '  + str(filename))
@@ -1229,7 +1192,6 @@ class ViewSlidesActivity(activity.Activity):
 
         self.save_page_number()
         self.metadata['activity'] = self.get_bundle_id()
-        self.metadata['mime_type'] = 'application/x-cbz'
  
         if self._close_requested:
             textbuffer = self.annotation_textview.get_buffer()

@@ -26,6 +26,10 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Arabic translations for PACKAGE package.
 # Copyright (C) 2009 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
@@ -36,7 +40,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-12 00:32-0500\n"
-"PO-Revision-Date: 2011-01-24 00:50+0200\n"
+"PO-Revision-Date: 2010-02-19 18:27+0300\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "Language: ar\n"
@@ -45,11 +49,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
-"X-Generator: Pootle 2.0.3\n"
+"X-Generator: Virtaal 0.5.2\n"
 
 #: activity/activity.info:2
 msgid "View Slides"
-msgstr "عرض الشرائح"
+msgstr "عرض الشرائح "
 
 #: viewslides.py:238
 msgid "Slideshow Image"
@@ -101,7 +105,7 @@ msgstr "بدّل العلامة"
 
 #: viewslides.py:484
 msgid "Underline"
-msgstr "سطِّر"
+msgstr ""
 
 #: viewslides.py:735
 msgid "Success"
@@ -129,11 +133,11 @@ msgstr "أظهر جدول الصور"
 
 #: readtoolbar.py:258
 msgid "Reload Journal Table"
-msgstr "أعد تحميل جدول الدفتر"
+msgstr "أعد تحميل جدول الدفتر "
 
 #: readtoolbar.py:265
 msgid "Hide Image Tables"
-msgstr "أخْفِ جدول الصور"
+msgstr "أخف جدول الصور"
 
 #: readtoolbar.py:277
 msgid "Add Image"
@@ -141,7 +145,7 @@ msgstr "أضِف صورة"
 
 #: readtoolbar.py:284
 msgid "Remove Image"
-msgstr "احذف الصورة"
+msgstr "احذف الصورة "
 
 #: readtoolbar.py:291
 msgid "Extract Image"

@@ -22,134 +22,121 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# Arabic translations for PACKAGE package.
-# Copyright (C) 2009 THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# James Simmons <ja.simmons@sbcglobal.net>, 2009.
-# Khaled Hosny <khaledhosny@eglug.org>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-12 00:32-0500\n"
-"PO-Revision-Date: 2011-01-24 00:50+0200\n"
-"Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
-"Language-Team: Arabic <doc@arabeyes.org>\n"
-"Language: ar\n"
+"PO-Revision-Date: 2011-05-15 13:14+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: hy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
-"X-Generator: Pootle 2.0.3\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Pootle 2.0.1\n"
 
 #: activity/activity.info:2
 msgid "View Slides"
-msgstr "عرض الشرائح"
+msgstr "Դիտեք ժապավենները"
 
 #: viewslides.py:238
 msgid "Slideshow Image"
-msgstr "صورة عرض شرائح"
+msgstr "Ժապավենային պատկեր"
 
 #: viewslides.py:256
 msgid "Available Images"
-msgstr "الصور المتوفرة"
+msgstr "Առկա պատկերները"
 
 #: viewslides.py:359
 msgid "Read"
-msgstr "اقرأ"
+msgstr "Կարդալ"
 
 #: viewslides.py:364
 msgid "View"
-msgstr "عرض"
+msgstr "Դիտել"
 
 #: viewslides.py:371
 msgid "Slides"
-msgstr "الشرائح"
+msgstr "Ժապավեններ"
 
 #: viewslides.py:407 readtoolbar.py:37
 msgid "Back"
-msgstr "إلى الخلف"
+msgstr "Ետ"
 
 #: viewslides.py:410 readtoolbar.py:40
 msgid "Previous page"
-msgstr "الصفحة السابقة"
+msgstr "Նախորդ էջը"
 
 #: viewslides.py:413 readtoolbar.py:43
 msgid "Previous bookmark"
-msgstr "العلامة السابقة"
+msgstr "Նախորդ էջանշանը"
 
 #: viewslides.py:423 readtoolbar.py:53
 msgid "Forward"
-msgstr "إلى الأمام"
+msgstr "Առաջ"
 
 #: viewslides.py:426 readtoolbar.py:56
 msgid "Next page"
-msgstr "الصفحة التالية"
+msgstr "Հաջորդ էջը"
 
 #: viewslides.py:429 readtoolbar.py:59
 msgid "Next bookmark"
-msgstr "العلامة التالية"
+msgstr "Հայորդ էջանշանը"
 
 #: viewslides.py:473 readtoolbar.py:108
 msgid "Toggle Bookmark"
-msgstr "بدّل العلامة"
+msgstr "Էջանշան ամրացնել"
 
 #: viewslides.py:484
 msgid "Underline"
-msgstr "سطِّر"
+msgstr "Ընդգծել"
 
 #: viewslides.py:735
 msgid "Success"
-msgstr "نجاح"
+msgstr "Հաջողություն"
 
 #: viewslides.py:735
 msgid " added to Journal."
-msgstr " أضيف إلى الدفتر"
+msgstr " ավելացվել է Մատյանում:"
 
 #: readtoolbar.py:198
 msgid "Zoom out"
-msgstr "بعّد"
+msgstr "Փոքրամասշտաբ պատկեր"
 
 #: readtoolbar.py:205
 msgid "Zoom in"
-msgstr "قرّب"
+msgstr "Մեծամասշտաբ պատկեր"
 
 #: readtoolbar.py:217
 msgid "Fullscreen"
-msgstr "ملء الشاشة"
+msgstr "Լիապատկեր էկրան"
 
 #: readtoolbar.py:252
 msgid "Show Image Table"
-msgstr "أظهر جدول الصور"
+msgstr "Ցույց տալ Պատկերների աղյուսակը"
 
 #: readtoolbar.py:258
 msgid "Reload Journal Table"
-msgstr "أعد تحميل جدول الدفتر"
+msgstr "Վերաբեռնել Մատյանների աղյուսակը"
 
 #: readtoolbar.py:265
 msgid "Hide Image Tables"
-msgstr "أخْفِ جدول الصور"
+msgstr "Թաքցնել Պատկերների աղյուսակը"
 
 #: readtoolbar.py:277
 msgid "Add Image"
-msgstr "أضِف صورة"
+msgstr "Պատկեր ավելացնել"
 
 #: readtoolbar.py:284
 msgid "Remove Image"
-msgstr "احذف الصورة"
+msgstr "Հանել պատկերը"
 
 #: readtoolbar.py:291
 msgid "Extract Image"
-msgstr "استخرج الصورة"
+msgstr "Պատկերը դուրս բերել"
 
 #: readsidebar.py:47
 msgid "Bookmark"
-msgstr "علّم"
-
-#~ msgid "Choose document"
-#~ msgstr "إختر ملفا"
+msgstr "Էջանշել"

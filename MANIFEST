@@ -2,7 +2,6 @@ viewslides.py
 readtoolbar.py
 readsidebar.py
 xopower.py
-mybutton.py
 ViewSlides.jpg
 setup.py
 NEWS
@@ -227,18 +226,3 @@ po/hi.po
 po/fa_AF.po
 po/th.po
 po/gu.po
-locale/fil/activity.linfo
-locale/fil/LC_MESSAGES/org.laptop.ViewSlidesActivity.mo
-locale/tzo/activity.linfo
-locale/tzo/LC_MESSAGES/org.laptop.ViewSlidesActivity.mo
-locale/kos/activity.linfo
-locale/kos/LC_MESSAGES/org.laptop.ViewSlidesActivity.mo
-locale/tvl/activity.linfo
-locale/tvl/LC_MESSAGES/org.laptop.ViewSlidesActivity.mo
-locale/sq/activity.linfo
-locale/sq/LC_MESSAGES/org.laptop.ViewSlidesActivity.mo
-locale/ne/activity.linfo
-locale/ne/LC_MESSAGES/org.laptop.ViewSlidesActivity.mo
-icons/slides.svg
-po/tvl.po
-po/fil.po

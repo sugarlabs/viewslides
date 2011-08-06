@@ -25,7 +25,7 @@ _HARDWARE_MANAGER_INTERFACE = 'org.laptop.HardwareManager'
 _HARDWARE_MANAGER_SERVICE = 'org.laptop.HardwareManager'
 _HARDWARE_MANAGER_OBJECT_PATH = '/org/laptop/HardwareManager'
 
-_logger = logging.getLogger('viewslides-activity')
+_logger = logging.getLogger('read-etexts-activity')
 
 # start with sleep off
 sleep_inhibit = True
