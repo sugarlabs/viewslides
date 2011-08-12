@@ -2,120 +2,128 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-12 00:32-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2011-08-06 15:54-0500\n"
+"PO-Revision-Date: 2011-04-08 03:44+0200\n"
+"Last-Translator: Aputsiaq <aj@isit.gl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.7.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.1\n"
 
 #: activity/activity.info:2
 msgid "View Slides"
-msgstr ""
+msgstr "Vis præsentationer"
 
-#: viewslides.py:238
-msgid "Slideshow Image"
-msgstr ""
-
-#: viewslides.py:256
-msgid "Available Images"
-msgstr ""
-
-#: viewslides.py:359
-msgid "Read"
-msgstr ""
-
-#: viewslides.py:364
-msgid "View"
-msgstr ""
-
-#: viewslides.py:371
-msgid "Slides"
-msgstr ""
-
-#: viewslides.py:407 readtoolbar.py:37
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:37
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:407
 msgid "Back"
-msgstr ""
+msgstr "Tilbage"
 
-#: viewslides.py:410 readtoolbar.py:40
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:40
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:410
 msgid "Previous page"
-msgstr ""
+msgstr "Forrige side"
 
-#: viewslides.py:413 readtoolbar.py:43
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:43
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:413
 msgid "Previous bookmark"
-msgstr ""
+msgstr "Forrige bogmærke"
 
-#: viewslides.py:423 readtoolbar.py:53
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:53
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:423
 msgid "Forward"
-msgstr ""
+msgstr "Fremad"
 
-#: viewslides.py:426 readtoolbar.py:56
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:56
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:426
 msgid "Next page"
-msgstr ""
+msgstr "Næste side"
 
-#: viewslides.py:429 readtoolbar.py:59
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:59
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:429
 msgid "Next bookmark"
-msgstr ""
+msgstr "Næste bogmærke"
 
-#: viewslides.py:473 readtoolbar.py:108
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:108
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:473
 msgid "Toggle Bookmark"
-msgstr ""
+msgstr "Vis/skjul bogmærke"
 
-#: viewslides.py:484
-msgid "Underline"
-msgstr ""
-
-#: viewslides.py:735
-msgid "Success"
-msgstr ""
-
-#: viewslides.py:735
-msgid " added to Journal."
-msgstr ""
-
-#: readtoolbar.py:198
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:198
 msgid "Zoom out"
-msgstr ""
+msgstr "Zoom ud"
 
-#: readtoolbar.py:205
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:205
 msgid "Zoom in"
-msgstr ""
+msgstr "Zoom ind"
 
-#: readtoolbar.py:217
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:217
 msgid "Fullscreen"
-msgstr ""
+msgstr "Fuldskærm"
 
-#: readtoolbar.py:252
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:252
 msgid "Show Image Table"
-msgstr ""
+msgstr "Vis billedtabel"
 
-#: readtoolbar.py:258
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:258
 msgid "Reload Journal Table"
-msgstr ""
+msgstr "Genindlæs Journal-tabel"
 
-#: readtoolbar.py:265
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:265
 msgid "Hide Image Tables"
-msgstr ""
+msgstr "Skjul billedtabel"
 
-#: readtoolbar.py:277
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:277
 msgid "Add Image"
-msgstr ""
+msgstr "Tilføj billede"
 
-#: readtoolbar.py:284
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:284
 msgid "Remove Image"
-msgstr ""
+msgstr "Fjern billede"
 
-#: readtoolbar.py:291
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:291
 msgid "Extract Image"
-msgstr ""
+msgstr "Udtræk billede"
 
-#: readsidebar.py:47
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:238
+msgid "Slideshow Image"
+msgstr "Præsentationsbillede"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:256
+msgid "Available Images"
+msgstr "Tilgængelige billeder"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:359
+msgid "Read"
+msgstr "Læs"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:364
+msgid "View"
+msgstr "Vis"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:371
+msgid "Slides"
+msgstr "Præsentationssider"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:484
+msgid "Underline"
+msgstr "Understreg"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
+msgid "Success"
+msgstr "Succes"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
+msgid " added to Journal."
+msgstr " føjet til Journal."
+
+#: /home/jim/olpc/viewslides/mainline/readsidebar.py:47
 msgid "Bookmark"
-msgstr ""
+msgstr "Bogmærke"
