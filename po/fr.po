@@ -1,3 +1,39 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # French translations for PACKAGE package.
 # Copyright (C) 2009 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
@@ -8,52 +44,59 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-30 15:15-0500\n"
-"PO-Revision-Date: 2010-01-25 07:36+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"POT-Creation-Date: 2011-08-06 15:54-0500\n"
+"PO-Revision-Date: 2010-04-18 12:08+0200\n"
+"Last-Translator: samy boutayeb <s.boutayeb@free.fr>\n"
 "Language-Team: French\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Pootle 2.0.1\n"
+"X-Generator: Pootle 2.0.3\n"
 
 #: activity/activity.info:2
 msgid "View Slides"
-msgstr "Voir les diapositives"
+msgstr "Diaporama"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:37
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:407
 msgid "Back"
 msgstr "Retour"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:40
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:410
 msgid "Previous page"
 msgstr "Page précédente"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:43
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:413
 msgid "Previous bookmark"
 msgstr "Signet précédent"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:53
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:423
 msgid "Forward"
 msgstr "Suite"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:56
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:426
 msgid "Next page"
 msgstr "Page suivante"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:59
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:429
 msgid "Next bookmark"
 msgstr "Signet suivant"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:108
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:473
 msgid "Toggle Bookmark"
 msgstr "Basculer le signet"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:198
 msgid "Zoom out"
-msgstr "Zoom arriere"
+msgstr "Zoom arrière"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:205
 msgid "Zoom in"
@@ -61,7 +104,7 @@ msgstr "Zoom avant"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:217
 msgid "Fullscreen"
-msgstr "Plein ecran"
+msgstr "Plein écran"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:252
 msgid "Show Image Table"
@@ -87,31 +130,35 @@ msgstr "Retirer une image"
 msgid "Extract Image"
 msgstr "Extraire une image"
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:192
-msgid "Read"
-msgstr "Lire"
-
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:196
-msgid "View"
-msgstr "Vue"
-
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:203
-msgid "Slides"
-msgstr "Diapositives"
-
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:239
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:238
 msgid "Slideshow Image"
-msgstr "Diapo image"
+msgstr "Image diapo"
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:257
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:256
 msgid "Available Images"
 msgstr "Images disponibles"
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:512
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:359
+msgid "Read"
+msgstr "Lire"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:364
+msgid "View"
+msgstr "Afficher"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:371
+msgid "Slides"
+msgstr "Diapositives"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:484
+msgid "Underline"
+msgstr "Souligner"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
 msgid "Success"
 msgstr "Opération réussie"
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:512
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
 msgid " added to Journal."
 msgstr " ajouté au Journal."
 
