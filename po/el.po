@@ -1,38 +1,164 @@
-# Greek translations for PACKAGE package.
-# Copyright (C) 2009 THE PACKAGE'S COPYRIGHT HOLDER
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# James Simmons <ja.simmons@sbcglobal.net>, 2009.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-22 13:44-0600\n"
-"PO-Revision-Date: 2009-05-12 00:29-0400\n"
-"Last-Translator: Γιάννης Κασκαμανίδης <ttnfy17@yahoo.gr>\n"
-"Language-Team: Greek\n"
+"POT-Creation-Date: 2011-08-06 15:54-0500\n"
+"PO-Revision-Date: 2010-04-14 17:06+0200\n"
+"Last-Translator: Yannis <kiolalis@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ASCII\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 1.2.1\n"
+"X-Generator: Pootle 2.0.3\n"
 
 #: activity/activity.info:2
 msgid "View Slides"
 msgstr "Προβολή διαφανειών"
 
-#: viewslides.py:82
-msgid "Read"
-msgstr "Ανάγνωση"
-
-#: viewslides.py:161
-msgid "Choose document"
-msgstr "Επιλογή εγγράφου"
-
-#: readtoolbar.py:36
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:37
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:407
 msgid "Back"
 msgstr "Πίσω"
 
-#: readtoolbar.py:43
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:40
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:410
+msgid "Previous page"
+msgstr "Προηγούμενη σελίδα"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:43
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:413
+msgid "Previous bookmark"
+msgstr "Προηγούμενος σελιδοδείκτης"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:53
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:423
 msgid "Forward"
 msgstr "Μπροστά"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:56
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:426
+msgid "Next page"
+msgstr "Επόμενη σελίδα"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:59
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:429
+msgid "Next bookmark"
+msgstr "Επόμενος σελιδοδείκτης"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:108
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:473
+msgid "Toggle Bookmark"
+msgstr "Εναλλαγή σελιδοδεικτών"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:198
+msgid "Zoom out"
+msgstr "Σμίκρυνση"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:205
+msgid "Zoom in"
+msgstr "Μεγέθυνση"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:217
+msgid "Fullscreen"
+msgstr "Πλήρης οθόνη"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:252
+msgid "Show Image Table"
+msgstr "Εμφάνιση πίνακα εικόνων"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:258
+msgid "Reload Journal Table"
+msgstr "Επαναφόρτωση πίνακα Ημερολογίου"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:265
+msgid "Hide Image Tables"
+msgstr "Απόκρυψη πίνακα εικόνων"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:277
+msgid "Add Image"
+msgstr "Προσθήκη εικόνας"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:284
+msgid "Remove Image"
+msgstr "Αφαίρεση εικόνας"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:291
+msgid "Extract Image"
+msgstr "Εξαγωγή εικόνας"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:238
+msgid "Slideshow Image"
+msgstr "Εικόνα διαφάνειας"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:256
+msgid "Available Images"
+msgstr "Διαθέσιμες εικόνες"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:359
+msgid "Read"
+msgstr "Ανάγνωση"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:364
+msgid "View"
+msgstr "Προβολή"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:371
+msgid "Slides"
+msgstr "Διαφάνειες"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:484
+msgid "Underline"
+msgstr "Υπογραμμισμένα"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
+msgid "Success"
+msgstr "Επιτυχία"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
+msgid " added to Journal."
+msgstr " προστέθηκε στο Ημερολόγιο."
+
+#: /home/jim/olpc/viewslides/mainline/readsidebar.py:47
+msgid "Bookmark"
+msgstr "Σελιδοδείκτης"
+
+#~ msgid "Choose document"
+#~ msgstr "Επιλογή εγγράφου"
