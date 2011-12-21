@@ -26,117 +26,124 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-12 00:32-0500\n"
-"PO-Revision-Date: 2011-05-15 13:14+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"POT-Creation-Date: 2011-08-06 15:54-0500\n"
+"PO-Revision-Date: 2011-12-21 21:14+0200\n"
+"Last-Translator: anush.mkrtchyan <anush.mkrtchyan@ca1492.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Pootle 2.0.1\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Pootle 2.0.5\n"
 
 #: activity/activity.info:2
 msgid "View Slides"
 msgstr "Դիտեք ժապավենները"
 
-#: viewslides.py:238
-msgid "Slideshow Image"
-msgstr "Ժապավենային պատկեր"
-
-#: viewslides.py:256
-msgid "Available Images"
-msgstr "Առկա պատկերները"
-
-#: viewslides.py:359
-msgid "Read"
-msgstr "Կարդալ"
-
-#: viewslides.py:364
-msgid "View"
-msgstr "Դիտել"
-
-#: viewslides.py:371
-msgid "Slides"
-msgstr "Ժապավեններ"
-
-#: viewslides.py:407 readtoolbar.py:37
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:37
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:407
 msgid "Back"
 msgstr "Ետ"
 
-#: viewslides.py:410 readtoolbar.py:40
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:40
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:410
 msgid "Previous page"
 msgstr "Նախորդ էջը"
 
-#: viewslides.py:413 readtoolbar.py:43
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:43
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:413
 msgid "Previous bookmark"
 msgstr "Նախորդ էջանշանը"
 
-#: viewslides.py:423 readtoolbar.py:53
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:53
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:423
 msgid "Forward"
 msgstr "Առաջ"
 
-#: viewslides.py:426 readtoolbar.py:56
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:56
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:426
 msgid "Next page"
 msgstr "Հաջորդ էջը"
 
-#: viewslides.py:429 readtoolbar.py:59
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:59
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:429
 msgid "Next bookmark"
 msgstr "Հայորդ էջանշանը"
 
-#: viewslides.py:473 readtoolbar.py:108
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:108
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:473
 msgid "Toggle Bookmark"
-msgstr "Էջանշան ամրացնել"
+msgstr "Ակտիվացնել էջանշանը"
 
-#: viewslides.py:484
-msgid "Underline"
-msgstr "Ընդգծել"
-
-#: viewslides.py:735
-msgid "Success"
-msgstr "Հաջողություն"
-
-#: viewslides.py:735
-msgid " added to Journal."
-msgstr " ավելացվել է Մատյանում:"
-
-#: readtoolbar.py:198
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:198
 msgid "Zoom out"
-msgstr "Փոքրամասշտաբ պատկեր"
+msgstr "Հեռվացնել"
 
-#: readtoolbar.py:205
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:205
 msgid "Zoom in"
-msgstr "Մեծամասշտաբ պատկեր"
+msgstr "Մոտեցնել"
 
-#: readtoolbar.py:217
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:217
 msgid "Fullscreen"
-msgstr "Լիապատկեր էկրան"
+msgstr "Էկրանի չափով"
 
-#: readtoolbar.py:252
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:252
 msgid "Show Image Table"
 msgstr "Ցույց տալ Պատկերների աղյուսակը"
 
-#: readtoolbar.py:258
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:258
 msgid "Reload Journal Table"
-msgstr "Վերաբեռնել Մատյանների աղյուսակը"
+msgstr "Վերաբեռնել Մատյանի աղյուսակը"
 
-#: readtoolbar.py:265
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:265
 msgid "Hide Image Tables"
 msgstr "Թաքցնել Պատկերների աղյուսակը"
 
-#: readtoolbar.py:277
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:277
 msgid "Add Image"
-msgstr "Պատկեր ավելացնել"
+msgstr "Ավելացնել Պատկեր "
 
-#: readtoolbar.py:284
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:284
 msgid "Remove Image"
-msgstr "Հանել պատկերը"
+msgstr "ՀեռացնելՊպատկերը"
 
-#: readtoolbar.py:291
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:291
 msgid "Extract Image"
 msgstr "Պատկերը դուրս բերել"
 
-#: readsidebar.py:47
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:238
+msgid "Slideshow Image"
+msgstr "Ժապավենային պատկեր"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:256
+msgid "Available Images"
+msgstr "Առկա պատկերները"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:359
+msgid "Read"
+msgstr "Կարդալ"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:364
+msgid "View"
+msgstr "Դիտել"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:371
+msgid "Slides"
+msgstr "Ժապավեններ"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:484
+msgid "Underline"
+msgstr "Ընդգծել"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
+msgid "Success"
+msgstr "Հաջողություն"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
+msgid " added to Journal."
+msgstr " ավելացվեց Մատյանում:"
+
+#: /home/jim/olpc/viewslides/mainline/readsidebar.py:47
 msgid "Bookmark"
 msgstr "Էջանշել"
