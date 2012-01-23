@@ -1,37 +1,157 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Portuguese translations for PACKAGE package.
 # Copyright (C) 2009 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # James Simmons <ja.simmons@sbcglobal.net>, 2009.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-22 13:44-0600\n"
-"PO-Revision-Date: 2009-02-22 17:52-0600\n"
-"Last-Translator: James Simmons <ja.simmons@sbcglobal.net>\n"
+"POT-Creation-Date: 2011-08-06 15:54-0500\n"
+"PO-Revision-Date: 2012-01-23 03:35+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: Portuguese\n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ASCII\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.5\n"
 
 #: activity/activity.info:2
 msgid "View Slides"
-msgstr ""
+msgstr "Ver Diapositivos"
 
-#: viewslides.py:82
-msgid "Read"
-msgstr ""
-
-#: viewslides.py:161
-msgid "Choose document"
-msgstr ""
-
-#: readtoolbar.py:36
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:37
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:407
 msgid "Back"
-msgstr ""
+msgstr "Voltar"
 
-#: readtoolbar.py:43
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:40
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:410
+msgid "Previous page"
+msgstr "Página anterior"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:43
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:413
+msgid "Previous bookmark"
+msgstr "Marcador anterior"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:53
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:423
 msgid "Forward"
-msgstr ""
+msgstr "Avançar"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:56
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:426
+msgid "Next page"
+msgstr "Próxima página"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:59
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:429
+msgid "Next bookmark"
+msgstr "Próximo marcador"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:108
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:473
+msgid "Toggle Bookmark"
+msgstr "Marcar"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:198
+msgid "Zoom out"
+msgstr "Afastar zoom"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:205
+msgid "Zoom in"
+msgstr "Aproximar zoom"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:217
+msgid "Fullscreen"
+msgstr "Ecrã completo"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:252
+msgid "Show Image Table"
+msgstr "Mostrar tabela de imagens"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:258
+msgid "Reload Journal Table"
+msgstr "Recarregar tabela do Diário"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:265
+msgid "Hide Image Tables"
+msgstr "Esconder tabelas de Imagens"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:277
+msgid "Add Image"
+msgstr "Adicionar imagem"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:284
+msgid "Remove Image"
+msgstr "Remover imagem"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:291
+msgid "Extract Image"
+msgstr "Extrair imagem"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:238
+msgid "Slideshow Image"
+msgstr "Imagem de Apresentação de Diapositivos"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:256
+msgid "Available Images"
+msgstr "Imagens disponíveis"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:359
+msgid "Read"
+msgstr "Ler"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:364
+msgid "View"
+msgstr "Ver"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:371
+msgid "Slides"
+msgstr "Diapositivos"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:484
+msgid "Underline"
+msgstr "Sublinhar"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
+msgid "Success"
+msgstr "Sucesso"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
+msgid " added to Journal."
+msgstr " adicionado ao Diário."
+
+#: /home/jim/olpc/viewslides/mainline/readsidebar.py:47
+msgid "Bookmark"
+msgstr "Marcar"
