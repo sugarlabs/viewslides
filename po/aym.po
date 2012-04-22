@@ -1,3 +1,7 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -13,7 +17,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.0.5\n"
 
-#  "Ver Diapositivas"
 #: activity/activity.info:2
 msgid "View Slides"
 msgstr ""
@@ -54,7 +57,6 @@ msgstr "Jutiri laphi"
 msgid "Next bookmark"
 msgstr "Jutiri chimtaña"
 
-#  "Cambiar marcador"
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:108
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:473
 msgid "Toggle Bookmark"
@@ -75,42 +77,34 @@ msgstr "Jach'aptayaña"
 msgid "Fullscreen"
 msgstr "Maypacha uñtawi"
 
-#  "Mostrar Tabla de Imagen"
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:252
 msgid "Show Image Table"
 msgstr ""
 
-#  "Recargar Tabla del Diario"
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:258
 msgid "Reload Journal Table"
 msgstr ""
 
-#  "Ocultar Tabla de Imagen"
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:265
 msgid "Hide Image Tables"
 msgstr ""
 
-#  "Añadir Imagen"
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:277
 msgid "Add Image"
 msgstr ""
 
-#  "Eliminar Imagen"
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:284
 msgid "Remove Image"
 msgstr ""
 
-#  "Extraer imagen"
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:291
 msgid "Extract Image"
 msgstr ""
 
-#  "Imagen de presentación"
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:238
 msgid "Slideshow Image"
 msgstr ""
 
-#  "Imagenes disponibles"
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:256
 msgid "Available Images"
 msgstr ""
@@ -125,7 +119,6 @@ msgstr "Ullaña"
 msgid "View"
 msgstr "Unjaña"
 
-#  "Diapositivas"
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:371
 msgid "Slides"
 msgstr ""
@@ -135,12 +128,10 @@ msgstr ""
 msgid "Underline"
 msgstr "Sich'ita qillqanaka"
 
-#  "Éxito"
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:735
 msgid "Success"
 msgstr ""
 
-#  " añadido al Diario."
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:735
 msgid " added to Journal."
 msgstr ""

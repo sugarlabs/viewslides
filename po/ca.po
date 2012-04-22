@@ -2,12 +2,48 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-22 13:44-0600\n"
+"POT-Creation-Date: 2011-08-06 15:54-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,20 +54,111 @@ msgstr ""
 
 #: activity/activity.info:2
 msgid "View Slides"
-msgstr ""
+msgstr "Vista de les diapositives"
 
-#: viewslides.py:82
-msgid "Read"
-msgstr ""
-
-#: viewslides.py:161
-msgid "Choose document"
-msgstr ""
-
-#: readtoolbar.py:36
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:37
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:407
 msgid "Back"
+msgstr "Enrere"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:40
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:410
+msgid "Previous page"
+msgstr "Pàgina anterior"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:43
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:413
+msgid "Previous bookmark"
+msgstr "Adreça d'interès Anterior"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:53
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:423
+msgid "Forward"
+msgstr "Reenvia"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:56
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:426
+msgid "Next page"
+msgstr "Pàgina següent"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:59
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:429
+msgid "Next bookmark"
+msgstr "Adreça d'interès Següent"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:108
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:473
+msgid "Toggle Bookmark"
+msgstr "Activa/desactiva Marcador"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:198
+msgid "Zoom out"
+msgstr "Allunya"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:205
+msgid "Zoom in"
+msgstr "Apropa"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:217
+msgid "Fullscreen"
+msgstr "Pantalla completa"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:252
+msgid "Show Image Table"
 msgstr ""
 
-#: readtoolbar.py:43
-msgid "Forward"
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:258
+msgid "Reload Journal Table"
 msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:265
+msgid "Hide Image Tables"
+msgstr "Amaga Taules d'Imatge"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:277
+msgid "Add Image"
+msgstr "Afegeix Imatge"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:284
+msgid "Remove Image"
+msgstr "Esborra Imatge"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:291
+msgid "Extract Image"
+msgstr "Extrau Imatge"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:238
+msgid "Slideshow Image"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:256
+msgid "Available Images"
+msgstr "Imatges disponibles"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:359
+msgid "Read"
+msgstr "Llegit"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:364
+msgid "View"
+msgstr "Visualitza"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:371
+msgid "Slides"
+msgstr "Transparències"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:484
+msgid "Underline"
+msgstr "Subratllat"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
+msgid "Success"
+msgstr "Èxit"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
+msgid " added to Journal."
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/readsidebar.py:47
+msgid "Bookmark"
+msgstr "Preferit"

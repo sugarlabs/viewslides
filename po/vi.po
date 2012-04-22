@@ -2,12 +2,40 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-30 15:15-0500\n"
-"PO-Revision-Date: 2010-03-07 17:28+0200\n"
+"POT-Creation-Date: 2011-08-06 15:54-0500\n"
+"PO-Revision-Date: 2010-04-28 15:49+0200\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: vi\n"
@@ -15,37 +43,44 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Pootle 2.0.1\n"
+"X-Generator: Pootle 2.0.3\n"
 
 #: activity/activity.info:2
 msgid "View Slides"
 msgstr "Xem ảnh chiếu"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:37
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:407
 msgid "Back"
 msgstr "Lùi"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:40
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:410
 msgid "Previous page"
 msgstr "Trang trước"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:43
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:413
 msgid "Previous bookmark"
 msgstr "Dấu nhớ trước"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:53
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:423
 msgid "Forward"
 msgstr "Tiếp"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:56
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:426
 msgid "Next page"
 msgstr "Trang tiếp"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:59
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:429
 msgid "Next bookmark"
 msgstr "Dấu nhớ tiếp"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:108
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:473
 msgid "Toggle Bookmark"
 msgstr "Bật/tắt dấu nhớ"
 
@@ -85,31 +120,35 @@ msgstr "Bỏ ảnh"
 msgid "Extract Image"
 msgstr "Giải ảnh"
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:192
-msgid "Read"
-msgstr "Đọc"
-
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:196
-msgid "View"
-msgstr "Xem"
-
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:203
-msgid "Slides"
-msgstr "Ảnh chiếu"
-
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:239
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:238
 msgid "Slideshow Image"
 msgstr "Ảnh trình chiếu"
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:257
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:256
 msgid "Available Images"
 msgstr "Các ảnh sẵn sàng"
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:512
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:359
+msgid "Read"
+msgstr "Đọc"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:364
+msgid "View"
+msgstr "Xem"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:371
+msgid "Slides"
+msgstr "Ảnh chiếu"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:484
+msgid "Underline"
+msgstr "Gạch dưới"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
 msgid "Success"
 msgstr "Thành công"
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:512
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
 msgid " added to Journal."
 msgstr " được thêm vào Nhật ký."
 

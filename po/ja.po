@@ -2,50 +2,85 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-30 15:15-0500\n"
-"PO-Revision-Date: 2010-01-22 04:45+0200\n"
-"Last-Translator: korakurider <korakurider@gmail.com>\n"
+"POT-Creation-Date: 2011-08-06 15:54-0500\n"
+"PO-Revision-Date: 2011-12-16 06:07+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Pootle 2.0.1\n"
+"X-Generator: Pootle 2.0.5\n"
 
 #: activity/activity.info:2
 msgid "View Slides"
 msgstr "スライド表示"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:37
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:407
 msgid "Back"
 msgstr "戻る"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:40
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:410
 msgid "Previous page"
 msgstr "前ページ"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:43
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:413
 msgid "Previous bookmark"
 msgstr "前のブックマーク"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:53
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:423
 msgid "Forward"
 msgstr "進む"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:56
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:426
 msgid "Next page"
 msgstr "次ページ"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:59
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:429
 msgid "Next bookmark"
 msgstr "次のブックマーク"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:108
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:473
 msgid "Toggle Bookmark"
 msgstr "ブックマークを切り替える"
 
@@ -85,33 +120,37 @@ msgstr "画像を削除"
 msgid "Extract Image"
 msgstr "画像を切り出す"
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:192
-msgid "Read"
-msgstr "閲覧"
-
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:196
-msgid "View"
-msgstr "表示"
-
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:203
-msgid "Slides"
-msgstr "スライド"
-
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:239
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:238
 msgid "Slideshow Image"
 msgstr "画像をスライドショー表示する"
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:257
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:256
 msgid "Available Images"
 msgstr "利用可能な画像"
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:512
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:359
+msgid "Read"
+msgstr "閲覧"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:364
+msgid "View"
+msgstr "表示"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:371
+msgid "Slides"
+msgstr "スライド"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:484
+msgid "Underline"
+msgstr "下線"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
 msgid "Success"
 msgstr "成功"
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:512
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
 msgid " added to Journal."
-msgstr "ジャーナルに追加しました。"
+msgstr " ジャーナルに追加しました。"
 
 #: /home/jim/olpc/viewslides/mainline/readsidebar.py:47
 msgid "Bookmark"

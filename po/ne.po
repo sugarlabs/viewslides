@@ -1,3 +1,31 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Nepali translations for PACKAGE package.
 # Copyright (C) 2009 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
@@ -6,47 +34,124 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-30 18:21-0400\n"
-"PO-Revision-Date: 2009-02-23 19:17-0600\n"
-"Last-Translator: James Simmons <ja.simmons@sbcglobal.net>\n"
+"POT-Creation-Date: 2011-08-06 15:54-0500\n"
+"PO-Revision-Date: 2011-07-15 05:09+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: Nepali\n"
+"Language: ne\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.3.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.1\n"
 
 #: activity/activity.info:2
 msgid "View Slides"
-msgstr ""
+msgstr "स्लाइडहरु देखाऊ"
 
-#: viewslides.py:105
-msgid "Read"
-msgstr ""
-
-#: viewslides.py:109
-msgid "View"
-msgstr ""
-
-#: viewslides.py:188
-msgid "Choose document"
-msgstr ""
-
-#: readtoolbar.py:36
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:37
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:407
 msgid "Back"
-msgstr ""
+msgstr "पछाडि"
 
-#: readtoolbar.py:43
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:40
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:410
+msgid "Previous page"
+msgstr "पहिलेको पाना"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:43
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:413
+msgid "Previous bookmark"
+msgstr "पहिलेको पुस्तक-चिनो"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:53
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:423
 msgid "Forward"
-msgstr ""
+msgstr "अगाडि"
 
-#: readtoolbar.py:163
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:56
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:426
+msgid "Next page"
+msgstr "अर्को पाना"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:59
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:429
+msgid "Next bookmark"
+msgstr "अर्को पुस्तक-चिनो"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:108
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:473
+msgid "Toggle Bookmark"
+msgstr "पुस्तक-चिनो टगल गर"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:198
 msgid "Zoom out"
-msgstr ""
+msgstr "सानो बनाऊ"
 
-#: readtoolbar.py:170
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:205
 msgid "Zoom in"
-msgstr ""
+msgstr "ठूलो बनाऊ"
 
-#: readtoolbar.py:182
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:217
 msgid "Fullscreen"
-msgstr ""
+msgstr "पुरै पर्दा"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:252
+msgid "Show Image Table"
+msgstr "चित्र टेबल देखाउ"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:258
+msgid "Reload Journal Table"
+msgstr "पंजिका टेबल पुन:लोड गर"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:265
+msgid "Hide Image Tables"
+msgstr "चित्र टेबल लुकाउ"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:277
+msgid "Add Image"
+msgstr "चित्र थप"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:284
+msgid "Remove Image"
+msgstr "चित्र हटाउ"
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:291
+msgid "Extract Image"
+msgstr "चित्र झिक्नुहोस्"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:238
+msgid "Slideshow Image"
+msgstr "चित्र स्लाइडसो"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:256
+msgid "Available Images"
+msgstr "उपलब्ध चित्रहरु"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:359
+msgid "Read"
+msgstr "पढ"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:364
+msgid "View"
+msgstr "दृश्य"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:371
+msgid "Slides"
+msgstr "स्लाईडहरु"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:484
+msgid "Underline"
+msgstr "कच"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
+msgid "Success"
+msgstr "सफलता"
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
+msgid " added to Journal."
+msgstr " पंजिकामा थपियो"
+
+#: /home/jim/olpc/viewslides/mainline/readsidebar.py:47
+msgid "Bookmark"
+msgstr "पुस्तक-चिनो"

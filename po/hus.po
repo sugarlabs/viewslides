@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-06 15:54-0500\n"
-"PO-Revision-Date: 2011-08-26 17:24+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"PO-Revision-Date: 2011-08-29 07:35+0200\n"
+"Last-Translator: <zurisadai_k@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hus\n"
 "MIME-Version: 1.0\n"
@@ -19,106 +19,106 @@ msgstr ""
 
 #: activity/activity.info:2
 msgid "View Slides"
-msgstr "tsu´uw an tiplab"
+msgstr "Tsu´uw an tiplab"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:37
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:407
 msgid "Back"
-msgstr "wichiy"
+msgstr "Wichiy"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:40
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:410
 msgid "Previous page"
-msgstr "xi ok´xidh wal xeklek"
+msgstr "Xi ok´xidh wal xeklek"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:43
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:413
 msgid "Previous bookmark"
-msgstr "tapidhbel xi ok´xidh"
+msgstr "Tapidhbel xi ok´xidh"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:53
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:423
 msgid "Forward"
-msgstr "ainanchij"
+msgstr "Ne'etsnanchij"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:56
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:426
 msgid "Next page"
-msgstr "junake i walxeklek"
+msgstr "Junake i walxeklek"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:59
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:429
 msgid "Next bookmark"
-msgstr "ju´nake i tapidh bel"
+msgstr "Ju´nake i tapidh bel"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:108
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:473
 msgid "Toggle Bookmark"
-msgstr "ka jalkuy an tapidh bel"
+msgstr "Ka jalkuy an tapidh bel"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:198
 msgid "Zoom out"
-msgstr "tsipti´medha´"
+msgstr "Tsipti'méjdha'"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:205
 msgid "Zoom in"
-msgstr "puwedha´"
+msgstr "Puwedha´"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:217
 msgid "Fullscreen"
-msgstr "putat walek"
+msgstr "Putat walek"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:252
 msgid "Show Image Table"
-msgstr "tejwa´medha´ an tiplab ti yan i tse´ wal"
+msgstr "Tejwa´medha´ an tiplab ti yan i tse´ wal"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:258
 msgid "Reload Journal Table"
-msgstr "ka tuchiy an dhuchel dhuchlab"
+msgstr "Ka tuchiy an dhuchel dhuchlab"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:265
 msgid "Hide Image Tables"
-msgstr "ka tsi´nka an k´elab tiplab"
+msgstr "Ka tsi´nka an k´elab tiplab"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:277
 msgid "Add Image"
-msgstr "ka punchiy an tiplab"
+msgstr "Ka punchiy an tiplab"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:284
 msgid "Remove Image"
-msgstr "ka pakuw an tiplab"
+msgstr "Ka pakuw an tiplab"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:291
 msgid "Extract Image"
-msgstr "kakadh an tiplab"
+msgstr "Kakadh an tiplab"
 
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:238
 msgid "Slideshow Image"
-msgstr "tiplab tejwa´medha"
+msgstr "T'iplab tejwa´medha"
 
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:256
 msgid "Available Images"
-msgstr "tiplabchik jolat"
+msgstr "T'iplabchik jolat"
 
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:359
 msgid "Read"
-msgstr "ajum"
+msgstr "Ajum"
 
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:364
 msgid "View"
-msgstr "tsu´uw"
+msgstr "Tsu´uw"
 
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:371
 msgid "Slides"
-msgstr "tejwamedhomtalb"
+msgstr "Tejwamedhomtalb"
 
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:484
 msgid "Underline"
-msgstr "ka kitsoy"
+msgstr "Ka kitsoy"
 
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:735
 msgid "Success"
-msgstr "alwutalab"
+msgstr "Alwutalab"
 
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:735
 msgid " added to Journal."
@@ -126,4 +126,4 @@ msgstr " punkudh chudhel dhuchlab."
 
 #: /home/jim/olpc/viewslides/mainline/readsidebar.py:47
 msgid "Bookmark"
-msgstr "tapidhbel"
+msgstr "Tapidhbel"
