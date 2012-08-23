@@ -39,19 +39,19 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-06 15:54-0500\n"
-"PO-Revision-Date: 2011-04-14 06:12+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"PO-Revision-Date: 2012-07-04 10:37+0200\n"
+"Last-Translator: jui <appukonrad@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Pootle 2.0.1\n"
+"X-Generator: Pootle 2.0.5\n"
 
 #: activity/activity.info:2
 msgid "View Slides"
-msgstr ""
+msgstr "Zobrazit prezentace"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:37
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:407
@@ -61,12 +61,12 @@ msgstr "Zpět"
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:40
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:410
 msgid "Previous page"
-msgstr ""
+msgstr "Předchozí stránka"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:43
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:413
 msgid "Previous bookmark"
-msgstr ""
+msgstr "Předchozí záložka"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:53
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:423
@@ -76,29 +76,29 @@ msgstr "Vpřed"
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:56
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:426
 msgid "Next page"
-msgstr ""
+msgstr "Další stránka"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:59
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:429
 msgid "Next bookmark"
-msgstr ""
+msgstr "Další záložka"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:108
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:473
 msgid "Toggle Bookmark"
-msgstr ""
+msgstr "Přepnout záložku"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:198
 msgid "Zoom out"
-msgstr "Zmenšit"
+msgstr "Oddálit"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:205
 msgid "Zoom in"
-msgstr "Zvětšit"
+msgstr "Přiblížit"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:217
 msgid "Fullscreen"
-msgstr "Celá obrazovka"
+msgstr "Na celou obrazovku"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:252
 msgid "Show Image Table"
@@ -114,11 +114,11 @@ msgstr ""
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:277
 msgid "Add Image"
-msgstr ""
+msgstr "Přidat obrázek"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:284
 msgid "Remove Image"
-msgstr ""
+msgstr "Odstranit obrázek"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:291
 msgid "Extract Image"
