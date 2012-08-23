@@ -30,19 +30,20 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-06 15:54-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2012-05-22 02:13+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.5.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Pootle 2.0.5\n"
 
 #: activity/activity.info:2
 msgid "View Slides"
@@ -55,13 +56,15 @@ msgstr ""
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:40
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:410
+#, fuzzy
 msgid "Previous page"
-msgstr ""
+msgstr "Halaman sebelumnya"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:43
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:413
+#, fuzzy
 msgid "Previous bookmark"
-msgstr ""
+msgstr "Alamat sebelumnya"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:53
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:423
@@ -70,13 +73,15 @@ msgstr ""
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:56
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:426
+#, fuzzy
 msgid "Next page"
-msgstr ""
+msgstr "Halaman selanjutnya"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:59
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:429
+#, fuzzy
 msgid "Next bookmark"
-msgstr ""
+msgstr "Alamat selanjutnya"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:108
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:473
@@ -84,16 +89,19 @@ msgid "Toggle Bookmark"
 msgstr ""
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:198
+#, fuzzy
 msgid "Zoom out"
-msgstr ""
+msgstr "Perkecil"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:205
+#, fuzzy
 msgid "Zoom in"
-msgstr ""
+msgstr "Perbesar"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:217
+#, fuzzy
 msgid "Fullscreen"
-msgstr ""
+msgstr "Layar Penuh"
 
 #: /home/jim/olpc/viewslides/mainline/readtoolbar.py:252
 msgid "Show Image Table"
@@ -128,20 +136,23 @@ msgid "Available Images"
 msgstr ""
 
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:359
+#, fuzzy
 msgid "Read"
-msgstr ""
+msgstr "Baca"
 
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:364
+#, fuzzy
 msgid "View"
-msgstr ""
+msgstr "Tampilan"
 
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:371
 msgid "Slides"
 msgstr ""
 
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:484
+#, fuzzy
 msgid "Underline"
-msgstr ""
+msgstr "Garis bawah"
 
 #: /home/jim/olpc/viewslides/mainline/viewslides.py:735
 msgid "Success"
@@ -152,5 +163,6 @@ msgid " added to Journal."
 msgstr ""
 
 #: /home/jim/olpc/viewslides/mainline/readsidebar.py:47
+#, fuzzy
 msgid "Bookmark"
-msgstr ""
+msgstr "Alamat"
