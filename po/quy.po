@@ -1,0 +1,127 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-08-06 15:54-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Translate Toolkit 1.7.0\n"
+
+#: activity/activity.info:2
+msgid "View Slides"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:37
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:407
+msgid "Back"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:40
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:410
+msgid "Previous page"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:43
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:413
+msgid "Previous bookmark"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:53
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:423
+msgid "Forward"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:56
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:426
+msgid "Next page"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:59
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:429
+msgid "Next bookmark"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:108
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:473
+msgid "Toggle Bookmark"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:198
+msgid "Zoom out"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:205
+msgid "Zoom in"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:217
+msgid "Fullscreen"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:252
+msgid "Show Image Table"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:258
+msgid "Reload Journal Table"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:265
+msgid "Hide Image Tables"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:277
+msgid "Add Image"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:284
+msgid "Remove Image"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:291
+msgid "Extract Image"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:238
+msgid "Slideshow Image"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:256
+msgid "Available Images"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:359
+msgid "Read"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:364
+msgid "View"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:371
+msgid "Slides"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:484
+msgid "Underline"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
+msgid "Success"
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
+msgid " added to Journal."
+msgstr ""
+
+#: /home/jim/olpc/viewslides/mainline/readsidebar.py:47
+msgid "Bookmark"
+msgstr ""
