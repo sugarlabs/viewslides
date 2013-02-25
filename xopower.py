@@ -1,5 +1,3 @@
-#! /usr/bin/env python
-
 # Copyright (C) 2009 James D. Simmons
 #
 # This program is free software; you can redistribute it and/or modify
@@ -25,7 +23,7 @@ _HARDWARE_MANAGER_INTERFACE = 'org.laptop.HardwareManager'
 _HARDWARE_MANAGER_SERVICE = 'org.laptop.HardwareManager'
 _HARDWARE_MANAGER_OBJECT_PATH = '/org/laptop/HardwareManager'
 
-_logger = logging.getLogger('read-etexts-activity')
+_logger = logging.getLogger('viewslides-activity')
 
 # start with sleep off
 sleep_inhibit = True

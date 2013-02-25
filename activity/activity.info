@@ -1,9 +1,10 @@
 [Activity]
 name = View Slides
-service_name = org.laptop.ViewSlidesActivity
+bundle_id = org.laptop.ViewSlidesActivity
 exec = sugar-activity viewslides.ViewSlidesActivity
-activity_version = 11
+activity_version = 14
 icon = ViewSlides
 show_launcher = yes
-mime_types = application/zip
+mime_types = application/zip;application/x-cbz
 license = GPLv2+
+summary = Read and annotate comic book .cbz files and other collections of image files stored in Zip archives.
