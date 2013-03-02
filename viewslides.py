@@ -210,6 +210,7 @@ class ViewSlidesActivity(activity.Activity):
         self.eventbox.show()
         self.scrolled.add_with_viewport(self.eventbox)
         self.eventbox.set_events(Gdk.EventMask.KEY_PRESS_MASK | Gdk.EventMask.BUTTON_PRESS_MASK)
+        self.eventbox.set_can_focus(True)
         self.eventbox.connect("key_press_event", self.keypress_cb)
         self.eventbox.connect("button_press_event", self.buttonpress_cb)
  
@@ -758,6 +759,7 @@ class ViewSlidesActivity(activity.Activity):
         self.tempfile = new_zipfile
 
     def buttonpress_cb(self, widget, event):
+        print "got focus"
         widget.grab_focus()
 
     def __view_toolbar_go_fullscreen_cb(self, view_toolbar):
@@ -861,25 +863,25 @@ class ViewSlidesActivity(activity.Activity):
 
     def scroll_down(self):
         v_adjustment = self.scrolled.get_vadjustment()
-        if v_adjustment.value == v_adjustment.get_upper() - v_adjustment.get_page_size():
+        if v_adjustment.get_value() == v_adjustment.get_upper() - v_adjustment.get_page_size():
             self.next_page()
             return
-        if v_adjustment.value < v_adjustment.get_upper() - v_adjustment.get_page_size():
-            new_value = v_adjustment.value + v_adjustment.step_increment
+        if v_adjustment.get_value() < v_adjustment.get_upper() - v_adjustment.get_page_size():
+            new_value = v_adjustment.get_value() + v_adjustment.get_step_increment()
             if new_value > v_adjustment.get_upper() - v_adjustment.get_page_size():
                 new_value = v_adjustment.get_upper() - v_adjustment.get_page_size()
-            v_adjustment.value = new_value
+            v_adjustment.set_value(new_value)
 
     def scroll_up(self):
         v_adjustment = self.scrolled.get_vadjustment()
-        if v_adjustment.value == v_adjustment.get_lower():
+        if v_adjustment.get_value() == v_adjustment.get_lower():
             self.previous_page()
             return
-        if v_adjustment.value > v_adjustment.get_lower():
-            new_value = v_adjustment.value - v_adjustment.step_increment
+        if v_adjustment.get_value() > v_adjustment.get_lower():
+            new_value = v_adjustment.get_value() - v_adjustment.get_step_increment()
             if new_value < v_adjustment.get_lower():
                 new_value = v_adjustment.get_lower()
-            v_adjustment.value = new_value
+            v_adjustment.set_value(new_value)
 
     def previous_page(self):
         textbuffer = self.annotation_textview.get_buffer()
@@ -894,7 +896,7 @@ class ViewSlidesActivity(activity.Activity):
             os.remove(fname)
             self.show_bookmark_state(page)
         v_adjustment = self.scrolled.get_vadjustment()
-        v_adjustment.value = v_adjustment.get_upper() - v_adjustment.get_page_size()
+        v_adjustment.set_value(v_adjustment.get_upper() - v_adjustment.get_page_size())
         self.set_current_page(page)
         self.page = page
         annotation_textbuffer = self.annotation_textview.get_buffer()
@@ -910,7 +912,6 @@ class ViewSlidesActivity(activity.Activity):
             self.annotations_dirty = True
         page = self.page
         page = page + 1
-        print "\n\n\n", page, "\n\n\n"
         if page >= len(self.image_files): page=len(self.image_files) - 1
         if self.save_extracted_file(self.zf, self.image_files[page]) == True:
             fname = os.path.join(self.get_activity_root(), 'instance',  self.make_new_filename(self.image_files[page]))
@@ -918,7 +919,7 @@ class ViewSlidesActivity(activity.Activity):
             os.remove(fname)
             self.show_bookmark_state(page)
         v_adjustment = self.scrolled.get_vadjustment()
-        v_adjustment.value = v_adjustment.get_lower()
+        v_adjustment.set_value(v_adjustment.get_lower())
         self.set_current_page(page)
         self.page = page
         annotation_textbuffer = self.annotation_textview.get_buffer()
