@@ -1,6 +1,7 @@
 # Copyright 2009 One Laptop Per Child
 # Author: Sayamindu Dasgupta <sayamindu@laptop.org>
 #    and James Simmons <nicestep@gmail.com>
+#    and Aneesh Dogra <lionaneesh@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

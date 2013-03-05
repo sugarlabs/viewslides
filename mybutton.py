@@ -1,7 +1,8 @@
 # mybutton.py  A version of ActivityToolbarButton that hides the "Keep"
 # button.
 
-# Copyright (C) 2010  James D. Simmons
+# Copyright (C) 2010, 2013  James D. Simmons
+# Copyright (C) 2012 Aneesh Dogra <lionaneesh@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
