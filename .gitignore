@@ -6,4 +6,5 @@ View Slides.e4p
 .ropeproject/objectdb
 *.pyc
 dist
+locale
 
