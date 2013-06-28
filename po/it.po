@@ -34,7 +34,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-06 15:54-0500\n"
+"POT-Creation-Date: 2013-02-25 00:32-0500\n"
 "PO-Revision-Date: 2010-04-15 19:13+0200\n"
 "Last-Translator: Carlo Falciola <cfalciola@yahoo.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,116 +45,112 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.0.3\n"
 
-#: activity/activity.info:2
+#. TRANS: "name" option from activity.info file
 msgid "View Slides"
 msgstr "Visualizza Diapositive"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:37
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:407
+#. TRANS: "summary" option from activity.info file
+#. TRANS: "description" option from activity.info file
+msgid ""
+"Read and annotate comic book .cbz files and other collections of image files "
+"stored in Zip archives."
+msgstr ""
+
+#: readsidebar.py:47
+msgid "Bookmark"
+msgstr "Segnalibro"
+
+#: readtoolbar.py:36 viewslides.py:358
 msgid "Back"
 msgstr "Indietro"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:40
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:410
+#: readtoolbar.py:39 viewslides.py:361
 msgid "Previous page"
 msgstr "Pagina precedente"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:43
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:413
+#: readtoolbar.py:42 viewslides.py:364
 msgid "Previous bookmark"
 msgstr "Segnalibro precedente"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:53
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:423
+#: readtoolbar.py:52 viewslides.py:374
 msgid "Forward"
 msgstr "Avanti"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:56
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:426
+#: readtoolbar.py:55 viewslides.py:377
 msgid "Next page"
 msgstr "Prossima Pagina"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:59
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:429
+#: readtoolbar.py:58 viewslides.py:380
 msgid "Next bookmark"
 msgstr "Prossimo Segnalibro"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:108
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:473
+#: readtoolbar.py:103 viewslides.py:419
 msgid "Toggle Bookmark"
 msgstr "Attiva/Disattiva Segnalibro"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:198
+#: readtoolbar.py:188 viewslides.py:433
 msgid "Zoom out"
 msgstr "Zoom indietro"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:205
+#: readtoolbar.py:195 viewslides.py:440
 msgid "Zoom in"
 msgstr "Zoom avanti"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:217
+#: readtoolbar.py:207 viewslides.py:447
 msgid "Fullscreen"
 msgstr "Schermo intero"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:252
+#: readtoolbar.py:242
 msgid "Show Image Table"
 msgstr "Mostra la tavola delle immagini"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:258
+#: readtoolbar.py:248
 msgid "Reload Journal Table"
 msgstr "Ricarica la tavola dal Diario"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:265
+#: readtoolbar.py:255
 msgid "Hide Image Tables"
 msgstr "Nascondila tavola delle immagini"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:277
+#: readtoolbar.py:267
 msgid "Add Image"
 msgstr "Aggiungi Immagine"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:284
+#: readtoolbar.py:274
 msgid "Remove Image"
 msgstr "Elimina Immagine"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:291
+#: readtoolbar.py:281
 msgid "Extract Image"
 msgstr "Estrai Immagine"
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:238
+#: viewslides.py:232
 msgid "Slideshow Image"
 msgstr "Presentazione Immagini"
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:256
+#: viewslides.py:250
 msgid "Available Images"
 msgstr "Immagini disponibili"
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:359
-msgid "Read"
-msgstr "Leggi"
-
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:364
-msgid "View"
-msgstr "Visualizza"
-
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:371
-msgid "Slides"
-msgstr "Diapositive"
-
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:484
-msgid "Underline"
-msgstr "Sottolinea"
-
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
+#: viewslides.py:701
 msgid "Success"
 msgstr "Successo"
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
+#: viewslides.py:701
 msgid " added to Journal."
 msgstr " inserito nel Diario."
 
-#: /home/jim/olpc/viewslides/mainline/readsidebar.py:47
-msgid "Bookmark"
-msgstr "Segnalibro"
+#~ msgid "Read"
+#~ msgstr "Leggi"
+
+#~ msgid "View"
+#~ msgstr "Visualizza"
+
+#~ msgid "Slides"
+#~ msgstr "Diapositive"
+
+#~ msgid "Underline"
+#~ msgstr "Sottolinea"
 
 #~ msgid "Choose document"
 #~ msgstr "Scegli documento"

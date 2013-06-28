@@ -34,7 +34,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-06 15:54-0500\n"
+"POT-Creation-Date: 2013-02-25 00:32-0500\n"
 "PO-Revision-Date: 2011-07-03 14:50+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,116 +45,112 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.0.1\n"
 
-#: activity/activity.info:2
+#. TRANS: "name" option from activity.info file
 msgid "View Slides"
 msgstr "படவில்லைகளை நோக்கு"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:37
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:407
+#. TRANS: "summary" option from activity.info file
+#. TRANS: "description" option from activity.info file
+msgid ""
+"Read and annotate comic book .cbz files and other collections of image files "
+"stored in Zip archives."
+msgstr ""
+
+#: readsidebar.py:47
+msgid "Bookmark"
+msgstr "புத்தகக்குறி"
+
+#: readtoolbar.py:36 viewslides.py:358
 msgid "Back"
 msgstr "பின்"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:40
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:410
+#: readtoolbar.py:39 viewslides.py:361
 msgid "Previous page"
 msgstr "முன்னைய பக்கம்"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:43
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:413
+#: readtoolbar.py:42 viewslides.py:364
 msgid "Previous bookmark"
 msgstr "முன்னைய புத்தகக்குறி"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:53
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:423
+#: readtoolbar.py:52 viewslides.py:374
 msgid "Forward"
 msgstr "முன்"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:56
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:426
+#: readtoolbar.py:55 viewslides.py:377
 msgid "Next page"
 msgstr "அடுத்தது பக்கம்"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:59
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:429
+#: readtoolbar.py:58 viewslides.py:380
 msgid "Next bookmark"
 msgstr "அடுத்த புத்தகக்குறி"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:108
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:473
+#: readtoolbar.py:103 viewslides.py:419
 msgid "Toggle Bookmark"
 msgstr "மாறுகின்ற புத்தகக்குறி"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:198
+#: readtoolbar.py:188 viewslides.py:433
 msgid "Zoom out"
 msgstr "சிறிதாக்கிக் காட்டு"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:205
+#: readtoolbar.py:195 viewslides.py:440
 msgid "Zoom in"
 msgstr "பெரிதாக்கு"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:217
+#: readtoolbar.py:207 viewslides.py:447
 msgid "Fullscreen"
 msgstr "முழுத்திரை"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:252
+#: readtoolbar.py:242
 msgid "Show Image Table"
 msgstr "பட அட்டவணையைக் காட்டு"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:258
+#: readtoolbar.py:248
 msgid "Reload Journal Table"
 msgstr "சஞ்சிகை அட்டவணையை மீள்ஏற்று"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:265
+#: readtoolbar.py:255
 msgid "Hide Image Tables"
 msgstr "பட அட்டவணையை மறை"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:277
+#: readtoolbar.py:267
 msgid "Add Image"
 msgstr "படத்தைச் சேர்"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:284
+#: readtoolbar.py:274
 msgid "Remove Image"
 msgstr "படத்தை அகற்று"
 
-#: /home/jim/olpc/viewslides/mainline/readtoolbar.py:291
+#: readtoolbar.py:281
 msgid "Extract Image"
 msgstr "படத்தை பிரித்தெடு"
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:238
+#: viewslides.py:232
 msgid "Slideshow Image"
 msgstr "அளிக்கைக்காட்சி படம்"
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:256
+#: viewslides.py:250
 msgid "Available Images"
 msgstr "இருக்கும் படங்கள்"
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:359
-msgid "Read"
-msgstr "வாசி"
-
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:364
-msgid "View"
-msgstr "நோக்கு"
-
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:371
-msgid "Slides"
-msgstr "படவில்லை"
-
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:484
-msgid "Underline"
-msgstr "அடிகோடு"
-
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
+#: viewslides.py:701
 msgid "Success"
 msgstr "வெற்றி"
 
-#: /home/jim/olpc/viewslides/mainline/viewslides.py:735
+#: viewslides.py:701
 msgid " added to Journal."
 msgstr " சஞ்சிகையுடன் சேர்க்கப்பட்டது"
 
-#: /home/jim/olpc/viewslides/mainline/readsidebar.py:47
-msgid "Bookmark"
-msgstr "புத்தகக்குறி"
+#~ msgid "Read"
+#~ msgstr "வாசி"
+
+#~ msgid "View"
+#~ msgstr "நோக்கு"
+
+#~ msgid "Slides"
+#~ msgstr "படவில்லை"
+
+#~ msgid "Underline"
+#~ msgstr "அடிகோடு"
 
 #~ msgid "Choose document"
 #~ msgstr "ஆவணத்தை தெரிவு செய்"
