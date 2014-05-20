@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-25 00:32-0500\n"
-"PO-Revision-Date: 2012-04-28 07:18+0200\n"
+"PO-Revision-Date: 2014-05-20 19:11+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: nah\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 #. TRANS: "name" option from activity.info file
 msgid "View Slides"
-msgstr ""
+msgstr "Moitas tlaixpanextilli"
 
 #. TRANS: "summary" option from activity.info file
 #. TRANS: "description" option from activity.info file
@@ -27,88 +27,89 @@ msgid ""
 "Read and annotate comic book .cbz files and other collections of image files "
 "stored in Zip archives."
 msgstr ""
+"Xikixpowa wan xiamaijkuilo tlen pakilli ipan ajokuilli CBZ wan sekinok "
+"tlanejchikolliXitemaka ixkopintli tlen eltok ajokuilko zip."
 
 #: readsidebar.py:47
 msgid "Bookmark"
-msgstr ""
+msgstr "Tlaxájketl"
 
 #: readtoolbar.py:36 viewslides.py:358
-#, fuzzy
 msgid "Back"
 msgstr "Tlakuepilis"
 
 #: readtoolbar.py:39 viewslides.py:361
 msgid "Previous page"
-msgstr ""
+msgstr "Achtowi amaiswatl"
 
 #: readtoolbar.py:42 viewslides.py:364
 msgid "Previous bookmark"
-msgstr ""
+msgstr "Achtowi tlaxájketl"
 
 #: readtoolbar.py:52 viewslides.py:374
 msgid "Forward"
-msgstr ""
+msgstr "Nejnemis"
 
 #: readtoolbar.py:55 viewslides.py:377
 msgid "Next page"
-msgstr ""
+msgstr "Teipan amaiswatl"
 
 #: readtoolbar.py:58 viewslides.py:380
 msgid "Next bookmark"
-msgstr ""
+msgstr "Teipan tlaxájketl cali tlaixtempa"
 
 #: readtoolbar.py:103 viewslides.py:419
 msgid "Toggle Bookmark"
-msgstr ""
+msgstr "Tlaxájketl mopatlas"
 
 #: readtoolbar.py:188 viewslides.py:433
 msgid "Zoom out"
-msgstr ""
+msgstr "Ololos"
 
 #: readtoolbar.py:195 viewslides.py:440
 msgid "Zoom in"
-msgstr ""
+msgstr "Wextilis"
 
 #: readtoolbar.py:207 viewslides.py:447
 msgid "Fullscreen"
-msgstr ""
+msgstr "Nochi ixpantli"
 
 #: readtoolbar.py:242
 msgid "Show Image Table"
-msgstr ""
+msgstr "Moixpantis wuapalli tlen ixkopintli"
 
 #: readtoolbar.py:248
 msgid "Reload Journal Table"
-msgstr ""
+msgstr "nochipayotl motlamamaltis wapalli"
 
 #: readtoolbar.py:255
 msgid "Hide Image Tables"
-msgstr ""
+msgstr "Momiyanas wapalli tlen ixkopintli"
 
 #: readtoolbar.py:267
 msgid "Add Image"
-msgstr ""
+msgstr "Kipiwis ixkopintili"
 
 #: readtoolbar.py:274
 msgid "Remove Image"
-msgstr ""
+msgstr "ixpoliwis ixkopintili"
 
 #: readtoolbar.py:281
 msgid "Extract Image"
-msgstr ""
+msgstr "Mokuis ixkopintili"
 
 #: viewslides.py:232
 msgid "Slideshow Image"
-msgstr ""
+msgstr "Tlaixpantilli tlen ixkopintli"
 
 #: viewslides.py:250
 msgid "Available Images"
-msgstr ""
+msgstr "Onkaj ixkopintli"
 
 #: viewslides.py:701
 msgid "Success"
-msgstr ""
+msgstr "yajatilli"
 
 #: viewslides.py:701
 msgid " added to Journal."
-msgstr ""
+msgstr " Nochipayotl mopiwij"
