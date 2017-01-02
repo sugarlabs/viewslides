@@ -35,19 +35,20 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-25 00:32-0500\n"
-"PO-Revision-Date: 2010-02-13 01:07+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"PO-Revision-Date: 2017-01-02 20:53+0000\n"
+"Last-Translator: Chris <cjl@sugarlabs.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: pap\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.0.1\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1483390410.000000\n"
 
 #. TRANS: "name" option from activity.info file
 msgid "View Slides"
-msgstr "wak dia"
+msgstr "Wak dia"
 
 #. TRANS: "summary" option from activity.info file
 #. TRANS: "description" option from activity.info file
@@ -62,23 +63,23 @@ msgstr ""
 
 #: readtoolbar.py:36 viewslides.py:358
 msgid "Back"
-msgstr "bèk"
+msgstr "Bèk"
 
 #: readtoolbar.py:39 viewslides.py:361
 msgid "Previous page"
-msgstr "página anterior"
+msgstr "Página anterior"
 
 #: readtoolbar.py:42 viewslides.py:364
 msgid "Previous bookmark"
-msgstr "markadó anterior"
+msgstr "Markadó anterior"
 
 #: readtoolbar.py:52 viewslides.py:374
 msgid "Forward"
-msgstr "manda padilanti"
+msgstr "Manda padilanti"
 
 #: readtoolbar.py:55 viewslides.py:377
 msgid "Next page"
-msgstr "siguiente página"
+msgstr "Siguiente página"
 
 #: readtoolbar.py:58 viewslides.py:380
 msgid "Next bookmark"
@@ -90,19 +91,19 @@ msgstr ""
 
 #: readtoolbar.py:188 viewslides.py:433
 msgid "Zoom out"
-msgstr "ekspandé"
+msgstr "Ekspandé"
 
 #: readtoolbar.py:195 viewslides.py:440
 msgid "Zoom in"
-msgstr "hala serka"
+msgstr "Hala serka"
 
 #: readtoolbar.py:207 viewslides.py:447
 msgid "Fullscreen"
-msgstr "pantaya kompletu"
+msgstr "Pantaya kompletu"
 
 #: readtoolbar.py:242
 msgid "Show Image Table"
-msgstr "mustra tabèl di imagen"
+msgstr "Mustra tabèl di imagen"
 
 #: readtoolbar.py:248
 msgid "Reload Journal Table"
