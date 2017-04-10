@@ -43,19 +43,20 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-25 00:32-0500\n"
-"PO-Revision-Date: 2011-04-07 05:46+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"PO-Revision-Date: 2016-11-28 11:52+0000\n"
+"Last-Translator: Besnik_b <besnik@programeshqip.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: sq\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.0.1\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1480333926.000000\n"
 
 #. TRANS: "name" option from activity.info file
 msgid "View Slides"
-msgstr "Shikim i rrjedhshëm"
+msgstr "Shihni Diapozitiva"
 
 #. TRANS: "summary" option from activity.info file
 #. TRANS: "description" option from activity.info file
@@ -63,14 +64,16 @@ msgid ""
 "Read and annotate comic book .cbz files and other collections of image files "
 "stored in Zip archives."
 msgstr ""
+"Lexoni dhe mbani shënime më kartela .cbz librash humori dhe në të tjera "
+"koleksione kartelash figurash të depozituara në arkiva Zip."
 
 #: readsidebar.py:47
 msgid "Bookmark"
-msgstr "Fletëshënim"
+msgstr "Faqerojtës"
 
 #: readtoolbar.py:36 viewslides.py:358
 msgid "Back"
-msgstr "Prapa"
+msgstr "Mbrapsht"
 
 #: readtoolbar.py:39 viewslides.py:361
 msgid "Previous page"
@@ -78,7 +81,7 @@ msgstr "Faqja e mëparshme"
 
 #: readtoolbar.py:42 viewslides.py:364
 msgid "Previous bookmark"
-msgstr "Faqja e mëparshme"
+msgstr "Faqerojtësi i mëparshëm"
 
 #: readtoolbar.py:52 viewslides.py:374
 msgid "Forward"
@@ -86,59 +89,59 @@ msgstr "Përpara"
 
 #: readtoolbar.py:55 viewslides.py:377
 msgid "Next page"
-msgstr "Faqeja tjetër"
+msgstr "Faqja pasuese"
 
 #: readtoolbar.py:58 viewslides.py:380
 msgid "Next bookmark"
-msgstr "Fletëshënimi tjetër"
+msgstr "Faqerojtësi pasues"
 
 #: readtoolbar.py:103 viewslides.py:419
 msgid "Toggle Bookmark"
-msgstr ""
+msgstr "Këmbeni Faqerojtës"
 
 #: readtoolbar.py:188 viewslides.py:433
 msgid "Zoom out"
-msgstr "Zvogëlo"
+msgstr "Zvogëloje"
 
 #: readtoolbar.py:195 viewslides.py:440
 msgid "Zoom in"
-msgstr "Zmadho"
+msgstr "Zmadhoje"
 
 #: readtoolbar.py:207 viewslides.py:447
 msgid "Fullscreen"
-msgstr "Ekran të plotë"
+msgstr "Sa krejt ekrani"
 
 #: readtoolbar.py:242
 msgid "Show Image Table"
-msgstr "Shfaq Tabelën e Imazheve"
+msgstr "Shfaq Tabelë Figurash"
 
 #: readtoolbar.py:248
 msgid "Reload Journal Table"
-msgstr "Ringarko Tabelë e Ditarit"
+msgstr "Ringarko Tabelë Ditari"
 
 #: readtoolbar.py:255
 msgid "Hide Image Tables"
-msgstr "Fsheh Tabelën e Imazheve"
+msgstr "Fshih Tabela Figurash"
 
 #: readtoolbar.py:267
 msgid "Add Image"
-msgstr "Shto Imazh"
+msgstr "Shtoni Figurë"
 
 #: readtoolbar.py:274
 msgid "Remove Image"
-msgstr "Largo Imazhin"
+msgstr "Hiqe Figurën"
 
 #: readtoolbar.py:281
 msgid "Extract Image"
-msgstr "Ekstrakto Imazhin"
+msgstr "Përftoje Figurën"
 
 #: viewslides.py:232
 msgid "Slideshow Image"
-msgstr "Shfaqje e rrjedhshme e imazheve"
+msgstr "Figurë Paraqitje Diapozitivash"
 
 #: viewslides.py:250
 msgid "Available Images"
-msgstr "Imazhet në Dispozicion"
+msgstr "Figura Që Mund të Kihen"
 
 #: viewslides.py:701
 msgid "Success"
@@ -146,7 +149,7 @@ msgstr "Sukses"
 
 #: viewslides.py:701
 msgid " added to Journal."
-msgstr " shto në Protokoll."
+msgstr " u shtua te Ditari."
 
 #~ msgid "Read"
 #~ msgstr "Lexo"

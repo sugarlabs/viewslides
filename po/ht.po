@@ -39,13 +39,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-25 00:32-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2016-04-04 01:12+0000\n"
+"Last-Translator: Blondel <blondel.md@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: ht\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.3.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1459732370.000000\n"
 
 #. TRANS: "name" option from activity.info file
 msgid "View Slides"
@@ -57,10 +60,12 @@ msgid ""
 "Read and annotate comic book .cbz files and other collections of image files "
 "stored in Zip archives."
 msgstr ""
+"Li epi mete nòt nan liv ti komik (fichye .cbz) ak lòt koleksyon fichye imaj "
+"ki anrejistre nan achiv Zip."
 
 #: readsidebar.py:47
 msgid "Bookmark"
-msgstr ""
+msgstr "Favori"
 
 #: readtoolbar.py:36 viewslides.py:358
 msgid "Back"
@@ -68,11 +73,11 @@ msgstr "Tounen dèyè"
 
 #: readtoolbar.py:39 viewslides.py:361
 msgid "Previous page"
-msgstr ""
+msgstr "Paj anvan"
 
 #: readtoolbar.py:42 viewslides.py:364
 msgid "Previous bookmark"
-msgstr ""
+msgstr "Favori anvan"
 
 #: readtoolbar.py:52 viewslides.py:374
 msgid "Forward"
@@ -80,67 +85,67 @@ msgstr "Avanse"
 
 #: readtoolbar.py:55 viewslides.py:377
 msgid "Next page"
-msgstr ""
+msgstr "Paj swivan"
 
 #: readtoolbar.py:58 viewslides.py:380
 msgid "Next bookmark"
-msgstr ""
+msgstr "Favori swivan"
 
 #: readtoolbar.py:103 viewslides.py:419
 msgid "Toggle Bookmark"
-msgstr ""
+msgstr "Baskile Favori"
 
 #: readtoolbar.py:188 viewslides.py:433
 msgid "Zoom out"
-msgstr "Pouse ale"
+msgstr "Diminye"
 
 #: readtoolbar.py:195 viewslides.py:440
 msgid "Zoom in"
-msgstr "Rale vini"
+msgstr "Agrandi"
 
 #: readtoolbar.py:207 viewslides.py:447
 msgid "Fullscreen"
-msgstr "Tout lajè"
+msgstr "Plen ekran"
 
 #: readtoolbar.py:242
 msgid "Show Image Table"
-msgstr ""
+msgstr "Afiche Tablo Imaj"
 
 #: readtoolbar.py:248
 msgid "Reload Journal Table"
-msgstr ""
+msgstr "Relanse Tablo Jounal"
 
 #: readtoolbar.py:255
 msgid "Hide Image Tables"
-msgstr ""
+msgstr "Kache Tablo Imaj yo"
 
 #: readtoolbar.py:267
 msgid "Add Image"
-msgstr ""
+msgstr "Ajoute Imaj"
 
 #: readtoolbar.py:274
 msgid "Remove Image"
-msgstr ""
+msgstr "Retire Imaj"
 
 #: readtoolbar.py:281
 msgid "Extract Image"
-msgstr ""
+msgstr "Rale Imaj"
 
 #: viewslides.py:232
 msgid "Slideshow Image"
-msgstr ""
+msgstr "Imaj Prezantasyon"
 
 #: viewslides.py:250
 msgid "Available Images"
-msgstr ""
+msgstr "Imaj Disponib"
 
 #: viewslides.py:701
 msgid "Success"
-msgstr ""
+msgstr "Siksè"
 
 #: viewslides.py:701
 msgid " added to Journal."
-msgstr ""
+msgstr " ajoute nan Jounal la."
 
 #~ msgid "Read"
 #~ msgstr "Li"
