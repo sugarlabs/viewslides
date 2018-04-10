@@ -17,7 +17,8 @@
 import os
 import logging
 import dbus
-import gobject
+
+from gi.repository import GObject
 
 _HARDWARE_MANAGER_INTERFACE = 'org.laptop.HardwareManager'
 _HARDWARE_MANAGER_SERVICE = 'org.laptop.HardwareManager'
@@ -67,8 +68,8 @@ def turn_off_sleep_timer():
 def reset_sleep_timer():
     global _idle_timer
     if _idle_timer > 0:
-        gobject.source_remove(_idle_timer)
-    _idle_timer = gobject.timeout_add(5000, _suspend)
+        GObject.source_remove(_idle_timer)
+    _idle_timer = GObject.timeout_add(5000, _suspend)
 
 
 def _suspend():
