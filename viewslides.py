@@ -205,8 +205,8 @@ class ViewSlidesActivity(activity.Activity):
         self.zoom_image_to_fit = True
         self.total_pages = 0
 
-        self.connect("draw", self.area_expose_cb)
-        self.connect("delete_event", self.delete_cb)
+        self.connect("draw", self.__draw_cb)
+        self.connect("delete-event", self.__delete_event_cb)
         self.object_id = handle.object_id
         self.create_new_toolbar()
         self.scrolled = Gtk.ScrolledWindow()
@@ -222,8 +222,9 @@ class ViewSlidesActivity(activity.Activity):
         self.eventbox.set_events(
             Gdk.EventMask.KEY_PRESS_MASK | Gdk.EventMask.BUTTON_PRESS_MASK)
         self.eventbox.set_can_focus(True)
-        self.eventbox.connect("key_press_event", self.keypress_cb)
-        self.eventbox.connect("button_press_event", self.buttonpress_cb)
+        self.eventbox.connect("key-press-event", self.__key_press_event_cb)
+        self.eventbox.connect("button-press-event",
+                                  self.__button_press_event_cb)
 
         self.annotation_textview = Gtk.TextView()
         self.annotation_textview.set_left_margin(50)
@@ -827,8 +828,7 @@ class ViewSlidesActivity(activity.Activity):
         os.remove(self.tempfile)
         self.tempfile = new_zipfile
 
-    def buttonpress_cb(self, widget, event):
-        print "got focus"
+    def __button_press_event_cb(self, widget, event):
         widget.grab_focus()
 
     def __view_toolbar_go_fullscreen_cb(self, view_toolbar):
@@ -842,7 +842,7 @@ class ViewSlidesActivity(activity.Activity):
         self.zoom_image_to_fit = True
         self.show_page(self.page)
 
-    def keypress_cb(self, widget, event):
+    def __key_press_event_cb(self, widget, event):
         "Respond when the user presses Escape or one of the arrow keys"
         if xopower.service_activated:
             xopower.reset_sleep_timer()
@@ -1028,7 +1028,7 @@ class ViewSlidesActivity(activity.Activity):
         annotation_textbuffer = self.annotation_textview.get_buffer()
         annotation_textbuffer.set_text(self.annotations.get_note(page))
 
-    def area_expose_cb(self, area, event):
+    def __draw_cb(self, widget, cr):
         screen_width = Gdk.Screen.width()
         if self.saved_screen_width != screen_width and self.saved_screen_width != 0:
             self.show_page(self.page)
@@ -1154,9 +1154,8 @@ class ViewSlidesActivity(activity.Activity):
         self.get_saved_page_number()
         self._load_document(self.tempfile)
 
-    def delete_cb(self, widget, event):
+    def __delete_event_cb(self, widget, event):
         os.remove(self.temp_filename)
-        print 'deleted file', self.temp_filename
         return False
 
     def make_new_filename(self, filename):
