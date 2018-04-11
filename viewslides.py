@@ -1037,6 +1037,8 @@ class ViewSlidesActivity(activity.Activity):
 
     def show_page(self, page):
         self.show_bookmark_state(page)
+        if page not in self.image_files:
+            return
         if self.save_extracted_file(self.zf, self.image_files[page]):
             fname = os.path.join(
                 self.get_activity_root(),
