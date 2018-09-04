@@ -14,11 +14,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
 import os
 import logging
 import time
 import zipfile
 from zipfile import BadZipfile
+
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -26,6 +28,7 @@ from gi.repository import GdkPixbuf
 from gi.repository import Gdk
 import pygame
 import re
+
 from sugar3.activity import activity
 from sugar3 import network
 from sugar3.datastore import datastore
@@ -42,6 +45,7 @@ from sugar3.graphics.toggletoolbutton import ToggleToolButton
 from readsidebar import Sidebar
 from gettext import gettext as _
 import dbus
+from gi.repository import GLib
 from gi.repository import GObject
 import telepathy
 import cPickle as pickle
@@ -1333,7 +1337,7 @@ class ViewSlidesActivity(activity.Activity):
         self._want_document = True
         self._download_content_length = 0
         self._download_content_type = None
-        GObject.idle_add(self._get_document)
+        GLib.idle_add(self._get_document)
 
     def _download_document(self, tube_id, path):
         # FIXME: should ideally have the CM listen on a Unix socket
@@ -1388,7 +1392,7 @@ class ViewSlidesActivity(activity.Activity):
         # Avoid trying to download the document multiple times at once
         self._want_document = False
         self.progressbar.show()
-        GObject.idle_add(self._download_document, tube_id, path)
+        GLib.idle_add(self._download_document, tube_id, path)
         return False
 
     def _joined_cb(self, also_self):
@@ -1397,7 +1401,7 @@ class ViewSlidesActivity(activity.Activity):
         Get the shared document from another participant.
         """
         self.watch_for_tubes()
-        GObject.idle_add(self._get_document)
+        GLib.idle_add(self._get_document)
 
     def _share_document(self):
         """Share the document."""
@@ -1442,7 +1446,7 @@ class ViewSlidesActivity(activity.Activity):
             self.unused_download_tubes.add(tube_id)
             # if no download is in progress, let's fetch the document
             if self._want_document:
-                GObject.idle_add(self._get_document)
+                GLib.idle_add(self._get_document)
 
     def _list_tubes_reply_cb(self, tubes):
         """Callback when new tubes are available."""
