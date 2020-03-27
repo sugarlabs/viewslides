@@ -48,7 +48,7 @@ import dbus
 from gi.repository import GLib
 from gi.repository import GObject
 import telepathy
-import cPickle as pickle
+import pickle as pickle
 from decimal import *
 import xopower
 
@@ -126,7 +126,7 @@ class Annotations():
             self.bookmarks.remove(page)
             # print 'bookmarks=',  self.bookmarks
         except ValueError:
-            print 'page already not bookmarked', page
+            print('page already not bookmarked', page)
 
     def get_bookmarks(self):
         self.bookmarks.sort()
@@ -587,7 +587,7 @@ class ViewSlidesActivity(activity.Activity):
         ds_objects, num_objects = datastore.find({'mime_type': ['image/jpeg', 'image/gif',
                                                                 'image/tiff', 'image/png']}, properties=['uid', 'title', 'mime_type'])
         self.ls_right.clear()
-        for i in xrange(0, num_objects, 1):
+        for i in range(0, num_objects, 1):
             iter = self.ls_right.append()
             title = ds_objects[i].metadata['title']
             mime_type = ds_objects[i].metadata['mime_type']
@@ -728,7 +728,7 @@ class ViewSlidesActivity(activity.Activity):
                 arcname)
             self._slides_toolbar._add_image.props.sensitive = False
         except BadZipfile as err:
-            print 'Error opening the zip file: %s' % (err)
+            print('Error opening the zip file: %s' % (err))
             self._alert('Error', 'Error opening the zip file')
 
     def remove_image(self):
@@ -785,7 +785,7 @@ class ViewSlidesActivity(activity.Activity):
             return
         new_zipfile = os.path.join(self.get_activity_root(), 'instance',
                                    'rewrite%i' % time.time())
-        print self.tempfile, new_zipfile
+        print(self.tempfile, new_zipfile)
         zf_new = zipfile.ZipFile(new_zipfile, 'w')
         zf_old = zipfile.ZipFile(self.tempfile, 'r')
         for row in self.ls_left:
@@ -796,7 +796,7 @@ class ViewSlidesActivity(activity.Activity):
                 fname = os.path.join(
                     self.get_activity_root(), 'instance', outfn)
                 zf_new.write(fname.encode("utf-8"), new_file.encode("utf-8"))
-                print 'rewriting', new_file
+                print('rewriting', new_file)
                 os.remove(fname)
         zf_old.close()
         zf_new.close()
@@ -810,7 +810,7 @@ class ViewSlidesActivity(activity.Activity):
 
         new_zipfile = os.path.join(self.get_activity_root(), 'instance',
                                    'rewrite%i' % time.time())
-        print self.tempfile, new_zipfile
+        print(self.tempfile, new_zipfile)
         zf_new = zipfile.ZipFile(new_zipfile, 'w')
         zf_old = zipfile.ZipFile(self.tempfile, 'r')
         image_files = zf_old.namelist()
@@ -1115,7 +1115,7 @@ class ViewSlidesActivity(activity.Activity):
         try:
             filebytes = zipfile.read(filename)
         except BadZipfile as err:
-            print 'Error opening the zip file: %s' % (err)
+            print('Error opening the zip file: %s' % (err))
             return False
         except KeyError as err:
             self._alert('Key Error', 'Zipfile key not found: ' + str(filename))
@@ -1240,7 +1240,7 @@ class ViewSlidesActivity(activity.Activity):
                 self.watch_for_tubes()
                 self._share_document()
         else:
-            print 'Not a zipfile', file_path
+            print('Not a zipfile', file_path)
             self.tempfile = None
 
     def write_file(self, file_path):
@@ -1355,7 +1355,7 @@ class ViewSlidesActivity(activity.Activity):
         assert isinstance(addr, dbus.Struct)
         assert len(addr) == 2
         assert isinstance(addr[0], str)
-        assert isinstance(addr[1], (int, long))
+        assert isinstance(addr[1], int)
         assert addr[1] > 0 and addr[1] < 65536
         port = int(addr[1])
 
