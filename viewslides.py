@@ -19,6 +19,7 @@ import os
 import logging
 import time
 import zipfile
+import SimpleHTTPServer
 from zipfile import BadZipfile
 
 import gi
@@ -148,7 +149,7 @@ class Annotations():
         pickle_output.close()
 
 
-class ReadHTTPRequestHandler(network.ChunkedGlibHTTPRequestHandler):
+class ReadHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     """HTTP Request Handler for transferring document while collaborating.
 
     RequestHandler class that integrates with Glib mainloop. It writes
