@@ -46,8 +46,8 @@ from readsidebar import Sidebar
 from gettext import gettext as _
 import dbus
 from gi.repository import GLib
-from gi.repository import GObject
-import telepathy
+from gi.repository import GObject, TelepathyGLib
+
 import pickle as pickle
 from decimal import *
 import xopower
@@ -1343,11 +1343,11 @@ class ViewSlidesActivity(activity.Activity):
         # FIXME: should ideally have the CM listen on a Unix socket
         # instead of IPv4 (might be more compatible with Rainbow)
         chan = self._shared_activity.telepathy_tubes_chan
-        iface = chan[telepathy.CHANNEL_TYPE_TUBES]
+        iface = chan[TelepathyGLib.IFACE_CHANNEL_TYPE_TUBES]
         addr = iface.AcceptStreamTube(
             tube_id,
-            telepathy.SOCKET_ADDRESS_TYPE_IPV4,
-            telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST,
+            TelepathyGLib.SocketAddressType.IPV4,
+            TelepathyGLib.SocketAccessControl.LOCALHOST,
             0,
             utf8_strings=True)
         _logger.debug('Accepted stream tube: listening address is %r', addr)
@@ -1357,11 +1357,12 @@ class ViewSlidesActivity(activity.Activity):
         assert isinstance(addr[0], str)
         assert isinstance(addr[1], int)
         assert addr[1] > 0 and addr[1] < 65536
+        ip = addr[0]
         port = int(addr[1])
 
         getter = ReadURLDownloader("http://%s:%d/document"
-                                   % (addr[0], port))
-        getter.connect("finished", self._download_result_cb, tube_id)
+                                   % (ip, port))
+        getter.connect("finished", self._download_result_cb, tube_id,)
         getter.connect("progress", self._download_progress_cb, tube_id)
         getter.connect("error", self._download_error_cb, tube_id)
         _logger.debug("Starting download to %s...", path)
@@ -1409,29 +1410,28 @@ class ViewSlidesActivity(activity.Activity):
         # instead of IPv4 (might be more compatible with Rainbow)
 
         _logger.debug('Starting HTTP server on port %d', self.port)
-        self._fileserver = ReadHTTPServer(("", self.port),
-                                          self.tempfile)
+        self._fileserver = ReadHTTPServer(("", self.port), self.tempfile)
 
         # Make a tube for it
         chan = self._shared_activity.telepathy_tubes_chan
-        iface = chan[telepathy.CHANNEL_TYPE_TUBES]
+        iface = chan[TelepathyGLib.IFACE_CHANNEL_TYPE_TUBES]
         self._fileserver_tube_id = iface.OfferStreamTube(
             READ_STREAM_SERVICE,
             {},
-            telepathy.SOCKET_ADDRESS_TYPE_IPV4,
+            TelepathyGLib.SocketAddressType.IPV4,
             ('127.0.0.1',
              dbus.UInt16(
                  self.port)),
-            telepathy.SOCKET_ACCESS_CONTROL_LOCALHOST,
+            TelepathyGLib.SocketAccessControl.LOCALHOST,
             0)
 
     def watch_for_tubes(self):
         """Watch for new tubes."""
         tubes_chan = self._shared_activity.telepathy_tubes_chan
 
-        tubes_chan[telepathy.CHANNEL_TYPE_TUBES].connect_to_signal(
+        tubes_chan[TelepathyGLib.IFACE_CHANNEL_TYPE_TUBES].connect_to_signal(
             'NewTube', self._new_tube_cb)
-        tubes_chan[telepathy.CHANNEL_TYPE_TUBES].ListTubes(
+        tubes_chan[TelepathyGLib.IFACE_CHANNEL_TYPE_TUBES].ListTubes(
             reply_handler=self._list_tubes_reply_cb,
             error_handler=self._list_tubes_error_cb)
 
