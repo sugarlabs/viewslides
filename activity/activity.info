@@ -1,7 +1,7 @@
 [Activity]
 name = View Slides
 bundle_id = org.laptop.ViewSlidesActivity
-exec = sugar-activity viewslides.ViewSlidesActivity
+exec = sugar-activity3 viewslides.ViewSlidesActivity
 activity_version = 14
 icon = ViewSlides
 show_launcher = yes
