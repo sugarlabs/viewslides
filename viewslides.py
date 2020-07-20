@@ -1343,7 +1343,7 @@ class ViewSlidesActivity(activity.Activity):
     def _download_document(self, tube_id, path):
         # FIXME: should ideally have the CM listen on a Unix socket
         # instead of IPv4 (might be more compatible with Rainbow)
-        chan = self._shared_activity.telepathy_tubes_chan
+        chan = self.shared_activity.telepathy_tubes_chan
         iface = chan[TelepathyGLib.IFACE_CHANNEL_TYPE_TUBES]
         addr = iface.AcceptStreamTube(
             tube_id,
@@ -1414,7 +1414,7 @@ class ViewSlidesActivity(activity.Activity):
         self._fileserver = ReadHTTPServer(("", self.port), self.tempfile)
 
         # Make a tube for it
-        chan = self._shared_activity.telepathy_tubes_chan
+        chan = self.shared_activity.telepathy_tubes_chan
         iface = chan[TelepathyGLib.IFACE_CHANNEL_TYPE_TUBES]
         self._fileserver_tube_id = iface.OfferStreamTube(
             READ_STREAM_SERVICE,
@@ -1428,7 +1428,7 @@ class ViewSlidesActivity(activity.Activity):
 
     def watch_for_tubes(self):
         """Watch for new tubes."""
-        tubes_chan = self._shared_activity.telepathy_tubes_chan
+        tubes_chan = self.shared_activity.telepathy_tubes_chan
 
         tubes_chan[TelepathyGLib.IFACE_CHANNEL_TYPE_TUBES].connect_to_signal(
             'NewTube', self._new_tube_cb)
