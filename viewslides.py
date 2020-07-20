@@ -1125,7 +1125,7 @@ class ViewSlidesActivity(activity.Activity):
         if (outfn == ''):
             return False
         fname = os.path.join(self.get_activity_root(), 'instance', outfn)
-        f = open(fname, 'w')
+        f = open(fname, 'wb')
         try:
             f.write(filebytes)
         finally:
