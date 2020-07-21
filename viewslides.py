@@ -1349,8 +1349,7 @@ class ViewSlidesActivity(activity.Activity):
             tube_id,
             TelepathyGLib.SocketAddressType.IPV4,
             TelepathyGLib.SocketAccessControl.LOCALHOST,
-            0,
-            utf8_strings=True)
+            0)
         _logger.debug('Accepted stream tube: listening address is %r', addr)
         # SOCKET_ADDRESS_TYPE_IPV4 is defined to have addresses of type '(sq)'
         assert isinstance(addr, dbus.Struct)
