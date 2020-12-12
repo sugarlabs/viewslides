@@ -293,16 +293,28 @@ class SlidesToolbar(Gtk.Toolbar):
         self.activity = activity
 
     def _reload_journal_table_cb(self, button):
-        self.activity.load_journal_table()
+        self.activity.reload_journal_table()
+
+        if self.activity.get_shared():
+            self.activity.collab.post(dict(action="reload"))
 
     def _add_image_cb(self, button):
         self.activity.add_image()
 
+        if self.activity.get_shared():
+            self.activity.collab.post(dict(action="add-image"))
+
     def _remove_image_cb(self, button):
         self.activity.remove_image()
 
+        if self.activity.get_shared():
+            self.activity.collab.post(dict(action="remove-image"))
+
     def extract_image_cb(self, button):
         self.activity.extract_image()
+
+        if self.activity.get_shared():
+            self.activity.collab.post(dict(action="extract"))
 
     def _show_image_tables_cb(self, button):
         self._hide_image_tables.props.sensitive = True
