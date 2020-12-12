@@ -51,6 +51,7 @@ from gi.repository import TelepathyGLib
 import pickle
 from decimal import *
 import xopower
+from collabwrapper import CollabWrapper
 
 _TOOLBAR_READ = 1
 _TOOLBAR_SLIDES = 3
@@ -147,51 +148,6 @@ class Annotations():
         pickle_output.close()
 
 
-class ReadHTTPRequestHandler(network.ChunkedGlibHTTPRequestHandler):
-    """HTTP Request Handler for transferring document while collaborating.
-
-    RequestHandler class that integrates with Glib mainloop. It writes
-    the specified file to the client in chunks, returning control to the
-    mainloop between chunks.
-
-    """
-
-    def translate_path(self, path):
-        """Return the filepath to the shared document."""
-        return self.server.filepath
-
-
-class ReadHTTPServer(network.GlibTCPServer):
-    """HTTP Server for transferring document while collaborating."""
-
-    def __init__(self, server_address, filepath):
-        """Set up the GlibTCPServer with the ReadHTTPRequestHandler.
-
-        filepath -- path to shared document to be served.
-        """
-        self.filepath = filepath
-        network.GlibTCPServer.__init__(self, server_address,
-                                       ReadHTTPRequestHandler)
-
-
-class ReadURLDownloader(network.GlibURLDownloader):
-    """URLDownloader that provides content-length and content-type."""
-
-    def get_content_length(self):
-        """Return the content-length of the download."""
-        if self._info is not None:
-            return int(self._info.headers.get('Content-Length'))
-
-    def get_content_type(self):
-        """Return the content-type of the download."""
-        if self._info is not None:
-            return self._info.headers.get('Content-type')
-        return None
-
-
-READ_STREAM_SERVICE = 'viewslides-activity-http'
-
-
 class ViewSlidesActivity(activity.Activity):
     __gsignals__ = {
         'go-fullscreen': (GObject.SIGNAL_RUN_FIRST,
@@ -207,6 +163,7 @@ class ViewSlidesActivity(activity.Activity):
         self._object_id = handle.object_id
         self.zoom_image_to_fit = True
         self.total_pages = 0
+        self.buddies = {}
 
         self.connect("draw", self.__draw_cb)
         self.connect("delete-event", self.__delete_event_cb)
@@ -237,7 +194,7 @@ class ViewSlidesActivity(activity.Activity):
         self.sidebar = Sidebar()
         self.sidebar.show()
 
-        self.ls_left = self.ls_left = Gtk.ListStore(
+        self.ls_left = Gtk.ListStore(
             GObject.TYPE_STRING, GObject.TYPE_STRING)
         tv_left = Gtk.TreeView(self.ls_left)
         tv_left.set_rules_hint(True)
@@ -308,6 +265,10 @@ class ViewSlidesActivity(activity.Activity):
         self.is_dirty = False
         self.annotations_dirty = False
 
+        self.activity_zip = os.path.join(
+            self.get_activity_root(),
+            'instance',
+            'viewslides-files')
         self.load_journal_table()
 
         self.show_image("ViewSlides.jpg")
@@ -333,39 +294,26 @@ class ViewSlidesActivity(activity.Activity):
             self.connect("focus-out-event", self._focus_out_event_cb)
             self.connect("notify::active", self._now_active_cb)
 
-        self.unused_download_tubes = set()
-        self._want_document = True
-        self._download_content_length = 0
-        self._download_content_type = None
+        self._want_document = False
         # Status of temp file used for write_file:
-        self.tempfile = None
         self._close_requested = False
         self.connect("shared", self._shared_cb)
-        h = hash(self._activity_id)
-        self.port = 1024 + (h % 64511)
 
         self.is_received_document = False
         self.selected_journal_entry = None
         self.selected_title = None
         self.selection_left = None
 
-        if self.shared_activity and handle.object_id is None:
-            # We're joining, and we don't already have the document.
-            if self.get_shared():
-                # Already joined for some reason, just get the document
-                self._joined_cb(self)
-            else:
-                # Wait for a successful join before trying to get the document
-                self.connect("joined", self._joined_cb)
-        else:
-            # Assign a file path to create if one doesn't exist yet
+        if not self.get_shared():
             if handle.object_id is None:
-                self.tempfile = os.path.join(
-                    self.get_activity_root(),
-                    'instance',
-                    'tmp{}'.format(time.time()))
-
                 self.show_image_tables(True)
+
+        self.collab = CollabWrapper(self)
+        self.collab.joined.connect(self._joined_cb)
+        self.collab.buddy_joined.connect(self._buddy_joined_cb)
+        self.collab.buddy_left.connect(self._buddy_left_cb)
+        self.collab.incoming_file.connect(self._incoming_file_cb)
+        self.collab.setup()
 
     def create_new_toolbar(self):
         toolbar_box = ToolbarBox()
@@ -499,6 +447,12 @@ class ViewSlidesActivity(activity.Activity):
             # Not joining, not resuming
             slides_toolbar_button.set_expanded(True)
 
+    def get_data(self):
+        return None
+
+    def set_data(self, data):
+        pass
+
     def _zoom_in_cb(self, button):
         self._zoom_in.props.sensitive = False
         self._zoom_out.props.sensitive = True
@@ -616,6 +570,7 @@ class ViewSlidesActivity(activity.Activity):
             '.TIFF',
             '.png',
             '.PNG')
+        self.activity_zip = zipfile.ZipFile(self.activity_zip, 'w')
         for dirname, dirnames, filenames in os.walk('/media'):
             if '.olpc.store' in dirnames:
                 # don't visit .olpc.store directories
@@ -628,8 +583,24 @@ class ViewSlidesActivity(activity.Activity):
                         os.path.join(dirname, filename))
                     self.ls_right.set(iter, COLUMN_IMAGE, filename)
                     self.ls_right.set(iter, COLUMN_PATH, jobject_wrapper)
+                if filename not in self.activity_zip.namelist():
+                    self.activity_zip.write(os.path.join(dirname, filename), filename)
+        self.activity_zip.close()
 
         self.ls_right.set_sort_column_id(COLUMN_IMAGE, Gtk.SortType.ASCENDING)
+
+    def reload_journal_table(self):
+        if os.path.exists(self.activity_zip.filename) and zipfile.is_zipfile(self.activity_zip):
+            zf = zipfile.ZipFile(self.activity_zip, 'r')
+            for filename in zf.namelist():
+                iter = self.ls_right.append()
+                jobject_wrapper = JobjectWrapper()
+                jobject_wrapper.set_file_path(
+                    os.path.abspath(self.activity_zip.filename))
+                self.ls_right.set(iter, COLUMN_IMAGE, filename)
+                self.ls_right.set(iter, COLUMN_PATH, jobject_wrapper)
+        else:
+            self.load_journal_table()
 
     def col_left_edited_cb(self, cell, path, new_text, user_data):
         liststore = user_data
@@ -660,7 +631,7 @@ class ViewSlidesActivity(activity.Activity):
             self.sidebar.show()
             self.rewrite_zip()
             self.set_current_page(0)
-            self._load_document(self.tempfile)
+            self._load_document(os.path.abspath(self.activity_zip))
 
     def selection_left_cb(self, selection):
         tv = selection.get_tree_view()
@@ -669,7 +640,7 @@ class ViewSlidesActivity(activity.Activity):
         if self.selection_left:
             model, iter = self.selection_left
             selected_file = model.get_value(iter, COLUMN_OLD_NAME)
-            zf = zipfile.ZipFile(self.tempfile, 'r')
+            zf = zipfile.ZipFile(self.activity_zip, 'r')
             if self.save_extracted_file(zf, selected_file):
                 fname = os.path.join(
                     self.get_activity_root(),
@@ -705,28 +676,16 @@ class ViewSlidesActivity(activity.Activity):
                 str(arcname) +
                 ' already exists in slideshow!')
             return
-        # Assign a file path to create if one doesn't exist yet
-        if self.tempfile is None:
-            self.tempfile = os.path.join(self.get_activity_root(), 'instance',
-                                         'tmp{}'.format(time.time()))
-        try:
-            if os.path.exists(self.tempfile):
-                zf = zipfile.ZipFile(self.tempfile, 'a')
-            else:
-                zf = zipfile.ZipFile(self.tempfile, 'w')
-            zf.write(selected_file.encode("utf-8"), arcname.encode("utf-8"))
-            zf.close()
-            iter = self.ls_left.append()
-            self.ls_left.set(
-                iter,
-                COLUMN_IMAGE,
-                arcname,
-                COLUMN_OLD_NAME,
-                arcname)
-            self._slides_toolbar._add_image.props.sensitive = False
-        except BadZipfile as err:
-            print('Error opening the zip file: {}'.format(err))
-            self._alert('Error', 'Error opening the zip file')
+
+        iter = self.ls_left.append()
+        self.ls_left.set(
+            iter,
+            COLUMN_IMAGE,
+            arcname,
+            COLUMN_OLD_NAME,
+            arcname)
+
+        self._slides_toolbar._add_image.props.sensitive = False
 
     def remove_image(self):
         if self.selection_left:
@@ -739,7 +698,7 @@ class ViewSlidesActivity(activity.Activity):
         if self.selection_left:
             model, iter = self.selection_left
             selected_file = model.get_value(iter, COLUMN_OLD_NAME)
-            zf = zipfile.ZipFile(self.tempfile, 'r')
+            zf = zipfile.ZipFile(self.activity_zip, 'r')
             if self.save_extracted_file(zf, selected_file):
                 fname = os.path.join(
                     self.get_activity_root(),
@@ -781,10 +740,10 @@ class ViewSlidesActivity(activity.Activity):
         if not self.is_dirty:
             return
         new_zipfile = os.path.join(self.get_activity_root(), 'instance',
-                                   'rewrite{}'.format(time.time()))
-        print(self.tempfile, new_zipfile)
+                                   'activity_zip_rewrite')
+        _logger.debug(self.activity_zip, new_zipfile)
         zf_new = zipfile.ZipFile(new_zipfile, 'w')
-        zf_old = zipfile.ZipFile(self.tempfile, 'r')
+        zf_old = zipfile.ZipFile(self.activity_zip, 'r')
         for row in self.ls_left:
             copied_file = row[COLUMN_OLD_NAME]
             new_file = row[COLUMN_IMAGE]
@@ -797,8 +756,8 @@ class ViewSlidesActivity(activity.Activity):
                 os.remove(fname)
         zf_old.close()
         zf_new.close()
-        os.remove(self.tempfile)
-        self.tempfile = new_zipfile
+        os.remove(self.activity_zip)
+        self.activity_zip = new_zipfile
         self.is_dirty = False
 
     def final_rewrite_zip(self):
@@ -807,9 +766,9 @@ class ViewSlidesActivity(activity.Activity):
 
         new_zipfile = os.path.join(self.get_activity_root(), 'instance',
                                    'rewrite{}'.format(time.time()))
-        print(self.tempfile, new_zipfile)
+        print(self.activity_zip, new_zipfile)
         zf_new = zipfile.ZipFile(new_zipfile, 'w')
-        zf_old = zipfile.ZipFile(self.tempfile, 'r')
+        zf_old = zipfile.ZipFile(self.activity_zip, 'r')
         image_files = zf_old.namelist()
         i = 0
         while (i < len(image_files)):
@@ -825,8 +784,8 @@ class ViewSlidesActivity(activity.Activity):
 
         zf_old.close()
         zf_new.close()
-        os.remove(self.tempfile)
-        self.tempfile = new_zipfile
+        os.remove(self.activity_zip)
+        self.activity_zip = new_zipfile
 
     def __button_press_event_cb(self, widget, event):
         widget.grab_focus()
@@ -1121,11 +1080,11 @@ class ViewSlidesActivity(activity.Activity):
         if (outfn == ''):
             return False
         fname = os.path.join(self.get_activity_root(), 'instance', outfn)
-        f = open(fname, 'w')
+        f = open(fname, 'wb')
         try:
             f.write(filebytes)
         finally:
-            f.close
+            f.close()
         return True
 
     def extract_pickle_file(self):
@@ -1137,21 +1096,15 @@ class ViewSlidesActivity(activity.Activity):
             try:
                 f.write(filebytes)
             finally:
-                f.close
+                f.close()
             return True
         except KeyError:
             return False
 
     def read_file(self, file_path):
         """Load a file from the datastore on activity start"""
-        tempfile = os.path.join(
-            self.get_activity_root(),
-            'instance',
-            'tmp{}'.format(time.time()))
-        os.link(file_path, tempfile)
-        self.tempfile = tempfile
         self.get_saved_page_number()
-        self._load_document(self.tempfile)
+        self._load_document(self.activity_zip)
 
     def __delete_event_cb(self, widget, event):
         os.remove(self.temp_filename)
@@ -1197,32 +1150,19 @@ class ViewSlidesActivity(activity.Activity):
             self.zf = zipfile.ZipFile(file_path, 'r')
             self.image_files = self.zf.namelist()
             self.image_files.sort()
-            i = 0
-            valid_endings = (
-                '.jpg',
-                '.jpeg',
-                '.JPEG',
-                '.JPG',
-                '.gif',
-                '.GIF',
-                '.tiff',
-                '.TIFF',
-                '.png',
-                '.PNG')
             self.ls_left.clear()
+            i = 0
             while i < len(self.image_files):
                 newfn = self.make_new_filename(self.image_files[i])
-                if newfn.endswith(valid_endings):
-                    iter = self.ls_left.append()
-                    self.ls_left.set(
-                        iter,
-                        COLUMN_IMAGE,
-                        self.image_files[i],
-                        COLUMN_OLD_NAME,
-                        self.image_files[i])
-                    i = i + 1
-                else:
-                    del self.image_files[i]
+                iter = self.ls_left.append()
+                self.ls_left.set(
+                    iter,
+                    COLUMN_IMAGE,
+                    self.image_files[i],
+                    COLUMN_OLD_NAME,
+                    self.image_files[i])
+                i += 1
+
             self.extract_pickle_file()
             self.annotations.restore()
             self.show_page(self.page)
@@ -1231,22 +1171,14 @@ class ViewSlidesActivity(activity.Activity):
             if self.is_received_document:
                 self.metadata['title'] = self.annotations.get_title()
                 self.metadata['title_set_by_user'] = '1'
-            # We've got the document, so if we're a shared activity, offer it
-            if self.get_shared():
-                self.watch_for_tubes()
-                self._share_document()
         else:
             print('Not a zipfile', file_path)
-            self.tempfile = None
+            self.activity_zip = None
 
     def write_file(self, file_path):
         "Save meta data for the file."
-        # Assign a file path to create if one doesn't exist yet
-        if self.tempfile is None:
-            self.tempfile = os.path.join(self.get_activity_root(), 'instance',
-                                         'tmp{}'.format(time.time()))
-        if not os.path.exists(self.tempfile):
-            zf = zipfile.ZipFile(self.tempfile, 'w')
+        if not os.path.exists(self.activity_zip):
+            zf = zipfile.ZipFile(self.activity_zip, 'w')
             zf.writestr("filler.txt", "filler")
             zf.close()
 
@@ -1267,12 +1199,11 @@ class ViewSlidesActivity(activity.Activity):
             self.annotations.set_title(str(title))
             self.annotations.save()
             self.final_rewrite_zip()
-            os.link(self.tempfile, file_path)
-            _logger.debug(
-                "Removing temp file {} because we will close".format(self.tempfile))
-            os.unlink(self.tempfile)
+            os.link(
+                os.path.abspath(self.activity_zip), file_path)
+            os.unlink(os.path.abspath(self.activity_zip))
             os.remove(self.pickle_file_temp)
-            self.tempfile = None
+            self.activity_zip = None
             self.pickle_file_temp = None
 
     def can_close(self):
@@ -1281,188 +1212,113 @@ class ViewSlidesActivity(activity.Activity):
 
     # The code from here on down is for sharing.
     def set_downloaded_bytes(self, bytes, total):
+        _logger.debug("Downloaded {} of {} bytes...".format(
+                      bytes_downloaded,
+                      fsize,
+                      ))
         fraction = float(bytes) / float(total)
         self.progressbar.set_fraction(fraction)
 
     def clear_downloaded_bytes(self):
         self.progressbar.set_fraction(0.0)
 
-    def _download_result_cb(self, getter, tempfile, suggested_name, tube_id):
-        if self._download_content_type == 'text/html':
-            # got an error page instead
-            self._download_error_cb(getter, 'HTTP Error', tube_id)
-            return
-
-        del self.unused_download_tubes
-
-        self.tempfile = tempfile
-        file_path = os.path.join(self.get_activity_root(), 'instance',
-                                 '{}'.format(time.time()))
-        _logger.debug("Saving file {} to datastore...".format(file_path))
-        os.link(tempfile, file_path)
-        self._jobject.file_path = file_path
+    def _download_complete_cb(self, fpath):
+        _logger.debug(
+            "Saving file {} to datastore...".format(
+            os.path.basename(fpath)))
+        self._jobject.file_path = fpath
         datastore.write(self._jobject, transfer_ownership=True)
 
-        _logger.debug("Got document {} ({}) from tube {}".format(
-                      tempfile, suggested_name, tube_id))
-        self._load_document(tempfile)
+        self._load_document(fpath)
         self.save()
         self.progressbar.hide()
+        self.clear_downloaded_bytes()
 
-    def _download_progress_cb(self, getter, bytes_downloaded, tube_id):
-        if self._download_content_length > 0:
-            _logger.debug("Downloaded {} of {} bytes from tube {}...".format(
-                          bytes_downloaded, self._download_content_length,
-                          tube_id))
-        else:
-            _logger.debug("Downloaded {} bytes from tube {}...".format(
-                          bytes_downloaded, tube_id))
-        total = self._download_content_length
-        self.set_downloaded_bytes(bytes_downloaded, total)
-        Gdk.threads_enter()
-        while Gtk.events_pending():
-            Gtk.main_iteration()
-        Gdk.threads_leave()
-
-    def _download_error_cb(self, getter, err, tube_id):
-        self.progressbar.hide()
-        _logger.debug("Error getting document from tube {}: {}".format(
-                      tube_id, err))
-        self._alert('Failure', 'Error getting document from tube')
+    def _buddy_joined_cb(self, collab, buddy):
         self._want_document = True
-        self._download_content_length = 0
-        self._download_content_type = None
-        GLib.idle_add(self._get_document)
+        if buddy.nick in self.buddies.keys():
+            return
+        self.buddies[buddy.nick] = buddy
 
-    def _download_document(self, tube_id, path):
-        # FIXME: should ideally have the CM listen on a Unix socket
-        # instead of IPv4 (might be more compatible with Rainbow)
-        chan = self.shared_activity.telepathy_tubes_chan
-        iface = chan[TelepathyGLib.IFACE_CHANNEL_TYPE_TUBES]
-        addr = iface.AcceptStreamTube(
-            tube_id,
-            TelepathyGLib.SocketAddressType.IPV4,
-            TelepathyGLib.SocketAccessControl.LOCALHOST,
-            0,
-            utf8_strings=True)
-        _logger.debug('Accepted stream tube: listening address is {}'.format(addr))
-        # SOCKET_ADDRESS_TYPE_IPV4 is defined to have addresses of type '(sq)'
-        assert isinstance(addr, dbus.Struct)
-        assert len(addr) == 2
-        assert isinstance(addr[0], str)
-        assert isinstance(addr[1], int)
-        assert addr[1] > 0 and addr[1] < 65536
-        port = int(addr[1])
+        GLib.idle_add(self._share_document, buddy)
 
-        getter = ReadURLDownloader("http://{}:{}/document".format(
-                                   addr[0], port))
-        getter.connect("finished", self._download_result_cb, tube_id)
-        getter.connect("progress", self._download_progress_cb, tube_id)
-        getter.connect("error", self._download_error_cb, tube_id)
-        _logger.debug("Starting download to {}...".format(path))
-        getter.start(path)
-        self._download_content_length = getter.get_content_length()
-        self._download_content_type = getter.get_content_type()
-        return False
+    def _buddy_left_cb(self, collab, buddy):
+        if buddy.nick not in self.buddies.keys():
+            return
+        del self.buddies[buddy.nick]
 
-    def _get_document(self):
+    def _message_cb(self, collab, buddy, message):
+        action = message.get('action')
+
+        if action == 'add-image':
+            self.add_image()
+        if action == 'remove-image':
+            self.remove_image()
+        if action == 'extract':
+            self.extract_image()
+        if action == 'reload':
+            self.reload_journal_table()
+
+    def _incoming_file_cb(self, collab, incoming_file, description):
+        _logger.debug("Accepting incoming file")
         if not self._want_document:
             return False
 
-        # Assign a file path to download if one doesn't exist yet
-        if not self._jobject.file_path:
-            path = os.path.join(self.get_activity_root(), 'instance',
-                                'tmp{}'.format(time.time()))
-        else:
-            path = self._jobject.file_path
+        # Assign a file path to write incoming file to
+        fpath = os.path.join(self.get_activity_root(), 'instance',
+                             'activity-files')
 
-        # Pick an arbitrary tube we can try to download the document from
-        try:
-            tube_id = self.unused_download_tubes.pop()
-        except (ValueError, KeyError) as Error:
-            _logger.debug('No tubes to get the document from right now: {}'.format(
-                          Error))
-            return False
+        # Make sure the receiver has enough space on their
+        # computer to receive the sent file
+        def diskfree(path):
+            return os.statvfs(path).f_bsize * os.statvfs(path).f_bavail
+
+        a_space = diskfree(os.path.dirname(fpath)) // (1024**2)
+
+        if a_space > incoming_file.file_size:
+            incoming_file.accept_to_file(fpath)
+            incoming_file.ready.connect(ready_cb)
+            transfer_complete = False
+
+            while not transfer_complete:
+                self.progressbar.show()
+                self.set_downloaded_bytes(
+                    incoming_file.props.transferred_bytes,
+                    incoming_file.props.file_size)
+        else:
+            self._alert("No space on disk",
+                        "Delete some files to create space")
+            self._want_document = True
+            incoming_file.cancel()
+
+        def ready_cb(fpath):
+            transfer_complete = True
+            self._download_complete_cb(fpath)
 
         # Avoid trying to download the document multiple times at once
         self._want_document = False
-        self.progressbar.show()
-        GLib.idle_add(self._download_document, tube_id, path)
-        return False
 
     def _joined_cb(self, also_self):
         """Callback for when a shared activity is joined.
 
         Get the shared document from another participant.
         """
-        self.watch_for_tubes()
-        GLib.idle_add(self._get_document)
+        _logger.debug('Activity has been joined')
 
-    def _share_document(self):
+    def _share_document(self, buddy):
         """Share the document."""
-        # FIXME: should ideally have the fileserver listen on a Unix socket
-        # instead of IPv4 (might be more compatible with Rainbow)
-
-        _logger.debug('Starting HTTP server on port {}'.format(self.port))
-        self._fileserver = ReadHTTPServer(("", self.port),
-                                          self.tempfile)
-
-        # Make a tube for it
-        chan = self.shared_activity.telepathy_tubes_chan
-        iface = chan[TelepathyGLib.IFACE_CHANNEL_TYPE_TUBES]
-        self._fileserver_tube_id = iface.OfferStreamTube(
-            READ_STREAM_SERVICE,
-            {},
-            TelepathyGLib.SocketAddressType.IPV4,
-            ('127.0.0.1',
-             dbus.UInt16(
-                 self.port)),
-            TelepathyGLib.SocketAccessControl.LOCALHOST,
-            0)
-
-    def watch_for_tubes(self):
-        """Watch for new tubes."""
-        tubes_chan = self.shared_activity.telepathy_tubes_chan
-
-        tubes_chan[TelepathyGLib.IFACE_CHANNEL_TYPE_TUBES].connect_to_signal(
-            'NewTube', self._new_tube_cb)
-        tubes_chan[TelepathyGLib.IFACE_CHANNEL_TYPE_TUBES].ListTubes(
-            reply_handler=self._list_tubes_reply_cb,
-            error_handler=self._list_tubes_error_cb)
-
-    def _new_tube_cb(self, tube_id, initiator, tube_type, service, params,
-                     state):
-        """Callback when a new tube becomes available."""
-        _logger.debug('New tube: ID={} initator={} type={} service={} '
-                      'params={} state={}'.format(tube_id, initiator, tube_type,
-                      service, params, state))
-        if service == READ_STREAM_SERVICE:
-            _logger.debug('I could download from that tube')
-            self.unused_download_tubes.add(tube_id)
-            # if no download is in progress, let's fetch the document
-            if self._want_document:
-                GLib.idle_add(self._get_document)
-
-    def _list_tubes_reply_cb(self, tubes):
-        """Callback when new tubes are available."""
-        for tube_info in tubes:
-            self._new_tube_cb(*tube_info)
-
-    def _list_tubes_error_cb(self, error):
-        """Handle ListTubes error by logging."""
-        _logger.error('ListTubes() failed: {}'.format(error))
+        if self._want_document:
+            path = os.path.abspath(self.activity_zip.filename)
+            self.collab.send_file_file(
+                buddy,
+                path,
+                "Share zip file to joined buddies")
 
     def _shared_cb(self, activityid):
-        """Callback when activity shared.
-
-        Set up to share the document.
-
-        """
+        """Callback when activity shared."""
         # We initiated this activity and have now shared it, so by
         # definition we have the file.
         _logger.debug('Activity became shared')
-        self.watch_for_tubes()
-        self._share_document()
 
     def _alert(self, title, text=None):
         alert = NotifyAlert(timeout=15)
