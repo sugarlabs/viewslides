@@ -538,6 +538,7 @@ class ViewSlidesActivity(activity.Activity):
         ds_objects, num_objects = datastore.find({'mime_type': ['image/jpeg', 'image/gif',
             'image/tiff', 'image/png']}, properties=['uid', 'title', 'mime_type'])
         self.ls_right.clear()
+        self.activity_zip = zipfile.ZipFile(self.activity_zip, 'w')
         for i in range(0, num_objects, 1):
             iter = self.ls_right.append()
             title = ds_objects[i].metadata['title']
@@ -559,34 +560,10 @@ class ViewSlidesActivity(activity.Activity):
             jobject_wrapper.set_jobject(ds_objects[i])
             self.ls_right.set(iter, COLUMN_PATH, jobject_wrapper)
 
-        valid_endings = (
-            '.jpg',
-            '.jpeg',
-            '.JPEG',
-            '.JPG',
-            '.gif',
-            '.GIF',
-            '.tiff',
-            '.TIFF',
-            '.png',
-            '.PNG')
-        self.activity_zip = zipfile.ZipFile(self.activity_zip, 'w')
-        for dirname, dirnames, filenames in os.walk('/media'):
-            if '.olpc.store' in dirnames:
-                # don't visit .olpc.store directories
-                dirnames.remove('.olpc.store')
-            for filename in filenames:
-                if filename.endswith(valid_endings):
-                    iter = self.ls_right.append()
-                    jobject_wrapper = JobjectWrapper()
-                    jobject_wrapper.set_file_path(
-                        os.path.join(dirname, filename))
-                    self.ls_right.set(iter, COLUMN_IMAGE, filename)
-                    self.ls_right.set(iter, COLUMN_PATH, jobject_wrapper)
-                if filename not in self.activity_zip.namelist():
-                    self.activity_zip.write(os.path.join(dirname, filename), filename)
-        self.activity_zip.close()
+            if title not in self.activity_zip.namelist():
+                self.activity_zip.write(ds_objects[i].get_file_path(), title)
 
+        self.activity_zip.close()
         self.ls_right.set_sort_column_id(COLUMN_IMAGE, Gtk.SortType.ASCENDING)
 
     def reload_journal_table(self):
@@ -1177,7 +1154,7 @@ class ViewSlidesActivity(activity.Activity):
 
     def write_file(self, file_path):
         "Save meta data for the file."
-        if not os.path.exists(self.activity_zip):
+        if not os.path.exists(self.activity_zip.filename):
             zf = zipfile.ZipFile(self.activity_zip, 'w')
             zf.writestr("filler.txt", "filler")
             zf.close()
@@ -1200,8 +1177,8 @@ class ViewSlidesActivity(activity.Activity):
             self.annotations.save()
             self.final_rewrite_zip()
             os.link(
-                os.path.abspath(self.activity_zip), file_path)
-            os.unlink(os.path.abspath(self.activity_zip))
+                os.path.abspath(self.activity_zip.filename), file_path)
+            os.unlink(os.path.abspath(self.activity_zip.filename))
             os.remove(self.pickle_file_temp)
             self.activity_zip = None
             self.pickle_file_temp = None
