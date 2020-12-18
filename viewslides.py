@@ -271,7 +271,6 @@ class ViewSlidesActivity(activity.Activity):
             'viewslides-files')
         self.load_journal_table()
 
-        self.show_image("ViewSlides.jpg")
         self.page = 0
         self.temp_filename = ''
         self.saved_screen_width = 0
@@ -539,7 +538,7 @@ class ViewSlidesActivity(activity.Activity):
             'image/tiff', 'image/png']}, properties=['uid', 'title', 'mime_type'])
         self.ls_right.clear()
         self.activity_zip = zipfile.ZipFile(self.activity_zip, 'w')
-        for i in range(0, num_objects, 1):
+        for i in range(0, num_objects):
             iter = self.ls_right.append()
             title = ds_objects[i].metadata['title']
             mime_type = ds_objects[i].metadata['mime_type']
@@ -606,7 +605,6 @@ class ViewSlidesActivity(activity.Activity):
             self.hpane.hide()
             self.annotation_textview.show()
             self.sidebar.show()
-            self.rewrite_zip()
             self.set_current_page(0)
             self._load_document(os.path.abspath(self.activity_zip))
 
@@ -616,15 +614,6 @@ class ViewSlidesActivity(activity.Activity):
         self.selection_left = selection.get_selected()
         if self.selection_left:
             model, iter = self.selection_left
-            selected_file = model.get_value(iter, COLUMN_OLD_NAME)
-            zf = zipfile.ZipFile(self.activity_zip, 'r')
-            if self.save_extracted_file(zf, selected_file):
-                fname = os.path.join(
-                    self.get_activity_root(),
-                    'instance',
-                    self.make_new_filename(selected_file))
-                self.show_image(fname)
-                os.remove(fname)
             self._slides_toolbar._remove_image.props.sensitive = True
             self._slides_toolbar.extract_image.props.sensitive = True
 
@@ -671,19 +660,6 @@ class ViewSlidesActivity(activity.Activity):
             self._slides_toolbar._remove_image.props.sensitive = True
             self.is_dirty = True
 
-    def extract_image(self):
-        if self.selection_left:
-            model, iter = self.selection_left
-            selected_file = model.get_value(iter, COLUMN_OLD_NAME)
-            zf = zipfile.ZipFile(self.activity_zip, 'r')
-            if self.save_extracted_file(zf, selected_file):
-                fname = os.path.join(
-                    self.get_activity_root(),
-                    'instance',
-                    self.make_new_filename(selected_file))
-                self.create_journal_entry(fname, selected_file)
-                os.remove(fname)
-
     def create_journal_entry(self, tempfile, title):
         journal_entry = datastore.create()
         journal_entry.metadata['title'] = title
@@ -712,30 +688,6 @@ class ViewSlidesActivity(activity.Activity):
             if row[COLUMN_IMAGE] == filename:
                 return True
         return False
-
-    def rewrite_zip(self):
-        if not self.is_dirty:
-            return
-        new_zipfile = os.path.join(self.get_activity_root(), 'instance',
-                                   'activity_zip_rewrite')
-        _logger.debug(self.activity_zip, new_zipfile)
-        zf_new = zipfile.ZipFile(new_zipfile, 'w')
-        zf_old = zipfile.ZipFile(self.activity_zip, 'r')
-        for row in self.ls_left:
-            copied_file = row[COLUMN_OLD_NAME]
-            new_file = row[COLUMN_IMAGE]
-            if self.save_extracted_file(zf_old, copied_file):
-                outfn = self.make_new_filename(copied_file)
-                fname = os.path.join(
-                    self.get_activity_root(), 'instance', outfn)
-                zf_new.write(fname.encode("utf-8"), new_file.encode("utf-8"))
-                print('rewriting', new_file)
-                os.remove(fname)
-        zf_old.close()
-        zf_new.close()
-        os.remove(self.activity_zip)
-        self.activity_zip = new_zipfile
-        self.is_dirty = False
 
     def final_rewrite_zip(self):
         if not self.annotations_dirty:
@@ -1231,8 +1183,6 @@ class ViewSlidesActivity(activity.Activity):
             self.add_image()
         if action == 'remove-image':
             self.remove_image()
-        if action == 'extract':
-            self.extract_image()
         if action == 'reload':
             self.reload_journal_table()
 
