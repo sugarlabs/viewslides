@@ -508,7 +508,16 @@ class ViewSlidesActivity(activity.Activity):
         self.forward.props.sensitive = \
             current_page < self.total_pages - 1
 
+        self.num_page_entry.handler_block_by_func(
+            self.__new_num_page_entry_insert_text_cb)
+        self.num_page_entry.handler_block_by_func(
+            self.__new_num_page_entry_activate_cb)
         self.num_page_entry.props.text = str(current_page + 1)
+        self.num_page_entry.handler_unblock_by_func(
+            self.__new_num_page_entry_insert_text_cb)
+        self.num_page_entry.handler_unblock_by_func(
+            self.__new_num_page_entry_activate_cb)
+
         self.total_page_label.props.label = \
             ' / ' + str(self.total_pages)
 
@@ -615,7 +624,6 @@ class ViewSlidesActivity(activity.Activity):
         if self.selection_left:
             model, iter = self.selection_left
             self._slides_toolbar._remove_image.props.sensitive = True
-            self._slides_toolbar.extract_image.props.sensitive = True
 
     def selection_right_cb(self, selection):
         tv = selection.get_tree_view()
@@ -1033,7 +1041,7 @@ class ViewSlidesActivity(activity.Activity):
     def read_file(self, file_path):
         """Load a file from the datastore on activity start"""
         self.get_saved_page_number()
-        self._load_document(self.activity_zip)
+        self._load_document(os.path.abspath(self.activity_zip.filename))
 
     def __delete_event_cb(self, widget, event):
         os.remove(self.temp_filename)
