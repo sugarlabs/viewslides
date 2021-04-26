@@ -558,7 +558,7 @@ class IncomingFileTransfer(_BaseFileTransfer):
     def accept_to_file(self, destination_path):
         '''
         Accept the file transfer and write it to a new file.  The file must
-        already exist.
+        not already exist.
 
         Args:
             destination_path (str): the path where a new file will be
@@ -625,10 +625,6 @@ class IncomingFileTransfer(_BaseFileTransfer):
     @GObject.Property
     def output(self):
         return self._destination_path or self._output_stream
-
-    @GObject.Property
-    def socket_address(self):
-        return self._socket_address
 
 
 class _BaseOutgoingTransfer(_BaseFileTransfer):
