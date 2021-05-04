@@ -548,7 +548,7 @@ class ViewSlidesActivity(activity.Activity):
         self.ls_right.clear()
         self.activity_zip = zipfile.ZipFile(self.activity_zip, 'w')
         for i in range(0, num_objects):
-            iter = self.ls_right.append()
+            selected_iter = self.ls_right.append()
             title = ds_objects[i].metadata['title']
             mime_type = ds_objects[i].metadata['mime_type']
             if mime_type == 'image/jpeg' and not title.endswith('.jpg') and not title.endswith(
@@ -563,10 +563,10 @@ class ViewSlidesActivity(activity.Activity):
             if mime_type == 'image/tiff' and not title.endswith(
                     '.tiff') and not title.endswith('.TIFF'):
                 title = title + '.tiff'
-            self.ls_right.set(iter, COLUMN_IMAGE, title)
+            self.ls_right.set(selected_iter, COLUMN_IMAGE, title)
             jobject_wrapper = JobjectWrapper()
             jobject_wrapper.set_jobject(ds_objects[i])
-            self.ls_right.set(iter, COLUMN_PATH, jobject_wrapper)
+            self.ls_right.set(selected_iter, COLUMN_PATH, jobject_wrapper)
 
             if title not in self.activity_zip.namelist():
                 self.activity_zip.write(ds_objects[i].get_file_path(), title)
@@ -578,12 +578,12 @@ class ViewSlidesActivity(activity.Activity):
         if os.path.exists(self.activity_zip.filename) and zipfile.is_zipfile(self.activity_zip):
             zf = zipfile.ZipFile(self.activity_zip, 'r')
             for filename in zf.namelist():
-                iter = self.ls_right.append()
+                selected_iter = self.ls_right.append()
                 jobject_wrapper = JobjectWrapper()
                 jobject_wrapper.set_file_path(
                     os.path.abspath(self.activity_zip.filename))
-                self.ls_right.set(iter, COLUMN_IMAGE, filename)
-                self.ls_right.set(iter, COLUMN_PATH, jobject_wrapper)
+                self.ls_right.set(selected_iter, COLUMN_IMAGE, filename)
+                self.ls_right.set(selected_iter, COLUMN_PATH, jobject_wrapper)
         else:
             self.load_journal_table()
 
@@ -622,7 +622,7 @@ class ViewSlidesActivity(activity.Activity):
         model = tv.get_model()
         self.selection_left = selection.get_selected()
         if self.selection_left:
-            model, iter = self.selection_left
+            model, selected_iter = self.selection_left
             self._slides_toolbar._remove_image.props.sensitive = True
 
     def selection_right_cb(self, selection):
@@ -630,13 +630,13 @@ class ViewSlidesActivity(activity.Activity):
         model = tv.get_model()
         sel = selection.get_selected()
         if sel:
-            model, iter = sel
-            jobject = model.get_value(iter, COLUMN_PATH)
+            model, selected_iter = sel
+            jobject = model.get_value(selected_iter, COLUMN_PATH)
             fname = jobject.get_file_path()
             self.show_image(fname)
             self._slides_toolbar._add_image.props.sensitive = True
             self.selected_journal_entry = jobject
-            self.selected_title = model.get_value(iter, COLUMN_IMAGE)
+            self.selected_title = model.get_value(selected_iter, COLUMN_IMAGE)
 
     def add_image(self):
         if self.selected_journal_entry is None:
@@ -651,9 +651,9 @@ class ViewSlidesActivity(activity.Activity):
                 ' already exists in slideshow!')
             return
 
-        iter = self.ls_left.append()
+        selected_iter = self.ls_left.append()
         self.ls_left.set(
-            iter,
+            selected_iter,
             COLUMN_IMAGE,
             arcname,
             COLUMN_OLD_NAME,
@@ -663,8 +663,8 @@ class ViewSlidesActivity(activity.Activity):
 
     def remove_image(self):
         if self.selection_left:
-            model, iter = self.selection_left
-            self.ls_left.remove(iter)
+            model, selected_iter = self.selection_left
+            self.ls_left.remove(selected_iter)
             self._slides_toolbar._remove_image.props.sensitive = True
             self.is_dirty = True
 
@@ -1017,11 +1017,9 @@ class ViewSlidesActivity(activity.Activity):
         if (outfn == ''):
             return False
         fname = os.path.join(self.get_activity_root(), 'instance', outfn)
-        f = open(fname, 'wb')
-        try:
+        with open(fname, 'wb') as f:
             f.write(filebytes)
-        finally:
-            f.close()
+
         return True
 
     def extract_pickle_file(self):
@@ -1091,9 +1089,9 @@ class ViewSlidesActivity(activity.Activity):
             i = 0
             while i < len(self.image_files):
                 newfn = self.make_new_filename(self.image_files[i])
-                iter = self.ls_left.append()
+                selected_iter = self.ls_left.append()
                 self.ls_left.set(
-                    iter,
+                    selected_iter,
                     COLUMN_IMAGE,
                     self.image_files[i],
                     COLUMN_OLD_NAME,
