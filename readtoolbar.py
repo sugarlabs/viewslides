@@ -315,5 +315,4 @@ class SlidesToolbar(Gtk.Toolbar):
         self._show_image_tables.props.sensitive = True
         self._add_image.props.sensitive = False
         self._remove_image.props.sensitive = False
-        self.extract_image.props.sensitive = False
         self.activity.show_image_tables(False)
