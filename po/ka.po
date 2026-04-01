@@ -8,17 +8,20 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-03 12:02+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-04-01 08:11+0000\n"
+"Last-Translator: NF <rkavt@smartprojects.ge>\n"
+"Language-Team: Georgian <http://weblate.sugarlabs.org/projects/"
+"sugar-activities/viewslides/ka/>\n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.4.2\n"
 
 #: activity/activity.info:2
 msgid "View Slides"
-msgstr ""
+msgstr "სლაიდების ნახვა"
 
 #: activity/activity.info:3
 msgid ""
@@ -40,47 +43,47 @@ msgstr ""
 
 #: readsidebar.py:48
 msgid "Bookmark"
-msgstr ""
+msgstr "სანიშნე"
 
 #: readtoolbar.py:36 viewslides.py:336
 msgid "Back"
-msgstr ""
+msgstr "უკან"
 
 #: readtoolbar.py:39 viewslides.py:339
 msgid "Previous page"
-msgstr ""
+msgstr "წინა გვერდი"
 
 #: readtoolbar.py:42 viewslides.py:342
 msgid "Previous bookmark"
-msgstr ""
+msgstr "წინა სანიშნი"
 
 #: readtoolbar.py:52 viewslides.py:353
 msgid "Forward"
-msgstr ""
+msgstr "წინ"
 
 #: readtoolbar.py:55 viewslides.py:356
 msgid "Next page"
-msgstr ""
+msgstr "შემდეგი გვერდი"
 
 #: readtoolbar.py:58 viewslides.py:359
 msgid "Next bookmark"
-msgstr ""
+msgstr "შემდეგი სანიშნი"
 
 #: readtoolbar.py:104 viewslides.py:400
 msgid "Toggle Bookmark"
-msgstr ""
+msgstr "სანიშნის გადართვა"
 
 #: readtoolbar.py:191 viewslides.py:414
 msgid "Zoom out"
-msgstr ""
+msgstr "დაპატარავება"
 
 #: readtoolbar.py:198 viewslides.py:421
 msgid "Zoom in"
-msgstr ""
+msgstr "გადიდება"
 
 #: readtoolbar.py:210 viewslides.py:428
 msgid "Fullscreen"
-msgstr ""
+msgstr "სრულ ეკრანზე"
 
 #: readtoolbar.py:246
 msgid "Show Image Table"
@@ -96,11 +99,11 @@ msgstr ""
 
 #: readtoolbar.py:272
 msgid "Add Image"
-msgstr ""
+msgstr "გამოსახულების დამატება"
 
 #: readtoolbar.py:279
 msgid "Remove Image"
-msgstr ""
+msgstr "სურათის წაშლა"
 
 #: viewslides.py:207
 msgid "Slideshow Image"
@@ -108,11 +111,11 @@ msgstr ""
 
 #: viewslides.py:228
 msgid "Available Images"
-msgstr ""
+msgstr "ხელმისაწვდომი გამოსახულებები"
 
 #: viewslides.py:690
 msgid "Success"
-msgstr ""
+msgstr "წარმატება"
 
 #: viewslides.py:690
 msgid " added to Journal."
