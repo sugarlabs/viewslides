@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-03 12:02+0100\n"
-"PO-Revision-Date: 2026-04-01 08:11+0000\n"
+"PO-Revision-Date: 2026-06-14 03:15+0000\n"
 "Last-Translator: NF <rkavt@smartprojects.ge>\n"
 "Language-Team: Georgian <http://weblate.sugarlabs.org/projects/"
 "sugar-activities/viewslides/ka/>\n"
@@ -28,6 +28,8 @@ msgid ""
 "Read and annotate comic book .cbz files and other collections of image files "
 "stored in Zip archives."
 msgstr ""
+"Zip არქივებში დამახსოვრებული კომიქსის .cbz ფაილების და სხვა გამოსახულების "
+"ფაილების წაკითხვა და ანოტაცია."
 
 #: collabwrapper.py:197
 msgid "Joining activity..."
@@ -87,15 +89,15 @@ msgstr "სრულ ეკრანზე"
 
 #: readtoolbar.py:246
 msgid "Show Image Table"
-msgstr ""
+msgstr "გამოსახულების ცხრილის ჩვენება"
 
 #: readtoolbar.py:252
 msgid "Reload Journal Table"
-msgstr ""
+msgstr "ჟურნალის ცხრილის თავიდან ჩატვირთვა"
 
 #: readtoolbar.py:260
 msgid "Hide Image Tables"
-msgstr ""
+msgstr "გამოსახულების ცხრილების დამალვა"
 
 #: readtoolbar.py:272
 msgid "Add Image"
@@ -107,7 +109,7 @@ msgstr "სურათის წაშლა"
 
 #: viewslides.py:207
 msgid "Slideshow Image"
-msgstr ""
+msgstr "გამოსახულების სლაიდშოუ"
 
 #: viewslides.py:228
 msgid "Available Images"
@@ -119,4 +121,8 @@ msgstr "წარმატება"
 
 #: viewslides.py:690
 msgid " added to Journal."
-msgstr ""
+msgstr " ჩაემატა ჟურნალში."
+
+#: readtoolbar.py:281
+msgid "Extract Image"
+msgstr "გამოსახულების ამოღება"
